@@ -65,7 +65,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="TCP Port Scanner - for authorized targets only"
     )
-    parser.add_argument("target", help="Host or IP to scan")
+    parser.add_argument("target", nargs="?", default="scanme.nmap.org", help="Host or IP to scan (default: scanme.nmap.org)")
     parser.add_argument(
         "-p", "--ports",
         help="Ports to scan: 80, 1-1024, 22,80,443 (default: common ports)",
