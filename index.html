@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArquiVision - Empresa de Arquitectura</title>
+  <style>
+    /* esto lo hice yo solo jeje */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f0eb;
+      color: #333;
+    }
+
+    /* barra de navegacion */
+    nav {
+      background-color: #2c2c2c;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* logo hecho con SVG */
+    .logo-svg {
+      width: 50px;
+      height: 50px;
+    }
+
+    .logo-nombre {
+      color: #e8c97e;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: #e8c97e;
+    }
+
+    /* seccion hero */
+    .hero {
+      background: linear-gradient(135deg, #2c2c2c 0%, #4a4a4a 100%);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+      color: #e8c97e;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .btn-hero {
+      background-color: #e8c97e;
+      color: #2c2c2c;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-hero:hover {
+      background-color: #d4af5a;
+    }
+
+    /* seccion logo grande */
+    .seccion-logo {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: white;
+    }
+
+    .seccion-logo h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #2c2c2c;
+    }
+
+    .logo-grande {
+      display: inline-block;
+      background-color: #2c2c2c;
+      border-radius: 12px;
+      padding: 30px 40px;
+    }
+
+    /* seccion descripcion */
+    .descripcion {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .descripcion h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      color: #2c2c2c;
+      border-bottom: 3px solid #e8c97e;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .descripcion p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    /* tarjetas de servicios */
+    .servicios {
+      background-color: #2c2c2c;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .servicios h2 {
+      font-size: 28px;
+      color: #e8c97e;
+      margin-bottom: 40px;
+    }
+
+    .tarjetas {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tarjeta {
+      background-color: #3d3d3d;
+      color: white;
+      width: 220px;
+      padding: 25px 20px;
+      border-radius: 8px;
+      border-top: 4px solid #e8c97e;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-5px);
+    }
+
+    .tarjeta h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #e8c97e;
+    }
+
+    .tarjeta p {
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    /* contador animado */
+    .contador-seccion {
+      background-color: #e8c97e;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .contadores {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .contador-item h3 {
+      font-size: 42px;
+      font-weight: bold;
+      color: #2c2c2c;
+    }
+
+    .contador-item p {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+
+    /* formulario de contacto */
+    .contacto {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .contacto h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      color: #2c2c2c;
+    }
+
+    .contacto input,
+    .contacto textarea {
+      width: 100%;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+    }
+
+    .contacto textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .contacto button {
+      background-color: #2c2c2c;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .contacto button:hover {
+      background-color: #444;
+    }
+
+    .mensaje-ok {
+      color: green;
+      font-size: 15px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* footer */
+    footer {
+      background-color: #1a1a1a;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo-nav">
+      <svg class="logo-svg" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="25,4 46,40 4,40" fill="none" stroke="#e8c97e" stroke-width="3"/>
+        <line x1="25" y1="4" x2="25" y2="40" stroke="#e8c97e" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <line x1="4" y1="40" x2="46" y2="40" stroke="#e8c97e" stroke-width="2"/>
+        <rect x="20" y="28" width="10" height="12" fill="#e8c97e"/>
+      </svg>
+      <span class="logo-nombre">ARQUIVISION</span>
+    </div>
+    <div class="nav-links">
+      <a href="#nosotros">Nosotros</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Diseñamos tus Espacios</h1>
+    <p>Transformamos ideas en estructuras que inspiran. Arquitectura con propósito, estética y funcionalidad.</p>
+    <button class="btn-hero" onclick="scrollToContacto()">Contáctanos</button>
+  </section>
+
+  <!-- LOGO GRANDE -->
+  <section class="seccion-logo" id="nosotros">
+    <h2>Nuestro Logo</h2>
+    <div class="logo-grande">
+      <svg width="160" height="140" viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+        <!-- triangulo principal -->
+        <polygon points="80,10 150,120 10,120" fill="none" stroke="#e8c97e" stroke-width="4"/>
+        <!-- linea vertical central -->
+        <line x1="80" y1="10" x2="80" y2="120" stroke="#e8c97e" stroke-width="2" stroke-dasharray="5,3"/>
+        <!-- lineas horizontales decorativas -->
+        <line x1="47" y1="75" x2="113" y2="75" stroke="#e8c97e" stroke-width="1.5" opacity="0.5"/>
+        <line x1="32" y1="95" x2="128" y2="95" stroke="#e8c97e" stroke-width="1.5" opacity="0.5"/>
+        <!-- puerta -->
+        <rect x="68" y="88" width="24" height="32" fill="#e8c97e"/>
+        <!-- punto de fuga -->
+        <circle cx="80" cy="10" r="4" fill="#e8c97e"/>
+        <!-- base -->
+        <line x1="10" y1="120" x2="150" y2="120" stroke="#e8c97e" stroke-width="4"/>
+        <!-- nombre empresa -->
+        <text x="80" y="137" font-family="Arial" font-size="13" font-weight="bold"
+              fill="#e8c97e" text-anchor="middle" letter-spacing="3">ARQUIVISION</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- DESCRIPCION -->
+  <section class="descripcion">
+    <h2>Quiénes Somos</h2>
+    <p>
+      <strong>ArquiVision</strong> es una empresa de arquitectura fundada en 2010 con la misión de crear
+      espacios que combinan belleza, funcionalidad y sostenibilidad. Nuestro equipo de arquitectos
+      e ingenieros trabaja de la mano con cada cliente para entender su visión y hacerla realidad.
+    </p>
+    <p>
+      Nos especializamos en diseño residencial, comercial e institucional. Cada proyecto es único para
+      nosotros: desde la primera línea sobre el papel hasta la entrega final de la obra, acompañamos
+      a nuestros clientes en cada paso del proceso constructivo.
+    </p>
+    <p>
+      Creemos que la arquitectura tiene el poder de transformar comunidades. Por eso integramos
+      principios de diseño sostenible, eficiencia energética y respeto por el entorno en todos nuestros
+      proyectos. Más de 200 obras completadas nos respaldan.
+    </p>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="servicios" id="servicios">
+    <h2>Nuestros Servicios</h2>
+    <div class="tarjetas">
+      <div class="tarjeta">
+        <h3>Diseño Residencial</h3>
+        <p>Casas y apartamentos pensados para la vida de tus sueños.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Diseño Comercial</h3>
+        <p>Oficinas, tiendas y locales que proyectan profesionalismo.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Consultoría</h3>
+        <p>Asesoría experta en planeación, permisos y construcción.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Renovaciones</h3>
+        <p>Actualizamos espacios existentes con diseño moderno.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTADORES -->
+  <section class="contador-seccion">
+    <div class="contadores">
+      <div class="contador-item">
+        <h3 id="cnt-proyectos">0</h3>
+        <p>Proyectos completados</p>
+      </div>
+      <div class="contador-item">
+        <h3 id="cnt-clientes">0</h3>
+        <p>Clientes satisfechos</p>
+      </div>
+      <div class="contador-item">
+        <h3 id="cnt-anos">0</h3>
+        <p>Años de experiencia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contacto" id="contacto">
+    <h2>Contáctanos</h2>
+    <input type="text" id="nombre" placeholder="Tu nombre" />
+    <input type="email" id="correo" placeholder="Tu correo" />
+    <textarea id="mensaje" placeholder="Cuéntanos tu proyecto..."></textarea>
+    <button onclick="enviarFormulario()">Enviar mensaje</button>
+    <p class="mensaje-ok" id="msg-ok">¡Mensaje enviado! Te contactaremos pronto.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2024 ArquiVision. Todos los derechos reservados.</p>
+    <p style="margin-top:6px;">Bogotá, Colombia | arquivision@email.com | +57 300 000 0000</p>
+  </footer>
+
+  <script>
+    // funcion para ir al formulario de contacto
+    function scrollToContacto() {
+      document.getElementById("contacto").scrollIntoView({ behavior: "smooth" });
+    }
+
+    // formulario de contacto basico
+    function enviarFormulario() {
+      var nombre = document.getElementById("nombre").value;
+      var correo = document.getElementById("correo").value;
+      var mensaje = document.getElementById("mensaje").value;
+
+      if (nombre == "" || correo == "" || mensaje == "") {
+        alert("Por favor llena todos los campos!");
+        return;
+      }
+
+      // mostrar mensaje de exito
+      document.getElementById("msg-ok").style.display = "block";
+
+      // limpiar formulario
+      document.getElementById("nombre").value = "";
+      document.getElementById("correo").value = "";
+      document.getElementById("mensaje").value = "";
+    }
+
+    // animacion de contadores
+    function animarContador(id, objetivo, duracion) {
+      var elemento = document.getElementById(id);
+      var inicio = 0;
+      var pasos = duracion / 30;
+      var incremento = objetivo / pasos;
+
+      var intervalo = setInterval(function() {
+        inicio += incremento;
+        if (inicio >= objetivo) {
+          elemento.textContent = objetivo + "+";
+          clearInterval(intervalo);
+        } else {
+          elemento.textContent = Math.floor(inicio);
+        }
+      }, 30);
+    }
+
+    // ejecutar contadores cuando se ven en pantalla
+    var contadoresYaAnimados = false;
+
+    window.addEventListener("scroll", function() {
+      var seccionContador = document.querySelector(".contador-seccion");
+      var posicion = seccionContador.getBoundingClientRect().top;
+
+      if (posicion < window.innerHeight && !contadoresYaAnimados) {
+        contadoresYaAnimados = true;
+        animarContador("cnt-proyectos", 200, 1500);
+        animarContador("cnt-clientes", 180, 1500);
+        animarContador("cnt-anos", 14, 1000);
+      }
+    });
+  </script>
+
+</body>
+</html>
