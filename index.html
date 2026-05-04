@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ArquiVision - Empresa de Arquitectura</title>
   <style>
-    /* esto lo hice yo solo jeje */
     * {
       margin: 0;
       padding: 0;
@@ -18,7 +17,6 @@
       color: #333;
     }
 
-    /* barra de navegacion */
     nav {
       background-color: #2c2c2c;
       padding: 15px 30px;
@@ -33,7 +31,6 @@
       gap: 12px;
     }
 
-    /* logo hecho con SVG */
     .logo-svg {
       width: 50px;
       height: 50px;
@@ -57,7 +54,6 @@
       color: #e8c97e;
     }
 
-    /* seccion hero */
     .hero {
       background: linear-gradient(135deg, #2c2c2c 0%, #4a4a4a 100%);
       color: white;
@@ -94,7 +90,6 @@
       background-color: #d4af5a;
     }
 
-    /* seccion logo grande */
     .seccion-logo {
       text-align: center;
       padding: 60px 20px;
@@ -114,7 +109,6 @@
       padding: 30px 40px;
     }
 
-    /* seccion descripcion */
     .descripcion {
       max-width: 800px;
       margin: 0 auto;
@@ -139,7 +133,6 @@
       text-align: left;
     }
 
-    /* tarjetas de servicios */
     .servicios {
       background-color: #2c2c2c;
       padding: 60px 20px;
@@ -186,7 +179,6 @@
       line-height: 1.5;
     }
 
-    /* contador animado */
     .contador-seccion {
       background-color: #e8c97e;
       padding: 50px 20px;
@@ -212,7 +204,6 @@
       margin-top: 5px;
     }
 
-    /* formulario de contacto */
     .contacto {
       max-width: 500px;
       margin: 0 auto;
@@ -263,7 +254,6 @@
       display: none;
     }
 
-    /* footer */
     footer {
       background-color: #1a1a1a;
       color: #aaa;
@@ -275,7 +265,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav>
     <div class="logo-nav">
       <svg class="logo-svg" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
@@ -293,39 +282,29 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <h1>Diseñamos tus Espacios</h1>
     <p>Transformamos ideas en estructuras que inspiran. Arquitectura con propósito, estética y funcionalidad.</p>
     <button class="btn-hero" onclick="scrollToContacto()">Contáctanos</button>
   </section>
 
-  <!-- LOGO GRANDE -->
   <section class="seccion-logo" id="nosotros">
     <h2>Nuestro Logo</h2>
     <div class="logo-grande">
       <svg width="160" height="140" viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
-        <!-- triangulo principal -->
         <polygon points="80,10 150,120 10,120" fill="none" stroke="#e8c97e" stroke-width="4"/>
-        <!-- linea vertical central -->
         <line x1="80" y1="10" x2="80" y2="120" stroke="#e8c97e" stroke-width="2" stroke-dasharray="5,3"/>
-        <!-- lineas horizontales decorativas -->
         <line x1="47" y1="75" x2="113" y2="75" stroke="#e8c97e" stroke-width="1.5" opacity="0.5"/>
         <line x1="32" y1="95" x2="128" y2="95" stroke="#e8c97e" stroke-width="1.5" opacity="0.5"/>
-        <!-- puerta -->
         <rect x="68" y="88" width="24" height="32" fill="#e8c97e"/>
-        <!-- punto de fuga -->
         <circle cx="80" cy="10" r="4" fill="#e8c97e"/>
-        <!-- base -->
         <line x1="10" y1="120" x2="150" y2="120" stroke="#e8c97e" stroke-width="4"/>
-        <!-- nombre empresa -->
         <text x="80" y="137" font-family="Arial" font-size="13" font-weight="bold"
               fill="#e8c97e" text-anchor="middle" letter-spacing="3">ARQUIVISION</text>
       </svg>
     </div>
   </section>
 
-  <!-- DESCRIPCION -->
   <section class="descripcion">
     <h2>Quiénes Somos</h2>
     <p>
@@ -345,7 +324,6 @@
     </p>
   </section>
 
-  <!-- SERVICIOS -->
   <section class="servicios" id="servicios">
     <h2>Nuestros Servicios</h2>
     <div class="tarjetas">
@@ -368,7 +346,6 @@
     </div>
   </section>
 
-  <!-- CONTADORES -->
   <section class="contador-seccion">
     <div class="contadores">
       <div class="contador-item">
@@ -386,7 +363,6 @@
     </div>
   </section>
 
-  <!-- CONTACTO -->
   <section class="contacto" id="contacto">
     <h2>Contáctanos</h2>
     <input type="text" id="nombre" placeholder="Tu nombre" />
@@ -396,19 +372,16 @@
     <p class="mensaje-ok" id="msg-ok">¡Mensaje enviado! Te contactaremos pronto.</p>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <p>© 2024 ArquiVision. Todos los derechos reservados.</p>
     <p style="margin-top:6px;">Bogotá, Colombia | arquivision@email.com | +57 300 000 0000</p>
   </footer>
 
   <script>
-    // funcion para ir al formulario de contacto
     function scrollToContacto() {
       document.getElementById("contacto").scrollIntoView({ behavior: "smooth" });
     }
 
-    // formulario de contacto basico
     function enviarFormulario() {
       var nombre = document.getElementById("nombre").value;
       var correo = document.getElementById("correo").value;
@@ -419,16 +392,13 @@
         return;
       }
 
-      // mostrar mensaje de exito
       document.getElementById("msg-ok").style.display = "block";
 
-      // limpiar formulario
       document.getElementById("nombre").value = "";
       document.getElementById("correo").value = "";
       document.getElementById("mensaje").value = "";
     }
 
-    // animacion de contadores
     function animarContador(id, objetivo, duracion) {
       var elemento = document.getElementById(id);
       var inicio = 0;
@@ -446,7 +416,6 @@
       }, 30);
     }
 
-    // ejecutar contadores cuando se ven en pantalla
     var contadoresYaAnimados = false;
 
     window.addEventListener("scroll", function() {
