@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArquiVision — Video Marketing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #b8975a;
+      --dark: #080808;
+      --cream: #f0ebe3;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ── SLIDES ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.9s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── SLIDE 1: INTRO ── */
+    .s1 { background: var(--dark); }
+
+    .s1-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(184,151,90,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 30%, rgba(184,151,90,0.04) 0%, transparent 45%);
+    }
+
+    .s1-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(184,151,90,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184,151,90,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    .s1-content {
+      position: relative;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .s1-logo {
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease 0.3s;
+    }
+
+    .slide.active .s1-logo { opacity:1; transform:translateY(0); }
+
+    .s1-line {
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      margin: 28px auto;
+      transition: width 1.2s ease 0.8s;
+    }
+
+    .slide.active .s1-line { width: 200px; }
+
+    .s1-tag {
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.8s ease 1.4s;
+    }
+
+    .slide.active .s1-tag { opacity: 1; }
+
+    /* ── SLIDE 2: FRASE ── */
+    .s2 { background: var(--cream); }
+
+    .s2-content { text-align: center; max-width: 900px; padding: 0 60px; }
+
+    .s2-word {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 88px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--dark);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+      letter-spacing: -2px;
+    }
+
+    .s2-word.em { font-style: italic; color: var(--gold); }
+
+    .slide.active .s2-word:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.2s; }
+    .slide.active .s2-word:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.5s; }
+    .slide.active .s2-word:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.8s; }
+
+    .s2-sub {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.35);
+      margin-top: 32px;
+      opacity: 0;
+      transition: opacity 0.8s ease 1.2s;
+    }
+
+    .slide.active .s2-sub { opacity: 1; }
+
+    /* ── SLIDE 3: STATS ── */
+    .s3 { background: var(--dark); }
+
+    .s3-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(184,151,90,0.15);
+      max-width: 900px;
+      width: 90%;
+    }
+
+    .s3-stat {
+      background: var(--dark);
+      padding: 70px 50px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+    }
+
+    .slide.active .s3-stat:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.2s; }
+    .slide.active .s3-stat:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.5s; }
+    .slide.active .s3-stat:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.8s; }
+
+    .s3-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .s3-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(240,235,227,0.3);
+      margin-top: 12px;
+    }
+
+    /* ── SLIDE 4: SERVICIOS ── */
+    .s4 { background: #0d0d0b; }
+
+    .s4-content { max-width: 1000px; width: 90%; }
+
+    .s4-eyebrow {
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      transition: opacity 0.8s ease 0.2s;
+    }
+
+    .s4-eyebrow::before { content:''; width:40px; height:1px; background:var(--gold); }
+
+    .slide.active .s4-eyebrow { opacity: 1; }
+
+    .s4-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .s4-item {
+      padding: 40px 36px;
+      background: rgba(255,255,255,0.02);
+      border-left: 2px solid transparent;
+      transition: border-color 0.3s;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .slide.active .s4-item:nth-child(1) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.4s, border-color 0.3s; }
+    .slide.active .s4-item:nth-child(2) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.6s, border-color 0.3s; }
+    .slide.active .s4-item:nth-child(3) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.8s, border-color 0.3s; }
+    .slide.active .s4-item:nth-child(4) { opacity:1; transform:translateX(0); transition: all 0.6s ease 1s, border-color 0.3s; }
+
+    .s4-item:hover { border-left-color: var(--gold); }
+
+    .s4-item h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 10px;
+    }
+
+    .s4-item p {
+      font-size: 13px;
+      color: rgba(240,235,227,0.35);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ── SLIDE 5: PROYECTOS ── */
+    .s5 { background: var(--dark); }
+
+    .s5-content { text-align: center; }
+
+    .s5-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 50px;
+      opacity: 0;
+      transition: opacity 0.8s ease 0.2s;
+    }
+
+    .slide.active .s5-title { opacity: 1; }
+
+    .s5-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 260px);
+      grid-template-rows: 160px 160px;
+      gap: 10px;
+    }
+
+    .s5-card {
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .slide.active .s5-card:nth-child(1) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.3s; }
+    .slide.active .s5-card:nth-child(2) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.45s; }
+    .slide.active .s5-card:nth-child(3) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.6s; }
+    .slide.active .s5-card:nth-child(4) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.75s; }
+    .slide.active .s5-card:nth-child(5) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.9s; }
+    .slide.active .s5-card:nth-child(6) { opacity:1; transform:scale(1); transition: all 0.6s ease 1.05s; }
+
+    .s5-card:nth-child(1) { grid-column: span 2; }
+
+    .s5-bg {
+      width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .bg-a { background: linear-gradient(145deg,#0a0a18,#1a1635); }
+    .bg-b { background: linear-gradient(145deg,#180a0a,#2d1515); }
+    .bg-c { background: linear-gradient(145deg,#0a180a,#152d15); }
+    .bg-d { background: linear-gradient(145deg,#18180a,#2d2d10); }
+    .bg-e { background: linear-gradient(145deg,#0a1818,#102d2d); }
+    .bg-f { background: linear-gradient(145deg,#180a18,#2d102d); }
+
+    .s5-overlay {
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+    }
+
+    .s5-label {
+      position:absolute;
+      bottom: 14px; left: 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      color: white;
+      font-weight: 300;
+    }
+
+    .s5-card:nth-child(1) .s5-label { font-size: 22px; }
+
+    /* ── SLIDE 6: PROCESO ── */
+    .s6 { background: var(--cream); }
+
+    .s6-content { max-width: 900px; width: 90%; }
+
+    .s6-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 300;
+      color: var(--dark);
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease 0.2s;
+    }
+
+    .s6-title em { font-style:italic; color:var(--gold); }
+
+    .slide.active .s6-title { opacity:1; transform:translateY(0); }
+
+    .s6-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+    }
+
+    .s6-steps::before {
+      content:'';
+      position:absolute;
+      top:22px; left:12%; right:12%;
+      height:1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .s6-step {
+      text-align:center;
+      padding: 0 20px;
+      opacity:0;
+      transform:translateY(20px);
+    }
+
+    .slide.active .s6-step:nth-child(1) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.4s; }
+    .slide.active .s6-step:nth-child(2) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.6s; }
+    .slide.active .s6-step:nth-child(3) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.8s; }
+    .slide.active .s6-step:nth-child(4) { opacity:1; transform:translateY(0); transition: all 0.6s ease 1s; }
+
+    .s6-num {
+      width:44px; height:44px;
+      border:1px solid var(--gold);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 20px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:20px;
+      color:var(--gold);
+      background:var(--cream);
+      position:relative; z-index:1;
+    }
+
+    .s6-step h4 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:18px;
+      color:var(--dark);
+      margin-bottom:8px;
+    }
+
+    .s6-step p {
+      font-size:12px;
+      color:#777;
+      line-height:1.6;
+      font-weight:300;
+    }
+
+    /* ── SLIDE 7: TESTIMONIO ── */
+    .s7 { background: var(--dark); }
+
+    .s7-content {
+      max-width: 700px;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    .s7-quote {
+      font-family:'Cormorant Garamond',serif;
+      font-size:100px;
+      color:var(--gold);
+      line-height:0.6;
+      opacity:0.2;
+      margin-bottom:20px;
+      opacity:0;
+      transition: opacity 0.8s ease 0.2s;
+    }
+
+    .slide.active .s7-quote { opacity:0.2; }
+
+    .s7-text {
+      font-family:'Cormorant Garamond',serif;
+      font-size:32px;
+      font-weight:300;
+      font-style:italic;
+      color:var(--cream);
+      line-height:1.5;
+      opacity:0;
+      transform:translateY(20px);
+      transition: all 0.9s ease 0.5s;
+    }
+
+    .slide.active .s7-text { opacity:1; transform:translateY(0); }
+
+    .s7-autor {
+      margin-top:40px;
+      font-size:12px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:var(--gold);
+      opacity:0;
+      transition: opacity 0.8s ease 1.2s;
+    }
+
+    .slide.active .s7-autor { opacity:1; }
+
+    /* ── SLIDE 8: CTA ── */
+    .s8 { background: var(--gold); }
+
+    .s8-content { text-align:center; }
+
+    .s8-h {
+      font-family:'Cormorant Garamond',serif;
+      font-size:80px;
+      font-weight:600;
+      color:var(--dark);
+      line-height:1;
+      opacity:0;
+      transform:translateY(30px);
+      transition: all 0.8s ease 0.3s;
+    }
+
+    .slide.active .s8-h { opacity:1; transform:translateY(0); }
+
+    .s8-sub {
+      font-size:14px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:rgba(10,10,10,0.5);
+      margin-top:20px;
+      opacity:0;
+      transition: opacity 0.8s ease 0.8s;
+    }
+
+    .slide.active .s8-sub { opacity:1; }
+
+    .s8-url {
+      margin-top:36px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:22px;
+      color:var(--dark);
+      letter-spacing:2px;
+      opacity:0;
+      transition: opacity 0.8s ease 1.2s;
+    }
+
+    .slide.active .s8-url { opacity:1; }
+
+    .s8-logo {
+      margin-top:48px;
+      opacity:0;
+      transition: opacity 0.8s ease 1.5s;
+    }
+
+    .slide.active .s8-logo { opacity:1; }
+
+    /* ── CONTROLES ── */
+    .controls {
+      position:fixed;
+      bottom:36px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      align-items:center;
+      gap:20px;
+      z-index:100;
+    }
+
+    .ctrl-btn {
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      color:white;
+      width:44px; height:44px;
+      border-radius:50%;
+      font-size:18px;
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background 0.2s;
+      backdrop-filter:blur(10px);
+    }
+
+    .ctrl-btn:hover { background:rgba(184,151,90,0.3); border-color:var(--gold); }
+
+    .progress {
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .dot {
+      width:6px; height:6px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.25);
+      cursor:pointer;
+      transition:all 0.3s;
+    }
+
+    .dot.on {
+      background:var(--gold);
+      width:22px;
+      border-radius:3px;
+    }
+
+    .slide-counter {
+      font-size:11px;
+      color:rgba(255,255,255,0.3);
+      letter-spacing:2px;
+      min-width:48px;
+      text-align:center;
+    }
+
+    /* barra de progreso */
+    .progress-bar {
+      position:fixed;
+      top:0; left:0;
+      height:2px;
+      background:var(--gold);
+      transition:width 0.1s linear;
+      z-index:200;
+    }
+
+    /* SVG proyectos */
+    .proj-svg {
+      width:100%; height:100%;
+      position:absolute; inset:0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="pbar"></div>
+
+<!-- SLIDE 1: INTRO -->
+<div class="slide s1 active" id="slide-0">
+  <div class="s1-bg"></div>
+  <div class="s1-grid"></div>
+  <div class="s1-content">
+    <div class="s1-logo">
+      <svg width="320" height="64" viewBox="0 0 340 68" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="64" height="64" fill="none" stroke="#b8975a" stroke-width="1.8"/>
+        <rect x="8" y="8" width="52" height="52" fill="none" stroke="#b8975a" stroke-width="0.8"/>
+        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#b8975a" text-anchor="middle" letter-spacing="2">AV</text>
+        <text x="100" y="37" font-family="Georgia,serif" font-size="27" fill="#f0ebe3" text-anchor="start" letter-spacing="8">ARQUIVISION</text>
+        <line x1="100" y1="44" x2="338" y2="44" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
+        <text x="100" y="58" font-family="Arial,sans-serif" font-size="8.5" fill="#b8975a" text-anchor="start" letter-spacing="5">FIRMA DE ARQUITECTURA PREMIUM</text>
+      </svg>
+    </div>
+    <div class="s1-line"></div>
+    <div class="s1-tag">Bogotá, Colombia &nbsp;·&nbsp; Est. 2010</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: FRASE -->
+<div class="slide s2" id="slide-1">
+  <div class="s2-content">
+    <span class="s2-word">Diseñamos</span>
+    <span class="s2-word">el Futuro</span>
+    <span class="s2-word em">que Habitas.</span>
+    <div class="s2-sub">Arquitectura con propósito · Espacios que inspiran</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: STATS -->
+<div class="slide s3" id="slide-2">
+  <div class="s3-content">
+    <div class="s3-stat">
+      <div class="s3-num">200+</div>
+      <div class="s3-label">Proyectos completados</div>
+    </div>
+    <div class="s3-stat">
+      <div class="s3-num">14</div>
+      <div class="s3-label">Años de experiencia</div>
+    </div>
+    <div class="s3-stat">
+      <div class="s3-num">8</div>
+      <div class="s3-label">Ciudades en Colombia</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: SERVICIOS -->
+<div class="slide s4" id="slide-3">
+  <div class="s4-content">
+    <div class="s4-eyebrow">Nuestros Servicios</div>
+    <div class="s4-grid">
+      <div class="s4-item">
+        <h3>Diseño Residencial</h3>
+        <p>Casas y apartamentos diseñados para la vida que mereces.</p>
+      </div>
+      <div class="s4-item">
+        <h3>Diseño Comercial</h3>
+        <p>Espacios que comunican la identidad de tu marca.</p>
+      </div>
+      <div class="s4-item">
+        <h3>Consultoría Técnica</h3>
+        <p>Asesoría experta en permisos, normativa y viabilidad.</p>
+      </div>
+      <div class="s4-item">
+        <h3>Renovaciones</h3>
+        <p>Transformamos espacios existentes con precisión y estética.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: PROYECTOS -->
+<div class="slide s5" id="slide-4">
+  <div class="s5-content">
+    <div class="s5-title">Proyectos Destacados</div>
+    <div class="s5-grid">
+      <div class="s5-card">
+        <div class="s5-bg bg-a">
+          <svg width="100%" height="100%" viewBox="0 0 530 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <polygon points="265,15 490,110 490,150 40,150 40,110" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <polygon points="265,15 490,110 40,110" fill="rgba(184,151,90,0.1)"/>
+            <rect x="220" y="105" width="90" height="45" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="1"/>
+            <rect x="80" y="120" width="60" height="30" fill="none" stroke="#b8975a" stroke-width="0.8"/>
+            <rect x="390" y="120" width="60" height="30" fill="none" stroke="#b8975a" stroke-width="0.8"/>
+            <circle cx="265" cy="15" r="4" fill="#b8975a"/>
+            <line x1="40" y1="150" x2="490" y2="150" stroke="#b8975a" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Residencia Villa Norte · Bogotá</div>
+      </div>
+      <div class="s5-card">
+        <div class="s5-bg bg-b">
+          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <rect x="80" y="10" width="100" height="140" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <line x1="80" y1="35" x2="180" y2="35" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
+            <line x1="80" y1="60" x2="180" y2="60" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
+            <line x1="80" y1="85" x2="180" y2="85" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
+            <line x1="80" y1="110" x2="180" y2="110" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
+            <rect x="90" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
+            <rect x="113" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
+            <rect x="136" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
+            <rect x="110" y="125" width="40" height="25" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Torre Zen · Medellín</div>
+      </div>
+      <div class="s5-card">
+        <div class="s5-bg bg-c">
+          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <rect x="20" y="50" width="220" height="100" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <rect x="20" y="30" width="220" height="20" fill="rgba(184,151,90,0.1)" stroke="#b8975a" stroke-width="1"/>
+            <rect x="60" y="10" width="140" height="20" fill="rgba(184,151,90,0.08)" stroke="#b8975a" stroke-width="0.8"/>
+            <rect x="30" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="70" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="162" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="202" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="105" y="110" width="50" height="40" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Hotel Alma · Cartagena</div>
+      </div>
+      <div class="s5-card">
+        <div class="s5-bg bg-d">
+          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <line x1="10" y1="130" x2="250" y2="130" stroke="#b8975a" stroke-width="1.2"/>
+            <line x1="65" y1="130" x2="65" y2="40" stroke="#b8975a" stroke-width="1"/>
+            <line x1="130" y1="130" x2="130" y2="20" stroke="#b8975a" stroke-width="1.2"/>
+            <line x1="195" y1="130" x2="195" y2="50" stroke="#b8975a" stroke-width="1"/>
+            <path d="M40,130 Q65,75 90,130" fill="rgba(184,151,90,0.15)" stroke="#b8975a" stroke-width="0.8"/>
+            <path d="M105,130 Q130,60 155,130" fill="rgba(184,151,90,0.18)" stroke="#b8975a" stroke-width="0.8"/>
+            <path d="M170,130 Q195,80 220,130" fill="rgba(184,151,90,0.15)" stroke="#b8975a" stroke-width="0.8"/>
+            <polygon points="65,40 75,60 55,60" fill="#b8975a" opacity="0.7"/>
+            <polygon points="130,20 140,40 120,40" fill="#b8975a" opacity="0.9"/>
+            <polygon points="195,50 205,70 185,70" fill="#b8975a" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Parque Ecobarrio · Cali</div>
+      </div>
+      <div class="s5-card">
+        <div class="s5-bg bg-e">
+          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <rect x="10" y="50" width="240" height="100" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <rect x="10" y="30" width="240" height="20" fill="rgba(184,151,90,0.1)" stroke="#b8975a" stroke-width="1"/>
+            <line x1="10" y1="80" x2="250" y2="80" stroke="#b8975a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="110" x2="250" y2="110" stroke="#b8975a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="70" y1="50" x2="70" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
+            <line x1="130" y1="50" x2="130" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
+            <line x1="190" y1="50" x2="190" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
+            <rect x="25" y="57" width="32" height="18" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="85" y="57" width="32" height="18" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
+            <rect x="100" y="120" width="60" height="30" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Centro Comercial Vitrina</div>
+      </div>
+      <div class="s5-card">
+        <div class="s5-bg bg-f">
+          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
+            <rect x="10" y="70" width="70" height="80" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <rect x="95" y="45" width="70" height="105" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <rect x="180" y="70" width="70" height="80" fill="none" stroke="#b8975a" stroke-width="1.2"/>
+            <polygon points="130,15 250,45 10,45" fill="rgba(184,151,90,0.08)" stroke="#b8975a" stroke-width="1"/>
+            <line x1="130" y1="15" x2="130" y2="45" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+            <rect x="110" y="115" width="40" height="35" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
+            <circle cx="130" cy="15" r="3.5" fill="#b8975a"/>
+            <line x1="10" y1="150" x2="250" y2="150" stroke="#b8975a" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="s5-overlay"></div>
+        <div class="s5-label">Colegio Horizonte · Bucaramanga</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: PROCESO -->
+<div class="slide s6" id="slide-5">
+  <div class="s6-content">
+    <div class="s6-title">Nuestro <em>Proceso</em></div>
+    <div class="s6-steps">
+      <div class="s6-step">
+        <div class="s6-num">1</div>
+        <h4>Consulta Inicial</h4>
+        <p>Escuchamos tu visión y definimos el alcance del proyecto.</p>
+      </div>
+      <div class="s6-step">
+        <div class="s6-num">2</div>
+        <h4>Diseño</h4>
+        <p>Planos, renders 3D y especificaciones técnicas completas.</p>
+      </div>
+      <div class="s6-step">
+        <div class="s6-num">3</div>
+        <h4>Aprobaciones</h4>
+        <p>Gestionamos permisos y licencias de construcción.</p>
+      </div>
+      <div class="s6-step">
+        <div class="s6-num">4</div>
+        <h4>Entrega</h4>
+        <p>Supervisamos la obra y entregamos con garantía.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: TESTIMONIO -->
+<div class="slide s7" id="slide-6">
+  <div class="s7-content">
+    <div class="s7-quote">"</div>
+    <div class="s7-text">"ArquiVision no solo diseñó nuestra casa: diseñó la forma en que vivimos. Cada espacio fue pensado con una precisión y sensibilidad que nunca esperamos encontrar."</div>
+    <div class="s7-autor">— María López &nbsp;·&nbsp; Cliente Residencial · Bogotá</div>
+  </div>
+</div>
+
+<!-- SLIDE 8: CTA -->
+<div class="slide s8" id="slide-7">
+  <div class="s8-content">
+    <div class="s8-h">Comienza<br>tu Proyecto.</div>
+    <div class="s8-sub">Consulta inicial gratuita · Respuesta en 24 horas</div>
+    <div class="s8-url">arquivision.co</div>
+    <div class="s8-logo">
+      <svg width="240" height="48" viewBox="0 0 340 68" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="64" height="64" fill="none" stroke="#080808" stroke-width="1.5"/>
+        <rect x="8" y="8" width="52" height="52" fill="none" stroke="#080808" stroke-width="0.8"/>
+        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#080808" text-anchor="middle" letter-spacing="2">AV</text>
+        <text x="100" y="37" font-family="Georgia,serif" font-size="27" fill="#080808" text-anchor="start" letter-spacing="8">ARQUIVISION</text>
+        <line x1="100" y1="44" x2="338" y2="44" stroke="#080808" stroke-width="0.6" opacity="0.4"/>
+        <text x="100" y="58" font-family="Arial,sans-serif" font-size="8.5" fill="#080808" text-anchor="start" letter-spacing="5">FIRMA DE ARQUITECTURA PREMIUM</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- CONTROLES -->
+<div class="controls">
+  <button class="ctrl-btn" id="prev">‹</button>
+  <div class="progress" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 8</span>
+  <button class="ctrl-btn" id="play">⏸</button>
+  <button class="ctrl-btn" id="next">›</button>
+</div>
+
+<script>
+  var total = 8;
+  var current = 0;
+  var playing = true;
+  var duration = 5000;
+  var timer, barTimer, barStart, barEl = document.getElementById('pbar');
+
+  var dots = document.getElementById('dots');
+  for (var i = 0; i < total; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i===0?' on':'');
+    d.setAttribute('data-i', i);
+    d.onclick = function(){ goTo(+this.getAttribute('data-i')); };
+    dots.appendChild(d);
+  }
+
+  function goTo(n) {
+    document.getElementById('slide-'+current).classList.remove('active');
+    current = (n + total) % total;
+    document.getElementById('slide-'+current).classList.add('active');
+    document.querySelectorAll('.dot').forEach(function(d,i){ d.classList.toggle('on', i===current); });
+    document.getElementById('counter').textContent = (current+1)+' / '+total;
+    resetBar();
+    if (playing) startBar();
+  }
+
+  function resetBar() {
+    clearTimeout(timer);
+    clearInterval(barTimer);
+    barEl.style.width = '0%';
+  }
+
+  function startBar() {
+    barStart = Date.now();
+    barTimer = setInterval(function() {
+      var pct = Math.min(100, (Date.now()-barStart)/duration*100);
+      barEl.style.width = pct+'%';
+      if (pct >= 100) {
+        clearInterval(barTimer);
+        goTo(current+1);
+      }
+    }, 30);
+  }
+
+  document.getElementById('prev').onclick = function(){ goTo(current-1); };
+  document.getElementById('next').onclick = function(){ goTo(current+1); };
+  document.getElementById('play').onclick = function() {
+    playing = !playing;
+    this.textContent = playing ? '⏸' : '▶';
+    if (playing) startBar(); else resetBar();
+  };
+
+  startBar();
+</script>
+</body>
+</html>
