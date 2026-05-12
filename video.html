@@ -22,7 +22,7 @@
       width: 100vw;
     }
 
-    /* ── SLIDES ── */
+    /* SLIDES */
     .slide {
       position: absolute;
       inset: 0;
@@ -31,7 +31,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.9s ease;
+      transition: opacity 1.2s ease;
     }
 
     .slide.active {
@@ -39,746 +39,755 @@
       pointer-events: all;
     }
 
-    /* ── SLIDE 1: INTRO ── */
-    .s1 { background: var(--dark); }
-
-    .s1-bg {
+    /* FOTO DE FONDO */
+    .slide-photo {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 60%, rgba(184,151,90,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse at 70% 30%, rgba(184,151,90,0.04) 0%, transparent 45%);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.08);
+      transition: transform 6s ease;
     }
 
-    .s1-grid {
+    .slide.active .slide-photo {
+      transform: scale(1);
+    }
+
+    /* OVERLAYS */
+    .overlay-dark {
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(184,151,90,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(184,151,90,0.03) 1px, transparent 1px);
-      background-size: 80px 80px;
+      background: linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);
     }
 
-    .s1-content {
+    .overlay-bottom {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%);
+    }
+
+    .overlay-center {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+
+    .overlay-gold {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(184,151,90,0.85) 0%, rgba(140,110,40,0.9) 100%);
+    }
+
+    /* CONTENIDO */
+    .slide-content {
       position: relative;
-      text-align: center;
-      z-index: 2;
+      z-index: 10;
+      max-width: 1100px;
+      width: 90%;
+      padding: 0 60px;
     }
 
-    .s1-logo {
-      margin-bottom: 48px;
+    .slide-content.center { text-align: center; }
+    .slide-content.left { text-align: left; }
+
+    /* ANIMACIONES DE ENTRADA */
+    .anim {
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 1s ease 0.3s;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
     }
 
-    .slide.active .s1-logo { opacity:1; transform:translateY(0); }
+    .slide.active .anim { opacity: 1; transform: translateY(0); }
+    .slide.active .anim:nth-child(1) { transition-delay: 0.3s; }
+    .slide.active .anim:nth-child(2) { transition-delay: 0.6s; }
+    .slide.active .anim:nth-child(3) { transition-delay: 0.9s; }
+    .slide.active .anim:nth-child(4) { transition-delay: 1.2s; }
+    .slide.active .anim:nth-child(5) { transition-delay: 1.5s; }
 
-    .s1-line {
+    .anim-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .slide.active .anim-left { opacity: 1; transform: translateX(0); }
+    .slide.active .anim-left:nth-child(1) { transition-delay: 0.3s; }
+    .slide.active .anim-left:nth-child(2) { transition-delay: 0.6s; }
+    .slide.active .anim-left:nth-child(3) { transition-delay: 0.9s; }
+    .slide.active .anim-left:nth-child(4) { transition-delay: 1.2s; }
+
+    /* TIPOGRAFÍA */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .tag::before { content:''; width:36px; height:1px; background:var(--gold); }
+
+    .tag-dark {
+      color: rgba(10,10,10,0.6);
+    }
+
+    .tag-dark::before { background: rgba(10,10,10,0.4); }
+
+    .title-xl {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 92px;
+      font-weight: 300;
+      color: white;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 28px;
+    }
+
+    .title-xl em { font-style: italic; color: var(--gold); }
+
+    .title-lg {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 68px;
+      font-weight: 300;
+      color: white;
+      line-height: 1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .title-lg em { font-style: italic; color: var(--gold); }
+
+    .title-dark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px;
+      font-weight: 300;
+      color: var(--dark);
+      line-height: 1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .body-text {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .body-dark {
+      font-size: 15px;
+      color: rgba(10,10,10,0.55);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 480px;
+    }
+
+    .gold-line {
       width: 0;
       height: 1px;
       background: var(--gold);
-      margin: 28px auto;
-      transition: width 1.2s ease 0.8s;
+      margin-bottom: 28px;
+      transition: width 1s ease 0.5s;
     }
 
-    .slide.active .s1-line { width: 200px; }
+    .slide.active .gold-line { width: 80px; }
 
-    .s1-tag {
-      font-size: 11px;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: 0;
-      transition: opacity 0.8s ease 1.4s;
+    /* SLIDE 1 — INTRO */
+    .s1-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
     }
 
-    .slide.active .s1-tag { opacity: 1; }
-
-    /* ── SLIDE 2: FRASE ── */
-    .s2 { background: var(--cream); }
-
-    .s2-content { text-align: center; max-width: 900px; padding: 0 60px; }
-
-    .s2-word {
-      display: block;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 88px;
-      font-weight: 300;
-      line-height: 1;
-      color: var(--dark);
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s ease;
-      letter-spacing: -2px;
+    /* SLIDE 3 — STATS */
+    .stats-row {
+      display: flex;
+      gap: 0;
+      justify-content: center;
     }
 
-    .s2-word.em { font-style: italic; color: var(--gold); }
-
-    .slide.active .s2-word:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.2s; }
-    .slide.active .s2-word:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.5s; }
-    .slide.active .s2-word:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.8s; }
-
-    .s2-sub {
-      font-size: 13px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: rgba(10,10,10,0.35);
-      margin-top: 32px;
-      opacity: 0;
-      transition: opacity 0.8s ease 1.2s;
-    }
-
-    .slide.active .s2-sub { opacity: 1; }
-
-    /* ── SLIDE 3: STATS ── */
-    .s3 { background: var(--dark); }
-
-    .s3-content {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(184,151,90,0.15);
-      max-width: 900px;
-      width: 90%;
-    }
-
-    .s3-stat {
-      background: var(--dark);
-      padding: 70px 50px;
+    .stat-box {
+      padding: 50px 60px;
       text-align: center;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.7s ease;
+      border-right: 1px solid rgba(255,255,255,0.1);
     }
 
-    .slide.active .s3-stat:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.2s; }
-    .slide.active .s3-stat:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.5s; }
-    .slide.active .s3-stat:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.8s; }
+    .stat-box:last-child { border-right: none; }
 
-    .s3-num {
+    .stat-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 72px;
+      font-size: 80px;
       font-weight: 600;
       color: var(--gold);
       line-height: 1;
     }
 
-    .s3-label {
+    .stat-lbl {
       font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: rgba(240,235,227,0.3);
-      margin-top: 12px;
+      color: rgba(255,255,255,0.35);
+      margin-top: 10px;
     }
 
-    /* ── SLIDE 4: SERVICIOS ── */
-    .s4 { background: #0d0d0b; }
-
-    .s4-content { max-width: 1000px; width: 90%; }
-
-    .s4-eyebrow {
-      font-size: 11px;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 48px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      opacity: 0;
-      transition: opacity 0.8s ease 0.2s;
-    }
-
-    .s4-eyebrow::before { content:''; width:40px; height:1px; background:var(--gold); }
-
-    .slide.active .s4-eyebrow { opacity: 1; }
-
-    .s4-grid {
+    /* SLIDE 4 — PROYECTO */
+    .proyecto-layout {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      height: 100vh;
     }
 
-    .s4-item {
-      padding: 40px 36px;
-      background: rgba(255,255,255,0.02);
-      border-left: 2px solid transparent;
-      transition: border-color 0.3s;
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-
-    .slide.active .s4-item:nth-child(1) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.4s, border-color 0.3s; }
-    .slide.active .s4-item:nth-child(2) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.6s, border-color 0.3s; }
-    .slide.active .s4-item:nth-child(3) { opacity:1; transform:translateX(0); transition: all 0.6s ease 0.8s, border-color 0.3s; }
-    .slide.active .s4-item:nth-child(4) { opacity:1; transform:translateX(0); transition: all 0.6s ease 1s, border-color 0.3s; }
-
-    .s4-item:hover { border-left-color: var(--gold); }
-
-    .s4-item h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--cream);
-      margin-bottom: 10px;
-    }
-
-    .s4-item p {
-      font-size: 13px;
-      color: rgba(240,235,227,0.35);
-      font-weight: 300;
-      line-height: 1.7;
-    }
-
-    /* ── SLIDE 5: PROYECTOS ── */
-    .s5 { background: var(--dark); }
-
-    .s5-content { text-align: center; }
-
-    .s5-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 14px;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 50px;
-      opacity: 0;
-      transition: opacity 0.8s ease 0.2s;
-    }
-
-    .slide.active .s5-title { opacity: 1; }
-
-    .s5-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 260px);
-      grid-template-rows: 160px 160px;
-      gap: 10px;
-    }
-
-    .s5-card {
+    .proyecto-left {
       position: relative;
       overflow: hidden;
-      opacity: 0;
-      transform: scale(0.95);
     }
 
-    .slide.active .s5-card:nth-child(1) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.3s; }
-    .slide.active .s5-card:nth-child(2) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.45s; }
-    .slide.active .s5-card:nth-child(3) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.6s; }
-    .slide.active .s5-card:nth-child(4) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.75s; }
-    .slide.active .s5-card:nth-child(5) { opacity:1; transform:scale(1); transition: all 0.6s ease 0.9s; }
-    .slide.active .s5-card:nth-child(6) { opacity:1; transform:scale(1); transition: all 0.6s ease 1.05s; }
-
-    .s5-card:nth-child(1) { grid-column: span 2; }
-
-    .s5-bg {
-      width:100%; height:100%;
-      display:flex; align-items:center; justify-content:center;
+    .proyecto-right {
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 80px 60px;
     }
 
-    .bg-a { background: linear-gradient(145deg,#0a0a18,#1a1635); }
-    .bg-b { background: linear-gradient(145deg,#180a0a,#2d1515); }
-    .bg-c { background: linear-gradient(145deg,#0a180a,#152d15); }
-    .bg-d { background: linear-gradient(145deg,#18180a,#2d2d10); }
-    .bg-e { background: linear-gradient(145deg,#0a1818,#102d2d); }
-    .bg-f { background: linear-gradient(145deg,#180a18,#2d102d); }
-
-    .s5-overlay {
-      position:absolute; inset:0;
-      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+    /* SLIDE 5 — SERVICIOS */
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+      max-width: 780px;
+      margin-top: 40px;
     }
 
-    .s5-label {
-      position:absolute;
-      bottom: 14px; left: 18px;
+    .servicio-item {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      padding: 36px 32px;
+      border-left: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    .servicio-item h3 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 16px;
+      font-size: 26px;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .servicio-item p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .servicio-num {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    /* SLIDE 6 — GALERÍA */
+    .galeria {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .gal-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gal-card:first-child { grid-row: span 2; }
+
+    .gal-photo {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 6s ease;
+      transform: scale(1.08);
+    }
+
+    .slide.active .gal-photo { transform: scale(1); }
+
+    .gal-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+    }
+
+    .gal-label {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .gal-label span {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .gal-label h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
       color: white;
       font-weight: 300;
     }
 
-    .s5-card:nth-child(1) .s5-label { font-size: 22px; }
+    .gal-card:first-child .gal-label h3 { font-size: 28px; }
 
-    /* ── SLIDE 6: PROCESO ── */
-    .s6 { background: var(--cream); }
-
-    .s6-content { max-width: 900px; width: 90%; }
-
-    .s6-title {
+    /* SLIDE 7 — TESTIMONIO */
+    .quote-big {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 52px;
-      font-weight: 300;
-      color: var(--dark);
-      margin-bottom: 60px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease 0.2s;
+      font-size: 120px;
+      color: var(--gold);
+      line-height: 0.6;
+      margin-bottom: 24px;
+      opacity: 0.25;
     }
 
-    .s6-title em { font-style:italic; color:var(--gold); }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px;
+      font-style: italic;
+      font-weight: 300;
+      color: white;
+      line-height: 1.5;
+      max-width: 750px;
+      margin: 0 auto 36px;
+    }
 
-    .slide.active .s6-title { opacity:1; transform:translateY(0); }
+    .quote-autor {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
 
-    .s6-steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+    /* SLIDE 8 — PROCESO */
+    .proceso-row {
+      display: flex;
+      gap: 0;
+      max-width: 900px;
+      margin-top: 50px;
       position: relative;
     }
 
-    .s6-steps::before {
-      content:'';
-      position:absolute;
-      top:22px; left:12%; right:12%;
-      height:1px;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    .proceso-row::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
     }
 
-    .s6-step {
-      text-align:center;
-      padding: 0 20px;
-      opacity:0;
-      transform:translateY(20px);
-    }
-
-    .slide.active .s6-step:nth-child(1) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.4s; }
-    .slide.active .s6-step:nth-child(2) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.6s; }
-    .slide.active .s6-step:nth-child(3) { opacity:1; transform:translateY(0); transition: all 0.6s ease 0.8s; }
-    .slide.active .s6-step:nth-child(4) { opacity:1; transform:translateY(0); transition: all 0.6s ease 1s; }
-
-    .s6-num {
-      width:44px; height:44px;
-      border:1px solid var(--gold);
-      border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      margin:0 auto 20px;
-      font-family:'Cormorant Garamond',serif;
-      font-size:20px;
-      color:var(--gold);
-      background:var(--cream);
-      position:relative; z-index:1;
-    }
-
-    .s6-step h4 {
-      font-family:'Cormorant Garamond',serif;
-      font-size:18px;
-      color:var(--dark);
-      margin-bottom:8px;
-    }
-
-    .s6-step p {
-      font-size:12px;
-      color:#777;
-      line-height:1.6;
-      font-weight:300;
-    }
-
-    /* ── SLIDE 7: TESTIMONIO ── */
-    .s7 { background: var(--dark); }
-
-    .s7-content {
-      max-width: 700px;
+    .paso-item {
+      flex: 1;
       text-align: center;
-      padding: 0 40px;
+      padding: 0 20px;
     }
 
-    .s7-quote {
-      font-family:'Cormorant Garamond',serif;
-      font-size:100px;
-      color:var(--gold);
-      line-height:0.6;
-      opacity:0.2;
-      margin-bottom:20px;
-      opacity:0;
-      transition: opacity 0.8s ease 0.2s;
+    .paso-circle {
+      width: 44px; height: 44px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--gold);
+      background: rgba(0,0,0,0.6);
+      position: relative; z-index: 1;
     }
 
-    .slide.active .s7-quote { opacity:0.2; }
-
-    .s7-text {
-      font-family:'Cormorant Garamond',serif;
-      font-size:32px;
-      font-weight:300;
-      font-style:italic;
-      color:var(--cream);
-      line-height:1.5;
-      opacity:0;
-      transform:translateY(20px);
-      transition: all 0.9s ease 0.5s;
+    .paso-item h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: white;
+      margin-bottom: 8px;
+      font-weight: 400;
     }
 
-    .slide.active .s7-text { opacity:1; transform:translateY(0); }
-
-    .s7-autor {
-      margin-top:40px;
-      font-size:12px;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      color:var(--gold);
-      opacity:0;
-      transition: opacity 0.8s ease 1.2s;
+    .paso-item p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
     }
 
-    .slide.active .s7-autor { opacity:1; }
-
-    /* ── SLIDE 8: CTA ── */
-    .s8 { background: var(--gold); }
-
-    .s8-content { text-align:center; }
-
-    .s8-h {
-      font-family:'Cormorant Garamond',serif;
-      font-size:80px;
-      font-weight:600;
-      color:var(--dark);
-      line-height:1;
-      opacity:0;
-      transform:translateY(30px);
-      transition: all 0.8s ease 0.3s;
+    /* SLIDE 9 — CTA */
+    .cta-h {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 100px;
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 28px;
     }
 
-    .slide.active .s8-h { opacity:1; transform:translateY(0); }
-
-    .s8-sub {
-      font-size:14px;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      color:rgba(10,10,10,0.5);
-      margin-top:20px;
-      opacity:0;
-      transition: opacity 0.8s ease 0.8s;
+    .cta-sub {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.5);
+      margin-bottom: 16px;
     }
 
-    .slide.active .s8-sub { opacity:1; }
-
-    .s8-url {
-      margin-top:36px;
-      font-family:'Cormorant Garamond',serif;
-      font-size:22px;
-      color:var(--dark);
-      letter-spacing:2px;
-      opacity:0;
-      transition: opacity 0.8s ease 1.2s;
+    .cta-url {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: rgba(10,10,10,0.6);
+      letter-spacing: 2px;
     }
 
-    .slide.active .s8-url { opacity:1; }
-
-    .s8-logo {
-      margin-top:48px;
-      opacity:0;
-      transition: opacity 0.8s ease 1.5s;
-    }
-
-    .slide.active .s8-logo { opacity:1; }
-
-    /* ── CONTROLES ── */
+    /* CONTROLES */
     .controls {
-      position:fixed;
-      bottom:36px;
-      left:50%;
-      transform:translateX(-50%);
-      display:flex;
-      align-items:center;
-      gap:20px;
-      z-index:100;
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 200;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(16px);
+      padding: 12px 24px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .ctrl-btn {
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.2);
-      color:white;
-      width:44px; height:44px;
-      border-radius:50%;
-      font-size:18px;
-      cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:background 0.2s;
-      backdrop-filter:blur(10px);
+    .ctrl {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 18px;
+      cursor: pointer;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s;
     }
 
-    .ctrl-btn:hover { background:rgba(184,151,90,0.3); border-color:var(--gold); }
+    .ctrl:hover { color: var(--gold); }
 
-    .progress {
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
+    .dots { display: flex; gap: 6px; align-items: center; }
 
     .dot {
-      width:6px; height:6px;
-      border-radius:50%;
-      background:rgba(255,255,255,0.25);
-      cursor:pointer;
-      transition:all 0.3s;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
     .dot.on {
-      background:var(--gold);
-      width:22px;
-      border-radius:3px;
+      background: var(--gold);
+      width: 20px;
+      border-radius: 3px;
     }
 
-    .slide-counter {
-      font-size:11px;
-      color:rgba(255,255,255,0.3);
-      letter-spacing:2px;
-      min-width:48px;
-      text-align:center;
+    .counter {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+      min-width: 40px;
+      text-align: center;
     }
 
-    /* barra de progreso */
-    .progress-bar {
-      position:fixed;
-      top:0; left:0;
-      height:2px;
-      background:var(--gold);
-      transition:width 0.1s linear;
-      z-index:200;
+    .pbar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: var(--gold);
+      z-index: 300;
+      transition: width 0.1s linear;
     }
 
-    /* SVG proyectos */
-    .proj-svg {
-      width:100%; height:100%;
-      position:absolute; inset:0;
+    .btn-visit {
+      position: fixed;
+      top: 28px;
+      right: 36px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      padding: 10px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      z-index: 200;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-visit:hover {
+      border-color: var(--gold);
+      color: var(--gold);
     }
   </style>
 </head>
 <body>
 
-<div class="progress-bar" id="pbar"></div>
+<div class="pbar" id="pbar"></div>
 
-<!-- SLIDE 1: INTRO -->
-<div class="slide s1 active" id="slide-0">
-  <div class="s1-bg"></div>
-  <div class="s1-grid"></div>
-  <div class="s1-content">
-    <div class="s1-logo">
-      <svg width="320" height="64" viewBox="0 0 340 68" xmlns="http://www.w3.org/2000/svg">
+<a href="index.html" class="btn-visit">← Ver Sitio Web</a>
+
+<!-- SLIDE 1: INTRO con foto de fondo -->
+<div class="slide active" id="slide-0">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=85')"></div>
+  <div class="overlay-dark"></div>
+  <div class="slide-content center">
+    <div class="s1-logo anim">
+      <svg width="300" height="60" viewBox="0 0 340 68" xmlns="http://www.w3.org/2000/svg">
         <rect x="2" y="2" width="64" height="64" fill="none" stroke="#b8975a" stroke-width="1.8"/>
         <rect x="8" y="8" width="52" height="52" fill="none" stroke="#b8975a" stroke-width="0.8"/>
-        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#b8975a" text-anchor="middle" letter-spacing="2">AV</text>
+        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#b8975a" text-anchor="middle">AV</text>
         <text x="100" y="37" font-family="Georgia,serif" font-size="27" fill="#f0ebe3" text-anchor="start" letter-spacing="8">ARQUIVISION</text>
         <line x1="100" y1="44" x2="338" y2="44" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
         <text x="100" y="58" font-family="Arial,sans-serif" font-size="8.5" fill="#b8975a" text-anchor="start" letter-spacing="5">FIRMA DE ARQUITECTURA PREMIUM</text>
       </svg>
     </div>
-    <div class="s1-line"></div>
-    <div class="s1-tag">Bogotá, Colombia &nbsp;·&nbsp; Est. 2010</div>
+    <div class="gold-line" style="margin:0 auto 28px;"></div>
+    <div class="tag anim" style="justify-content:center;">Bogotá, Colombia &nbsp;·&nbsp; Est. 2010</div>
   </div>
 </div>
 
-<!-- SLIDE 2: FRASE -->
-<div class="slide s2" id="slide-1">
-  <div class="s2-content">
-    <span class="s2-word">Diseñamos</span>
-    <span class="s2-word">el Futuro</span>
-    <span class="s2-word em">que Habitas.</span>
-    <div class="s2-sub">Arquitectura con propósito · Espacios que inspiran</div>
+<!-- SLIDE 2: FRASE IMPACTO -->
+<div class="slide" id="slide-1">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85')"></div>
+  <div class="overlay-dark"></div>
+  <div class="slide-content left">
+    <div class="tag anim-left">Nuestra filosofía</div>
+    <div class="title-xl anim-left">Diseñamos<br>el Futuro<br><em>que Habitas.</em></div>
+    <p class="body-text anim-left">Cada línea que trazamos tiene un propósito. Cada espacio que construimos, una historia. Arquitectura que trasciende el tiempo.</p>
   </div>
 </div>
 
-<!-- SLIDE 3: STATS -->
-<div class="slide s3" id="slide-2">
-  <div class="s3-content">
-    <div class="s3-stat">
-      <div class="s3-num">200+</div>
-      <div class="s3-label">Proyectos completados</div>
-    </div>
-    <div class="s3-stat">
-      <div class="s3-num">14</div>
-      <div class="s3-label">Años de experiencia</div>
-    </div>
-    <div class="s3-stat">
-      <div class="s3-num">8</div>
-      <div class="s3-label">Ciudades en Colombia</div>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 4: SERVICIOS -->
-<div class="slide s4" id="slide-3">
-  <div class="s4-content">
-    <div class="s4-eyebrow">Nuestros Servicios</div>
-    <div class="s4-grid">
-      <div class="s4-item">
-        <h3>Diseño Residencial</h3>
-        <p>Casas y apartamentos diseñados para la vida que mereces.</p>
+<!-- SLIDE 3: NÚMEROS -->
+<div class="slide" id="slide-2">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=85')"></div>
+  <div class="overlay-center"></div>
+  <div class="slide-content center">
+    <div class="tag anim" style="justify-content:center;">Nuestra trayectoria</div>
+    <div class="stats-row anim">
+      <div class="stat-box">
+        <div class="stat-num">200+</div>
+        <div class="stat-lbl">Proyectos</div>
       </div>
-      <div class="s4-item">
+      <div class="stat-box">
+        <div class="stat-num">180+</div>
+        <div class="stat-lbl">Clientes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">14</div>
+        <div class="stat-lbl">Años</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">8</div>
+        <div class="stat-lbl">Ciudades</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: PROYECTO RESIDENCIAL -->
+<div class="slide" id="slide-3">
+  <div class="proyecto-layout">
+    <div class="proyecto-left">
+      <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=960&q=85')"></div>
+      <div class="overlay-bottom"></div>
+    </div>
+    <div class="proyecto-right">
+      <div>
+        <div class="tag anim-left" style="color:var(--gold)">Diseño Residencial</div>
+        <div class="title-lg anim-left" style="font-size:52px;">Residencia<br><em>Villa Norte</em></div>
+        <p class="body-text anim-left">Casa campestre de 480 m² con diseño bioclimático. Integración total entre espacios interiores y el entorno natural.</p>
+        <div class="anim-left" style="display:flex;gap:30px;margin-top:10px;">
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Área</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:white;">480 m²</div></div>
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Año</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:white;">2023</div></div>
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Ciudad</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:white;">Bogotá</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: SERVICIOS -->
+<div class="slide" id="slide-4">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85')"></div>
+  <div class="overlay-dark"></div>
+  <div class="slide-content left">
+    <div class="tag anim-left">Lo que ofrecemos</div>
+    <h2 class="title-lg anim-left" style="font-size:56px;">Nuestros<br><em>Servicios</em></h2>
+    <div class="servicios-grid anim">
+      <div class="servicio-item">
+        <div class="servicio-num">01</div>
+        <h3>Diseño Residencial</h3>
+        <p>Casas y apartamentos que reflejan quiénes eres.</p>
+      </div>
+      <div class="servicio-item">
+        <div class="servicio-num">02</div>
         <h3>Diseño Comercial</h3>
         <p>Espacios que comunican la identidad de tu marca.</p>
       </div>
-      <div class="s4-item">
+      <div class="servicio-item">
+        <div class="servicio-num">03</div>
         <h3>Consultoría Técnica</h3>
-        <p>Asesoría experta en permisos, normativa y viabilidad.</p>
+        <p>Permisos, normativa y viabilidad de tu proyecto.</p>
       </div>
-      <div class="s4-item">
+      <div class="servicio-item">
+        <div class="servicio-num">04</div>
         <h3>Renovaciones</h3>
-        <p>Transformamos espacios existentes con precisión y estética.</p>
+        <p>Transformamos espacios existentes con precisión.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 5: PROYECTOS -->
-<div class="slide s5" id="slide-4">
-  <div class="s5-content">
-    <div class="s5-title">Proyectos Destacados</div>
-    <div class="s5-grid">
-      <div class="s5-card">
-        <div class="s5-bg bg-a">
-          <svg width="100%" height="100%" viewBox="0 0 530 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <polygon points="265,15 490,110 490,150 40,150 40,110" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <polygon points="265,15 490,110 40,110" fill="rgba(184,151,90,0.1)"/>
-            <rect x="220" y="105" width="90" height="45" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="1"/>
-            <rect x="80" y="120" width="60" height="30" fill="none" stroke="#b8975a" stroke-width="0.8"/>
-            <rect x="390" y="120" width="60" height="30" fill="none" stroke="#b8975a" stroke-width="0.8"/>
-            <circle cx="265" cy="15" r="4" fill="#b8975a"/>
-            <line x1="40" y1="150" x2="490" y2="150" stroke="#b8975a" stroke-width="1.5"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Residencia Villa Norte · Bogotá</div>
+<!-- SLIDE 6: GALERÍA DE PROYECTOS -->
+<div class="slide" id="slide-5">
+  <div class="galeria">
+    <div class="gal-card">
+      <div class="gal-photo" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=960&q=85')"></div>
+      <div class="gal-overlay"></div>
+      <div class="gal-label anim">
+        <span>Residencial · Bogotá · 2023</span>
+        <h3>Residencia Villa Norte</h3>
       </div>
-      <div class="s5-card">
-        <div class="s5-bg bg-b">
-          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <rect x="80" y="10" width="100" height="140" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <line x1="80" y1="35" x2="180" y2="35" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
-            <line x1="80" y1="60" x2="180" y2="60" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
-            <line x1="80" y1="85" x2="180" y2="85" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
-            <line x1="80" y1="110" x2="180" y2="110" stroke="#b8975a" stroke-width="0.6" opacity="0.5"/>
-            <rect x="90" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
-            <rect x="113" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
-            <rect x="136" y="18" width="16" height="10" fill="rgba(184,151,90,0.3)" stroke="#b8975a" stroke-width="0.6"/>
-            <rect x="110" y="125" width="40" height="25" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Torre Zen · Medellín</div>
+    </div>
+    <div class="gal-card">
+      <div class="gal-photo" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=720&q=80')"></div>
+      <div class="gal-overlay"></div>
+      <div class="gal-label anim">
+        <span>Comercial · Medellín</span>
+        <h3>Torre Zen</h3>
       </div>
-      <div class="s5-card">
-        <div class="s5-bg bg-c">
-          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <rect x="20" y="50" width="220" height="100" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <rect x="20" y="30" width="220" height="20" fill="rgba(184,151,90,0.1)" stroke="#b8975a" stroke-width="1"/>
-            <rect x="60" y="10" width="140" height="20" fill="rgba(184,151,90,0.08)" stroke="#b8975a" stroke-width="0.8"/>
-            <rect x="30" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="70" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="162" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="202" y="60" width="28" height="20" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="105" y="110" width="50" height="40" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Hotel Alma · Cartagena</div>
+    </div>
+    <div class="gal-card">
+      <div class="gal-photo" style="background-image:url('https://images.unsplash.com/photo-1551882547-ff40c4cd61a9?w=720&q=80')"></div>
+      <div class="gal-overlay"></div>
+      <div class="gal-label anim">
+        <span>Hotelería · Cartagena</span>
+        <h3>Hotel Alma</h3>
       </div>
-      <div class="s5-card">
-        <div class="s5-bg bg-d">
-          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <line x1="10" y1="130" x2="250" y2="130" stroke="#b8975a" stroke-width="1.2"/>
-            <line x1="65" y1="130" x2="65" y2="40" stroke="#b8975a" stroke-width="1"/>
-            <line x1="130" y1="130" x2="130" y2="20" stroke="#b8975a" stroke-width="1.2"/>
-            <line x1="195" y1="130" x2="195" y2="50" stroke="#b8975a" stroke-width="1"/>
-            <path d="M40,130 Q65,75 90,130" fill="rgba(184,151,90,0.15)" stroke="#b8975a" stroke-width="0.8"/>
-            <path d="M105,130 Q130,60 155,130" fill="rgba(184,151,90,0.18)" stroke="#b8975a" stroke-width="0.8"/>
-            <path d="M170,130 Q195,80 220,130" fill="rgba(184,151,90,0.15)" stroke="#b8975a" stroke-width="0.8"/>
-            <polygon points="65,40 75,60 55,60" fill="#b8975a" opacity="0.7"/>
-            <polygon points="130,20 140,40 120,40" fill="#b8975a" opacity="0.9"/>
-            <polygon points="195,50 205,70 185,70" fill="#b8975a" opacity="0.7"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Parque Ecobarrio · Cali</div>
+    </div>
+    <div class="gal-card">
+      <div class="gal-photo" style="background-image:url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=720&q=80')"></div>
+      <div class="gal-overlay"></div>
+      <div class="gal-label anim">
+        <span>Residencial · Cali</span>
+        <h3>Casa Moderna</h3>
       </div>
-      <div class="s5-card">
-        <div class="s5-bg bg-e">
-          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <rect x="10" y="50" width="240" height="100" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <rect x="10" y="30" width="240" height="20" fill="rgba(184,151,90,0.1)" stroke="#b8975a" stroke-width="1"/>
-            <line x1="10" y1="80" x2="250" y2="80" stroke="#b8975a" stroke-width="0.6" opacity="0.4"/>
-            <line x1="10" y1="110" x2="250" y2="110" stroke="#b8975a" stroke-width="0.6" opacity="0.4"/>
-            <line x1="70" y1="50" x2="70" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
-            <line x1="130" y1="50" x2="130" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
-            <line x1="190" y1="50" x2="190" y2="150" stroke="#b8975a" stroke-width="0.6" opacity="0.3"/>
-            <rect x="25" y="57" width="32" height="18" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="85" y="57" width="32" height="18" fill="rgba(184,151,90,0.2)" stroke="#b8975a" stroke-width="0.7"/>
-            <rect x="100" y="120" width="60" height="30" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Centro Comercial Vitrina</div>
-      </div>
-      <div class="s5-card">
-        <div class="s5-bg bg-f">
-          <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" opacity="0.5">
-            <rect x="10" y="70" width="70" height="80" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <rect x="95" y="45" width="70" height="105" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <rect x="180" y="70" width="70" height="80" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-            <polygon points="130,15 250,45 10,45" fill="rgba(184,151,90,0.08)" stroke="#b8975a" stroke-width="1"/>
-            <line x1="130" y1="15" x2="130" y2="45" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
-            <rect x="110" y="115" width="40" height="35" fill="rgba(184,151,90,0.25)" stroke="#b8975a" stroke-width="1"/>
-            <circle cx="130" cy="15" r="3.5" fill="#b8975a"/>
-            <line x1="10" y1="150" x2="250" y2="150" stroke="#b8975a" stroke-width="1.5"/>
-          </svg>
-        </div>
-        <div class="s5-overlay"></div>
-        <div class="s5-label">Colegio Horizonte · Bucaramanga</div>
+    </div>
+    <div class="gal-card">
+      <div class="gal-photo" style="background-image:url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=720&q=80')"></div>
+      <div class="gal-overlay"></div>
+      <div class="gal-label anim">
+        <span>Comercial · Bogotá</span>
+        <h3>Centro Vitrina</h3>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 6: PROCESO -->
-<div class="slide s6" id="slide-5">
-  <div class="s6-content">
-    <div class="s6-title">Nuestro <em>Proceso</em></div>
-    <div class="s6-steps">
-      <div class="s6-step">
-        <div class="s6-num">1</div>
-        <h4>Consulta Inicial</h4>
-        <p>Escuchamos tu visión y definimos el alcance del proyecto.</p>
+<!-- SLIDE 7: PROYECTO COMERCIAL -->
+<div class="slide" id="slide-6">
+  <div class="proyecto-layout">
+    <div class="proyecto-right" style="background:var(--cream);padding:80px 60px;">
+      <div>
+        <div class="tag anim-left" style="color:var(--gold)">Diseño Comercial</div>
+        <div class="title-dark anim-left" style="font-size:52px;">Torre<br><em style="color:var(--gold)">Empresarial Zen</em></div>
+        <p class="body-dark anim-left">Edificio de 12 pisos diseñado para potenciar la productividad y reflejar la identidad corporativa de sus ocupantes.</p>
+        <div class="anim-left" style="display:flex;gap:30px;margin-top:28px;">
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Pisos</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:var(--dark);">12</div></div>
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Área</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:var(--dark);">18.000 m²</div></div>
+          <div><div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Ciudad</div><div style="font-size:22px;font-family:'Cormorant Garamond',serif;color:var(--dark);">Medellín</div></div>
+        </div>
       </div>
-      <div class="s6-step">
-        <div class="s6-num">2</div>
+    </div>
+    <div class="proyecto-left">
+      <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1464938050520-ef2270bb8ce8?w=960&q=85')"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: TESTIMONIO -->
+<div class="slide" id="slide-7">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=85')"></div>
+  <div class="overlay-center"></div>
+  <div class="slide-content center">
+    <div class="quote-big anim">"</div>
+    <div class="quote-text anim">"ArquiVision no solo diseñó nuestra casa: diseñó la forma en que vivimos. Cada espacio fue pensado con una precisión y sensibilidad que nunca esperamos encontrar."</div>
+    <div class="quote-autor anim">— María López &nbsp;·&nbsp; Cliente Residencial · Bogotá</div>
+  </div>
+</div>
+
+<!-- SLIDE 9: PROCESO -->
+<div class="slide" id="slide-8">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=1920&q=85')"></div>
+  <div class="overlay-dark"></div>
+  <div class="slide-content left">
+    <div class="tag anim-left">Cómo trabajamos</div>
+    <h2 class="title-lg anim-left" style="font-size:56px;">Nuestro<br><em>Proceso</em></h2>
+    <div class="proceso-row anim">
+      <div class="paso-item">
+        <div class="paso-circle">1</div>
+        <h4>Consulta</h4>
+        <p>Escuchamos tu visión y definimos el proyecto.</p>
+      </div>
+      <div class="paso-item">
+        <div class="paso-circle">2</div>
         <h4>Diseño</h4>
-        <p>Planos, renders 3D y especificaciones técnicas completas.</p>
+        <p>Planos y renders 3D fotorrealistas.</p>
       </div>
-      <div class="s6-step">
-        <div class="s6-num">3</div>
-        <h4>Aprobaciones</h4>
-        <p>Gestionamos permisos y licencias de construcción.</p>
+      <div class="paso-item">
+        <div class="paso-circle">3</div>
+        <h4>Permisos</h4>
+        <p>Gestionamos todas las licencias.</p>
       </div>
-      <div class="s6-step">
-        <div class="s6-num">4</div>
+      <div class="paso-item">
+        <div class="paso-circle">4</div>
         <h4>Entrega</h4>
-        <p>Supervisamos la obra y entregamos con garantía.</p>
+        <p>Supervisamos y entregamos con garantía.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 7: TESTIMONIO -->
-<div class="slide s7" id="slide-6">
-  <div class="s7-content">
-    <div class="s7-quote">"</div>
-    <div class="s7-text">"ArquiVision no solo diseñó nuestra casa: diseñó la forma en que vivimos. Cada espacio fue pensado con una precisión y sensibilidad que nunca esperamos encontrar."</div>
-    <div class="s7-autor">— María López &nbsp;·&nbsp; Cliente Residencial · Bogotá</div>
-  </div>
-</div>
-
-<!-- SLIDE 8: CTA -->
-<div class="slide s8" id="slide-7">
-  <div class="s8-content">
-    <div class="s8-h">Comienza<br>tu Proyecto.</div>
-    <div class="s8-sub">Consulta inicial gratuita · Respuesta en 24 horas</div>
-    <div class="s8-url">arquivision.co</div>
-    <div class="s8-logo">
+<!-- SLIDE 10: CTA FINAL -->
+<div class="slide" id="slide-9">
+  <div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=85')"></div>
+  <div class="overlay-gold"></div>
+  <div class="slide-content center">
+    <div class="cta-h anim">Comienza<br>tu Proyecto.</div>
+    <div class="cta-sub anim">Consulta inicial gratuita · Respuesta en 24 horas</div>
+    <div class="cta-url anim">hola@arquivision.co &nbsp;·&nbsp; +57 300 000 0000</div>
+    <div class="anim" style="margin-top:44px;">
       <svg width="240" height="48" viewBox="0 0 340 68" xmlns="http://www.w3.org/2000/svg">
         <rect x="2" y="2" width="64" height="64" fill="none" stroke="#080808" stroke-width="1.5"/>
         <rect x="8" y="8" width="52" height="52" fill="none" stroke="#080808" stroke-width="0.8"/>
-        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#080808" text-anchor="middle" letter-spacing="2">AV</text>
-        <text x="100" y="37" font-family="Georgia,serif" font-size="27" fill="#080808" text-anchor="start" letter-spacing="8">ARQUIVISION</text>
+        <text x="34" y="46" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#080808" text-anchor="middle">AV</text>
+        <text x="100" y="37" font-family="Georgia,serif" font-size="26" fill="#080808" text-anchor="start" letter-spacing="8">ARQUIVISION</text>
         <line x1="100" y1="44" x2="338" y2="44" stroke="#080808" stroke-width="0.6" opacity="0.4"/>
         <text x="100" y="58" font-family="Arial,sans-serif" font-size="8.5" fill="#080808" text-anchor="start" letter-spacing="5">FIRMA DE ARQUITECTURA PREMIUM</text>
       </svg>
@@ -788,27 +797,24 @@
 
 <!-- CONTROLES -->
 <div class="controls">
-  <button class="ctrl-btn" id="prev">‹</button>
-  <div class="progress" id="dots"></div>
-  <span class="slide-counter" id="counter">1 / 8</span>
-  <button class="ctrl-btn" id="play">⏸</button>
-  <button class="ctrl-btn" id="next">›</button>
+  <button class="ctrl" id="prev">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1/10</span>
+  <button class="ctrl" id="play">⏸</button>
+  <button class="ctrl" id="next">›</button>
 </div>
 
 <script>
-  var total = 8;
-  var current = 0;
-  var playing = true;
-  var duration = 5000;
-  var timer, barTimer, barStart, barEl = document.getElementById('pbar');
+  var total = 10, current = 0, playing = true, duration = 6000;
+  var pbar = document.getElementById('pbar'), barStart, barIv;
 
-  var dots = document.getElementById('dots');
+  var dotsEl = document.getElementById('dots');
   for (var i = 0; i < total; i++) {
     var d = document.createElement('div');
     d.className = 'dot' + (i===0?' on':'');
     d.setAttribute('data-i', i);
     d.onclick = function(){ goTo(+this.getAttribute('data-i')); };
-    dots.appendChild(d);
+    dotsEl.appendChild(d);
   }
 
   function goTo(n) {
@@ -816,26 +822,22 @@
     current = (n + total) % total;
     document.getElementById('slide-'+current).classList.add('active');
     document.querySelectorAll('.dot').forEach(function(d,i){ d.classList.toggle('on', i===current); });
-    document.getElementById('counter').textContent = (current+1)+' / '+total;
+    document.getElementById('counter').textContent = (current+1)+'/'+total;
     resetBar();
     if (playing) startBar();
   }
 
   function resetBar() {
-    clearTimeout(timer);
-    clearInterval(barTimer);
-    barEl.style.width = '0%';
+    clearInterval(barIv);
+    pbar.style.width = '0%';
   }
 
   function startBar() {
     barStart = Date.now();
-    barTimer = setInterval(function() {
-      var pct = Math.min(100, (Date.now()-barStart)/duration*100);
-      barEl.style.width = pct+'%';
-      if (pct >= 100) {
-        clearInterval(barTimer);
-        goTo(current+1);
-      }
+    barIv = setInterval(function() {
+      var p = Math.min(100, (Date.now()-barStart)/duration*100);
+      pbar.style.width = p+'%';
+      if (p >= 100) { clearInterval(barIv); goTo(current+1); }
     }, 30);
   }
 
