@@ -1,109 +1,104 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ArquiVision — Arquitectura & Diseño</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArquiVision — Firma de Arquitectura</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --gold: #c9a84c;
-      --gold-light: #e8c97e;
-      --dark: #111111;
-      --dark2: #1e1e1e;
-      --dark3: #2a2a2a;
-      --gray: #6b6b6b;
-      --light: #f8f5f0;
-      --white: #ffffff;
+      --gold: #b8975a;
+      --gold2: #d4ad6a;
+      --dark: #0a0a0a;
+      --dark2: #111111;
+      --dark3: #1a1a1a;
+      --cream: #f0ebe3;
+      --cream2: #faf7f3;
+      --mid: #6a6a6a;
+      --light: #e8e0d4;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--white);
-      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--cream);
       overflow-x: hidden;
     }
 
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
+    /* ── NAV ── */
     nav {
       position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 22px 60px;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      padding: 28px 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: background 0.4s, padding 0.4s, box-shadow 0.4s;
+      transition: all 0.5s;
     }
 
-    nav.scrolled {
-      background: rgba(17,17,17,0.97);
-      padding: 14px 60px;
-      box-shadow: 0 2px 30px rgba(0,0,0,0.3);
-      backdrop-filter: blur(10px);
+    nav.solid {
+      padding: 18px 60px;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(184,151,90,0.15);
     }
 
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 6px;
+      color: var(--cream);
       text-decoration: none;
-    }
-
-    .nav-logo-text {
-      color: var(--white);
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 3px;
-    }
-
-    .nav-logo-text span { color: var(--gold); }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 36px;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 1.5px;
       text-transform: uppercase;
-      transition: color 0.2s;
     }
 
-    .nav-links a:hover { color: var(--gold); }
+    .nav-logo span { color: var(--gold); }
 
-    .nav-cta {
-      background: transparent;
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .nav-menu a {
+      color: rgba(240,235,227,0.6);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-menu a:hover { color: var(--gold); }
+
+    .nav-btn {
+      border: 1px solid rgba(184,151,90,0.5);
       color: var(--gold) !important;
-      border: 1px solid var(--gold);
-      padding: 10px 24px;
-      border-radius: 2px;
-      transition: background 0.2s !important;
+      padding: 10px 26px;
+      border-radius: 1px;
+      transition: background 0.3s, border-color 0.3s !important;
     }
 
-    .nav-cta:hover { background: var(--gold) !important; color: var(--dark) !important; }
+    .nav-btn:hover {
+      background: var(--gold) !important;
+      color: var(--dark) !important;
+      border-color: var(--gold) !important;
+    }
 
+    /* ── HERO ── */
     .hero {
       height: 100vh;
-      min-height: 700px;
-      background: var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      min-height: 750px;
       position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 60px 90px;
       overflow: hidden;
     }
 
@@ -111,53 +106,73 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 50%);
+        linear-gradient(160deg, #0a0a0a 0%, #141410 40%, #0d0c09 100%);
     }
 
-    .hero-lines {
+    .hero-geo {
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
+      overflow: hidden;
+    }
+
+    .hero-geo svg {
+      position: absolute;
+      top: 0; right: 0;
+      width: 60%;
+      height: 100%;
+      opacity: 0.18;
+    }
+
+    .hero-number {
+      position: absolute;
+      top: 50%;
+      right: 60px;
+      transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 280px;
+      font-weight: 300;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(184,151,90,0.1);
+      line-height: 1;
+      user-select: none;
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
       max-width: 800px;
-      padding: 0 30px;
     }
 
     .hero-eyebrow {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 12px;
-      color: var(--gold);
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-weight: 500;
-      margin-bottom: 28px;
+      gap: 16px;
+      margin-bottom: 32px;
     }
 
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
+    .hero-eyebrow::before {
       content: '';
-      width: 40px;
+      width: 50px;
       height: 1px;
       background: var(--gold);
     }
 
+    .hero-eyebrow span {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
     .hero h1 {
-      font-size: 72px;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 24px;
-      letter-spacing: -1px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 96px;
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--cream);
+      margin-bottom: 36px;
+      letter-spacing: -2px;
     }
 
     .hero h1 em {
@@ -165,55 +180,58 @@
       color: var(--gold);
     }
 
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 60px;
+    }
+
     .hero-desc {
-      font-size: 17px;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.8;
-      max-width: 540px;
-      margin: 0 auto 44px;
+      font-size: 15px;
+      color: rgba(240,235,227,0.45);
+      line-height: 1.9;
       font-weight: 300;
+      max-width: 380px;
     }
 
     .hero-actions {
       display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      gap: 14px;
+      flex-shrink: 0;
     }
 
-    .btn-primary {
+    .btn-gold {
       background: var(--gold);
       color: var(--dark);
       border: none;
-      padding: 16px 38px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 16px 38px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      padding: 16px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 1.5px;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
-      border-radius: 2px;
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+      transition: background 0.3s, transform 0.3s;
     }
 
-    .btn-outline:hover {
+    .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(240,235,227,0.6);
+      border: 1px solid rgba(240,235,227,0.2);
+      padding: 16px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-ghost:hover {
       border-color: var(--gold);
       color: var(--gold);
       transform: translateY(-2px);
@@ -221,654 +239,810 @@
 
     .hero-scroll {
       position: absolute;
-      bottom: 36px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      color: rgba(255,255,255,0.3);
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 50px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      animation: scrollDown 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollDown {
-      0% { transform: scaleY(0); transform-origin: top; }
-      50% { transform: scaleY(1); transform-origin: top; }
-      51% { transform: scaleY(1); transform-origin: bottom; }
-      100% { transform: scaleY(0); transform-origin: bottom; }
-    }
-
-    .stats-bar {
-      background: var(--dark2);
-      padding: 36px 60px;
-      display: flex;
-      justify-content: center;
-      gap: 80px;
-      flex-wrap: wrap;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-item h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 38px;
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .stat-item p {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-
-    section { padding: 110px 60px; }
-
-    .section-label {
-      display: inline-flex;
-      align-items: center;
       gap: 10px;
-      color: var(--gold);
-      font-size: 11px;
+    }
+
+    .hero-scroll span {
+      font-size: 9px;
       letter-spacing: 3px;
+      color: rgba(255,255,255,0.25);
       text-transform: uppercase;
-      font-weight: 500;
-      margin-bottom: 16px;
     }
 
-    .section-label::before {
-      content: '';
-      width: 30px;
-      height: 1px;
+    .scroll-bar {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(var(--gold), transparent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:0.3; transform:scaleY(0.8); }
+      50% { opacity:1; transform:scaleY(1); }
+    }
+
+    /* ── TICKER ── */
+    .ticker {
       background: var(--gold);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
-    .section-title {
-      font-size: 44px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
+    .ticker-inner {
+      display: inline-flex;
+      animation: ticker 25s linear infinite;
     }
 
-    .section-subtitle {
-      font-size: 16px;
-      color: var(--gray);
-      line-height: 1.8;
-      font-weight: 300;
-      max-width: 540px;
+    .ticker-item {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--dark);
+      padding: 0 48px;
+      letter-spacing: 1px;
+    }
+
+    .ticker-dot {
+      color: rgba(10,10,10,0.35);
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── NOSOTROS ── */
+    .nosotros {
+      background: var(--cream2);
+      padding: 130px 60px;
     }
 
     .nosotros-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      max-width: 1100px;
+      gap: 100px;
+      max-width: 1200px;
       margin: 0 auto;
+      align-items: center;
     }
 
-    .nosotros-visual {
-      position: relative;
-    }
+    .nosotros-left { position: relative; }
 
-    .logo-display {
+    .logo-block {
       background: var(--dark);
-      border-radius: 4px;
-      padding: 60px;
+      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
     }
+
+    .logo-block::before {
+      content: '';
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(184,151,90,0.15);
+    }
+
+    .logo-block::after {
+      content: 'ARQUIVISION';
+      position: absolute;
+      bottom: 28px;
+      left: 0; right: 0;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 8px;
+      color: rgba(184,151,90,0.5);
+    }
+
+    .stats-side {
+      position: absolute;
+      right: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .stat-side {
+      background: var(--gold);
+      padding: 20px 24px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .stat-side h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .stat-side p {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.6);
+      margin-top: 4px;
+    }
+
+    .nosotros-right { padding-left: 20px; }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .eyebrow span {
+      font-size: 11px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 28px;
+      letter-spacing: -1px;
+    }
+
+    .section-title em { font-style: italic; color: var(--gold); }
 
     .nosotros-text p {
       font-size: 15px;
       color: #555;
       line-height: 1.9;
-      margin-bottom: 18px;
       font-weight: 300;
+      margin-bottom: 20px;
     }
 
-    .nosotros-text p strong { color: var(--dark); font-weight: 600; }
-
-    .valores {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 30px;
-    }
-
-    .valor {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .valor-dot {
-      width: 6px;
-      height: 6px;
+    .divider {
+      width: 50px;
+      height: 1px;
       background: var(--gold);
-      border-radius: 50%;
-      margin-top: 6px;
+      margin: 32px 0;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .feature-line {
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
       flex-shrink: 0;
     }
 
-    .valor p {
-      font-size: 13px !important;
-      color: #666 !important;
-      margin: 0 !important;
-      line-height: 1.5 !important;
+    .feature-item span {
+      font-size: 13px;
+      color: #555;
+      letter-spacing: 0.5px;
     }
 
-    .valor strong { font-size: 13px; color: var(--dark) !important; }
-
-    .servicios-section {
-      background: var(--light);
+    /* ── SERVICIOS ── */
+    .servicios {
+      background: var(--dark);
+      padding: 130px 60px;
     }
 
     .servicios-header {
-      text-align: center;
-      margin-bottom: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      max-width: 1200px;
+      margin: 0 auto 80px;
     }
 
-    .servicios-header .section-subtitle {
-      margin: 0 auto;
+    .servicios-header .section-title { color: var(--cream); margin-bottom: 0; }
+
+    .servicios-header p {
+      font-size: 14px;
+      color: rgba(240,235,227,0.35);
+      line-height: 1.8;
+      max-width: 300px;
+      font-weight: 300;
     }
 
     .servicios-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      max-width: 1100px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    .servicio-card {
-      background: var(--white);
-      padding: 44px 32px;
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
+    .servicio {
+      padding: 50px 36px;
+      border-right: 1px solid rgba(255,255,255,0.06);
       position: relative;
-      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.4s;
     }
 
-    .servicio-card::after {
+    .servicio:last-child { border-right: none; }
+    .servicio:hover { background: rgba(184,151,90,0.04); }
+
+    .servicio::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
       background: var(--gold);
-      transition: width 0.3s;
+      transition: width 0.4s;
     }
 
-    .servicio-card:hover::after { width: 100%; }
-    .servicio-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .servicio:hover::after { width: 100%; }
 
-    .servicio-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 48px;
-      color: rgba(201,168,76,0.15);
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 20px;
+    .s-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      opacity: 0.7;
     }
 
-    .servicio-card h3 {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: var(--dark);
+    .s-icon {
+      font-size: 32px;
+      margin-bottom: 24px;
+      filter: grayscale(0.3);
     }
 
-    .servicio-card p {
-      font-size: 14px;
-      color: var(--gray);
-      line-height: 1.7;
+    .servicio h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .servicio p {
+      font-size: 13px;
+      color: rgba(240,235,227,0.35);
+      line-height: 1.8;
       font-weight: 300;
     }
 
-    .proyectos-section {
-      background: var(--dark);
-      padding: 110px 60px;
+    .s-arrow {
+      position: absolute;
+      bottom: 36px;
+      right: 36px;
+      color: var(--gold);
+      font-size: 18px;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .servicio:hover .s-arrow { opacity: 1; transform: translateX(0); }
+
+    /* ── PROYECTOS ── */
+    .proyectos {
+      background: var(--cream2);
+      padding: 130px 60px;
     }
 
     .proyectos-header {
+      max-width: 1200px;
+      margin: 0 auto 70px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 60px;
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
-    .proyectos-header .section-title { color: var(--white); margin-bottom: 0; }
-    .proyectos-header .section-label { color: var(--gold); }
+    .proyectos-header .section-title { margin-bottom: 0; }
 
-    .proyectos-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .proyecto-card {
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--dark3);
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .proyecto-card:hover { transform: translateY(-6px); }
-    .proyecto-card:first-child { grid-column: span 2; }
-
-    .proyecto-img {
-      height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 64px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .proyecto-card:first-child .proyecto-img { height: 300px; }
-
-    .g1 { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
-    .g2 { background: linear-gradient(135deg, #2d1b69, #11998e); }
-    .g3 { background: linear-gradient(135deg, #373b44, #4286f4); }
-    .g4 { background: linear-gradient(135deg, #1a1a1a, #4a4a4a); }
-    .g5 { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
-    .g6 { background: linear-gradient(135deg, #200122, #6f0000); }
-
-    .proyecto-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-      display: flex;
-      align-items: flex-end;
-      padding: 20px;
-    }
-
-    .proyecto-card:hover .proyecto-overlay { opacity: 1; }
-
-    .proyecto-overlay span {
-      color: var(--gold);
+    .proyectos-header a {
       font-size: 12px;
       letter-spacing: 2px;
       text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(184,151,90,0.3);
+      padding-bottom: 4px;
     }
 
-    .proyecto-info {
-      padding: 22px 24px;
+    .proyectos-bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 280px 280px;
+      gap: 14px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .proyecto-info h3 {
-      font-size: 16px;
-      color: var(--white);
-      margin-bottom: 6px;
+    .p-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--dark3);
     }
 
-    .proyecto-info p {
+    .p-card:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+    .p-card:nth-child(2) { grid-column: span 4; }
+    .p-card:nth-child(3) { grid-column: span 3; }
+    .p-card:nth-child(4) { grid-column: span 3; }
+    .p-card:nth-child(5) { grid-column: span 4; }
+    .p-card:nth-child(6) { grid-column: span 5; }
+
+    .p-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      transition: transform 0.6s;
+    }
+
+    .p-card:hover .p-visual { transform: scale(1.08); }
+
+    .va { background: linear-gradient(145deg, #0d0d1a 0%, #1a1635 50%, #0a1628 100%); }
+    .vb { background: linear-gradient(145deg, #1a0d0d 0%, #2d1515 50%, #150a0a 100%); }
+    .vc { background: linear-gradient(145deg, #0d1a0d 0%, #152d15 50%, #0a150a 100%); }
+    .vd { background: linear-gradient(145deg, #1a1a0d 0%, #2d2d10 50%, #15150a 100%); }
+    .ve { background: linear-gradient(145deg, #0d1a1a 0%, #102d2d 50%, #0a1515 100%); }
+    .vf { background: linear-gradient(145deg, #1a0d1a 0%, #2d102d 50%, #150a15 100%); }
+
+    .p-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%);
+    }
+
+    .p-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 30px;
+      transform: translateY(8px);
+      transition: transform 0.3s;
+    }
+
+    .p-card:hover .p-info { transform: translateY(0); }
+
+    .p-tag {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+
+    .p-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: white;
+      line-height: 1.2;
+    }
+
+    .p-card:nth-child(1) .p-info h3 { font-size: 32px; }
+
+    .p-info p {
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 1px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 6px;
+      opacity: 0;
+      transition: opacity 0.3s 0.1s;
     }
 
-    .proceso-section {
-      background: var(--light);
+    .p-card:hover .p-info p { opacity: 1; }
+
+    /* ── PROCESO ── */
+    .proceso {
+      background: var(--dark2);
+      padding: 130px 60px;
     }
 
-    .proceso-header {
+    .proceso-top {
       text-align: center;
-      margin-bottom: 70px;
+      max-width: 600px;
+      margin: 0 auto 100px;
     }
 
-    .proceso-header .section-subtitle { margin: 0 auto; }
+    .proceso-top .section-title { color: var(--cream); }
 
-    .proceso-steps {
+    .proceso-top p {
+      font-size: 15px;
+      color: rgba(240,235,227,0.35);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-top: 16px;
+    }
+
+    .proceso-list {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       position: relative;
     }
 
-    .proceso-steps::before {
+    .proceso-list::before {
       content: '';
       position: absolute;
-      top: 28px;
+      top: 30px;
       left: 12%;
       right: 12%;
       height: 1px;
-      background: linear-gradient(to right, var(--gold), transparent, var(--gold));
+      background: linear-gradient(to right,
+        transparent,
+        rgba(184,151,90,0.3) 20%,
+        rgba(184,151,90,0.3) 80%,
+        transparent);
     }
 
     .paso {
+      padding: 0 30px;
       text-align: center;
-      padding: 0 20px;
-      position: relative;
     }
 
-    .paso-num {
-      width: 56px;
-      height: 56px;
-      background: var(--dark);
-      border: 2px solid var(--gold);
+    .paso-circle {
+      width: 60px;
+      height: 60px;
+      border: 1px solid var(--gold);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      color: var(--gold);
-      margin: 0 auto 24px;
+      margin: 0 auto 36px;
       position: relative;
-      z-index: 1;
+      background: var(--dark2);
+    }
+
+    .paso-circle span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--gold);
     }
 
     .paso h3 {
-      font-size: 16px;
-      margin-bottom: 10px;
-      color: var(--dark);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 14px;
     }
 
     .paso p {
       font-size: 13px;
-      color: var(--gray);
-      line-height: 1.6;
+      color: rgba(240,235,227,0.35);
+      line-height: 1.8;
       font-weight: 300;
     }
 
-    .testimonios-section {
-      background: var(--white);
+    /* ── TESTIMONIOS ── */
+    .testimonios {
+      background: var(--cream);
+      padding: 130px 60px;
     }
 
-    .testimonios-header {
+    .testimonios-top {
       text-align: center;
-      margin-bottom: 70px;
+      max-width: 600px;
+      margin: 0 auto 80px;
     }
 
-    .testimonios-header .section-subtitle { margin: 0 auto; }
+    .testimonios-top .section-title { color: var(--dark); }
 
     .testimonios-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1100px;
+      gap: 2px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     .testimonio {
-      padding: 36px;
-      border: 1px solid #ececec;
-      border-radius: 4px;
+      background: white;
+      padding: 52px 44px;
       position: relative;
-      transition: box-shadow 0.3s, transform 0.3s;
+      transition: transform 0.3s;
     }
 
-    .testimonio:hover {
-      box-shadow: 0 20px 50px rgba(0,0,0,0.07);
-      transform: translateY(-4px);
-    }
+    .testimonio:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
 
-    .quote-mark {
-      font-family: 'Playfair Display', serif;
-      font-size: 80px;
+    .t-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 100px;
       color: var(--gold);
-      line-height: 0.6;
-      margin-bottom: 24px;
-      opacity: 0.4;
+      line-height: 0.7;
+      margin-bottom: 28px;
+      opacity: 0.25;
     }
 
     .testimonio p {
-      font-size: 14px;
-      color: #555;
-      line-height: 1.8;
-      font-weight: 300;
-      margin-bottom: 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
       font-style: italic;
+      color: #333;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      font-weight: 300;
     }
 
-    .testimonio-footer {
+    .t-stars {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .t-autor {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       border-top: 1px solid #f0f0f0;
-      padding-top: 20px;
+      padding-top: 24px;
     }
 
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+    .t-avatar {
+      width: 48px;
+      height: 48px;
       background: var(--dark);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
       color: var(--gold);
-      font-weight: 700;
-      font-size: 15px;
       flex-shrink: 0;
     }
 
-    .testimonio-info strong {
+    .t-info strong {
       display: block;
       font-size: 14px;
       color: var(--dark);
-      font-weight: 600;
-    }
-
-    .testimonio-info span {
-      font-size: 12px;
-      color: var(--gray);
-    }
-
-    .estrellas {
-      color: var(--gold);
-      font-size: 13px;
-      margin-bottom: 14px;
-      letter-spacing: 2px;
-    }
-
-    .contacto-section {
-      background: var(--dark);
-      padding: 110px 60px;
-    }
-
-    .contacto-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
-      max-width: 1000px;
-      margin: 0 auto;
-      align-items: start;
-    }
-
-    .contacto-info .section-title { color: var(--white); }
-    .contacto-info .section-subtitle { color: rgba(255,255,255,0.4); }
-
-    .contacto-datos {
-      margin-top: 44px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .dato {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .dato-icon {
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .dato-text strong {
-      display: block;
-      font-size: 13px;
-      color: var(--white);
       font-weight: 500;
     }
 
-    .dato-text span {
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
+    .t-info span {
+      font-size: 12px;
+      color: #999;
     }
 
-    .contacto-form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    /* ── CONTACTO ── */
+    .contacto {
+      background: var(--dark);
+      padding: 130px 60px;
     }
 
-    .form-row {
+    .contacto-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 120px;
+      align-items: start;
     }
 
-    .form-field {
+    .contacto-left .section-title { color: var(--cream); }
+
+    .c-desc {
+      font-size: 15px;
+      color: rgba(240,235,227,0.35);
+      line-height: 1.9;
+      font-weight: 300;
+      margin-top: 16px;
+      margin-bottom: 52px;
+    }
+
+    .c-datos {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 28px;
     }
 
-    .form-field label {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
+    .c-dato {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .c-dato-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(184,151,90,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .c-dato-text strong {
+      display: block;
+      font-size: 12px;
       letter-spacing: 2px;
       text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
     }
 
-    .form-field input,
-    .form-field select,
-    .form-field textarea {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 2px;
-      padding: 14px 16px;
-      font-family: 'Inter', sans-serif;
+    .c-dato-text span {
       font-size: 14px;
-      color: var(--white);
-      transition: border-color 0.2s;
+      color: rgba(240,235,227,0.45);
+      font-weight: 300;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .f-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .f-field {
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-bottom: none;
+      padding: 22px 24px 16px;
+      transition: border-color 0.3s;
+    }
+
+    .f-row .f-field:first-child { border-right: none; }
+    .form > .f-field { border-bottom: none; }
+    .form > .f-field:last-of-type { border-bottom: 1px solid rgba(255,255,255,0.07); }
+
+    .f-field:focus-within { border-color: rgba(184,151,90,0.4); }
+
+    .f-field label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(240,235,227,0.3);
+      margin-bottom: 8px;
+    }
+
+    .f-field input,
+    .f-field select,
+    .f-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
       outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--cream);
+      font-weight: 300;
     }
 
-    .form-field input::placeholder,
-    .form-field textarea::placeholder {
-      color: rgba(255,255,255,0.2);
+    .f-field input::placeholder,
+    .f-field textarea::placeholder {
+      color: rgba(240,235,227,0.18);
     }
 
-    .form-field input:focus,
-    .form-field select:focus,
-    .form-field textarea:focus {
-      border-color: var(--gold);
-    }
+    .f-field select option { background: var(--dark3); }
+    .f-field select { color: rgba(240,235,227,0.4); }
 
-    .form-field select option { background: var(--dark2); color: var(--white); }
+    .f-field textarea { height: 100px; resize: none; }
 
-    .form-field textarea {
-      height: 120px;
-      resize: vertical;
-    }
-
-    .btn-submit {
+    .btn-form {
       background: var(--gold);
       color: var(--dark);
       border: none;
-      padding: 16px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 2px;
+      padding: 20px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      border-radius: 2px;
       cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 6px;
+      margin-top: 20px;
+      width: 100%;
+      transition: background 0.3s;
     }
 
-    .btn-submit:hover { background: var(--gold-light); }
+    .btn-form:hover { background: var(--gold2); }
 
-    .msg-ok {
+    .f-ok {
       display: none;
-      color: #4caf50;
-      font-size: 14px;
-      padding: 14px;
-      background: rgba(76,175,80,0.1);
-      border: 1px solid rgba(76,175,80,0.2);
-      border-radius: 2px;
-      text-align: center;
+      font-size: 13px;
+      color: #6abf69;
+      padding: 16px 0;
+      letter-spacing: 1px;
     }
 
+    /* ── FOOTER ── */
     footer {
-      background: #0a0a0a;
-      padding: 50px 60px 30px;
+      background: #040404;
+      padding: 70px 60px 40px;
     }
 
     .footer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 30px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 40px;
     }
 
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
+    .footer-brand p {
+      font-size: 13px;
+      color: rgba(240,235,227,0.25);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-top: 16px;
+      max-width: 260px;
+    }
+
+    .footer-logo-text {
+      font-family: 'Cormorant Garamond', serif;
       font-size: 22px;
-      color: var(--white);
+      letter-spacing: 5px;
+      color: var(--cream);
+    }
+
+    .footer-logo-text span { color: var(--gold); }
+
+    .footer-col h4 {
+      font-size: 10px;
       letter-spacing: 3px;
-    }
-
-    .footer-logo span { color: var(--gold); }
-
-    .footer-links {
-      display: flex;
-      gap: 30px;
-    }
-
-    .footer-links a {
+      text-transform: uppercase;
       color: rgba(255,255,255,0.3);
+      margin-bottom: 24px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      color: rgba(240,235,227,0.4);
       text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-weight: 300;
       transition: color 0.2s;
     }
 
-    .footer-links a:hover { color: var(--gold); }
+    .footer-col a:hover { color: var(--gold); }
 
     .footer-bottom {
       display: flex;
@@ -878,373 +1052,394 @@
 
     .footer-bottom p {
       font-size: 12px;
-      color: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.15);
     }
 
-    .footer-bottom span {
-      font-size: 12px;
-      color: rgba(255,255,255,0.2);
-    }
-
-    .btn-flotante {
+    /* ── BTN FLOTANTE ── */
+    .fab {
       position: fixed;
-      bottom: 32px;
-      right: 32px;
-      width: 54px;
-      height: 54px;
+      bottom: 36px;
+      right: 36px;
+      width: 56px;
+      height: 56px;
       background: var(--gold);
       border: none;
       border-radius: 50%;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 6px 24px rgba(201,168,76,0.4);
+      box-shadow: 0 8px 32px rgba(184,151,90,0.35);
       z-index: 500;
-      transition: transform 0.2s, background 0.2s;
+      transition: transform 0.3s, background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .btn-flotante:hover { transform: scale(1.1); background: var(--gold-light); }
+    .fab:hover { transform: scale(1.12) rotate(10deg); background: var(--gold2); }
 
-    .fade-up {
+    /* ── ANIMACIONES ── */
+    .reveal {
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .fade-up:nth-child(2) { transition-delay: 0.1s; }
-    .fade-up:nth-child(3) { transition-delay: 0.2s; }
-    .fade-up:nth-child(4) { transition-delay: 0.3s; }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal:nth-child(2) { transition-delay: 0.12s; }
+    .reveal:nth-child(3) { transition-delay: 0.22s; }
+    .reveal:nth-child(4) { transition-delay: 0.32s; }
   </style>
 </head>
 <body>
 
-  <nav id="navbar">
-    <a href="#" class="nav-logo">
-      <svg width="32" height="32" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="25,4 46,40 4,40" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
-        <line x1="25" y1="4" x2="25" y2="40" stroke="#c9a84c" stroke-width="1.2" stroke-dasharray="3,2"/>
-        <rect x="20" y="28" width="10" height="12" fill="#c9a84c"/>
-        <line x1="4" y1="40" x2="46" y2="40" stroke="#c9a84c" stroke-width="2"/>
-      </svg>
-      <span class="nav-logo-text">ARQUI<span>VISION</span></span>
-    </a>
-    <div class="nav-links">
-      <a href="#nosotros">Nosotros</a>
-      <a href="#servicios">Servicios</a>
-      <a href="#proyectos">Proyectos</a>
-      <a href="#proceso">Proceso</a>
-      <a href="#contacto" class="nav-cta">Contáctanos</a>
-    </div>
-  </nav>
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">ARQUI<span>VISION</span></a>
+  <div class="nav-menu">
+    <a href="#nosotros">Nosotros</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto" class="nav-btn">Contacto</a>
+  </div>
+</nav>
 
-  <section class="hero" id="inicio">
-    <div class="hero-bg"></div>
-    <div class="hero-lines"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">Arquitectura & Diseño Premium</div>
-      <h1>Espacios que<br><em>Inspiran</em> Vidas</h1>
-      <p class="hero-desc">Transformamos visiones en arquitectura extraordinaria. Diseño con propósito, precisión y pasión desde 2010.</p>
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-geo">
+    <svg viewBox="0 0 800 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="400" y1="0" x2="400" y2="900" stroke="#b8975a" stroke-width="0.5"/>
+      <line x1="0" y1="450" x2="800" y2="450" stroke="#b8975a" stroke-width="0.5"/>
+      <polygon points="400,50 720,680 80,680" fill="none" stroke="#b8975a" stroke-width="1"/>
+      <polygon points="400,150 660,600 140,600" fill="none" stroke="#b8975a" stroke-width="0.5"/>
+      <polygon points="400,250 600,520 200,520" fill="none" stroke="#b8975a" stroke-width="0.5"/>
+      <rect x="360" y="500" width="80" height="180" fill="rgba(184,151,90,0.15)"/>
+      <rect x="310" y="560" width="40" height="120" fill="rgba(184,151,90,0.08)"/>
+      <rect x="450" y="540" width="40" height="140" fill="rgba(184,151,90,0.08)"/>
+      <circle cx="400" cy="50" r="6" fill="#b8975a"/>
+      <line x1="80" y1="680" x2="720" y2="680" stroke="#b8975a" stroke-width="1.5"/>
+      <line x1="60" y1="690" x2="740" y2="690" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="330" y="380" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="370" y="380" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="410" y="380" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="330" y="430" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="370" y="430" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+      <rect x="410" y="430" width="20" height="25" fill="none" stroke="#b8975a" stroke-width="0.5" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="hero-number">A</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>Firma de Arquitectura Premium · Est. 2010</span></div>
+    <h1>Diseñamos<br>el <em>Futuro</em><br>que Habitas</h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Cada línea que trazamos tiene un propósito. Cada espacio que construimos, una historia. Arquitectura que trasciende el tiempo.</p>
       <div class="hero-actions">
-        <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Solicitar Cotización</button>
-        <button class="btn-outline" onclick="document.getElementById('proyectos').scrollIntoView({behavior:'smooth'})">Ver Proyectos</button>
+        <button class="btn-gold" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Solicitar Cotización</button>
+        <button class="btn-ghost" onclick="document.getElementById('proyectos').scrollIntoView({behavior:'smooth'})">Ver Portafolio</button>
       </div>
-    </div>
-    <div class="hero-scroll">
-      <div class="scroll-line"></div>
-      Scroll
-    </div>
-  </section>
-
-  <div class="stats-bar">
-    <div class="stat-item fade-up">
-      <h3 id="cnt1">0</h3>
-      <p>Proyectos completados</p>
-    </div>
-    <div class="stat-item fade-up">
-      <h3 id="cnt2">0</h3>
-      <p>Clientes satisfechos</p>
-    </div>
-    <div class="stat-item fade-up">
-      <h3 id="cnt3">0</h3>
-      <p>Años de experiencia</p>
-    </div>
-    <div class="stat-item fade-up">
-      <h3 id="cnt4">0</h3>
-      <p>Ciudades en Colombia</p>
     </div>
   </div>
+  <div class="hero-scroll"><div class="scroll-bar"></div><span>Scroll</span></div>
+</section>
 
-  <section id="nosotros">
-    <div class="nosotros-grid">
-      <div class="nosotros-visual fade-up">
-        <div class="logo-display">
-          <svg width="200" height="175" viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="80,10 150,120 10,120" fill="none" stroke="#c9a84c" stroke-width="3.5"/>
-            <line x1="80" y1="10" x2="80" y2="120" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="5,3"/>
-            <line x1="47" y1="75" x2="113" y2="75" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
-            <line x1="32" y1="95" x2="128" y2="95" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
-            <rect x="68" y="88" width="24" height="32" fill="#c9a84c"/>
-            <circle cx="80" cy="10" r="4" fill="#c9a84c"/>
-            <line x1="10" y1="120" x2="150" y2="120" stroke="#c9a84c" stroke-width="3.5"/>
-            <text x="80" y="137" font-family="Georgia,serif" font-size="11" font-weight="bold"
-                  fill="#c9a84c" text-anchor="middle" letter-spacing="4">ARQUIVISION</text>
-          </svg>
-        </div>
-      </div>
-      <div class="nosotros-text fade-up">
-        <div class="section-label">Quiénes somos</div>
-        <h2 class="section-title">Arquitectura con Propósito y Precisión</h2>
-        <p><strong>ArquiVision</strong> es una firma de arquitectura fundada en 2010, especializada en crear espacios que equilibran belleza, funcionalidad y sostenibilidad. Cada proyecto refleja nuestra filosofía: la arquitectura debe mejorar la calidad de vida de quienes la habitan.</p>
-        <p>Nuestro equipo multidisciplinario de arquitectos, ingenieros y diseñadores trabaja con metodología BIM, garantizando precisión técnica y visualización completa antes de iniciar la construcción.</p>
-        <div class="valores">
-          <div class="valor">
-            <div class="valor-dot"></div>
-            <p><strong>Diseño centrado en el usuario</strong><br>Cada espacio es concebido para quienes lo vivirán.</p>
-          </div>
-          <div class="valor">
-            <div class="valor-dot"></div>
-            <p><strong>Sostenibilidad activa</strong><br>Certificaciones LEED y materiales de bajo impacto.</p>
-          </div>
-          <div class="valor">
-            <div class="valor-dot"></div>
-            <p><strong>Innovación tecnológica</strong><br>Renders fotorrealistas y modelos 3D en tiempo real.</p>
-          </div>
-          <div class="valor">
-            <div class="valor-dot"></div>
-            <p><strong>Cumplimiento garantizado</strong><br>Entregamos en tiempo y dentro del presupuesto.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">Diseño Residencial <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Arquitectura Comercial <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Diseño Sostenible <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Consultoría Técnica <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Renders 3D <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Renovaciones <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Diseño de Interiores <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Arquitectura Institucional <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Diseño Residencial <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Arquitectura Comercial <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Diseño Sostenible <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Consultoría Técnica <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Renders 3D <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Renovaciones <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Diseño de Interiores <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Arquitectura Institucional <span class="ticker-dot">◆</span></span>
+  </div>
+</div>
 
-  <section class="servicios-section" id="servicios">
-    <div class="servicios-header fade-up">
-      <div class="section-label">Lo que hacemos</div>
-      <h2 class="section-title">Nuestros Servicios</h2>
-      <p class="section-subtitle">Soluciones integrales de arquitectura y diseño para proyectos residenciales, comerciales e institucionales.</p>
-    </div>
-    <div class="servicios-grid">
-      <div class="servicio-card fade-up">
-        <div class="servicio-num">01</div>
-        <h3>Diseño Residencial</h3>
-        <p>Casas, apartamentos y condominios diseñados para la vida que deseas vivir, con atención al detalle y la funcionalidad.</p>
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
+  <div class="nosotros-grid">
+    <div class="nosotros-left reveal">
+      <div class="logo-block">
+        <svg width="220" height="220" viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="80,10 150,120 10,120" fill="none" stroke="#b8975a" stroke-width="2.5"/>
+          <polygon points="80,10 150,120 10,120" fill="rgba(184,151,90,0.04)"/>
+          <line x1="80" y1="10" x2="80" y2="120" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+          <line x1="47" y1="75" x2="113" y2="75" stroke="#b8975a" stroke-width="0.8" opacity="0.3"/>
+          <line x1="32" y1="95" x2="128" y2="95" stroke="#b8975a" stroke-width="0.8" opacity="0.3"/>
+          <rect x="68" y="88" width="24" height="32" fill="#b8975a"/>
+          <circle cx="80" cy="10" r="3.5" fill="#b8975a"/>
+          <line x1="10" y1="120" x2="150" y2="120" stroke="#b8975a" stroke-width="2.5"/>
+          <rect x="52" y="55" width="12" height="14" fill="none" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+          <rect x="96" y="55" width="12" height="14" fill="none" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+        </svg>
       </div>
-      <div class="servicio-card fade-up">
-        <div class="servicio-num">02</div>
-        <h3>Diseño Comercial</h3>
-        <p>Oficinas, tiendas y espacios corporativos que reflejan la identidad de tu marca y optimizan la productividad.</p>
-      </div>
-      <div class="servicio-card fade-up">
-        <div class="servicio-num">03</div>
-        <h3>Consultoría Técnica</h3>
-        <p>Asesoría experta en viabilidad, normativa urbana, permisos de construcción y gestión de proyectos.</p>
-      </div>
-      <div class="servicio-card fade-up">
-        <div class="servicio-num">04</div>
-        <h3>Renovaciones</h3>
-        <p>Transformamos espacios existentes con intervenciones precisas que elevan el valor y la calidad del inmueble.</p>
+      <div class="stats-side">
+        <div class="stat-side"><h4 id="s1">0</h4><p>Proyectos</p></div>
+        <div class="stat-side"><h4 id="s2">0</h4><p>Clientes</p></div>
+        <div class="stat-side"><h4 id="s3">0</h4><p>Años</p></div>
       </div>
     </div>
-  </section>
+    <div class="nosotros-right reveal">
+      <div class="eyebrow"><span>Sobre Nosotros</span></div>
+      <h2 class="section-title">Arquitectura con <em>Alma</em> y Precisión</h2>
+      <div class="nosotros-text">
+        <p>Somos una firma de arquitectura con sede en Bogotá, fundada en 2010 bajo la convicción de que el espacio construido puede transformar la vida de las personas. Cada proyecto que emprendemos es una oportunidad de crear algo que perdure.</p>
+        <p>Trabajamos con metodología BIM, lo que nos permite anticipar cada detalle del proyecto antes de que comience la obra, garantizando eficiencia, calidad y total transparencia con nuestros clientes.</p>
+      </div>
+      <div class="divider"></div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-line"></div><span>Certificación LEED en diseño sostenible</span></div>
+        <div class="feature-item"><div class="feature-line"></div><span>Modelado BIM y visualización 3D fotorrealista</span></div>
+        <div class="feature-item"><div class="feature-line"></div><span>Gestión integral de obra y supervisión técnica</span></div>
+        <div class="feature-item"><div class="feature-line"></div><span>Presencia en 8 ciudades de Colombia</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="proyectos-section" id="proyectos">
-    <div class="proyectos-header fade-up">
-      <div>
-        <div class="section-label">Nuestro portafolio</div>
-        <h2 class="section-title">Proyectos Destacados</h2>
-      </div>
+<!-- SERVICIOS -->
+<section class="servicios" id="servicios">
+  <div class="servicios-header reveal">
+    <div>
+      <div class="eyebrow"><span>Lo que ofrecemos</span></div>
+      <h2 class="section-title" style="color:var(--cream)">Nuestros Servicios</h2>
     </div>
-    <div class="proyectos-grid">
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g1">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🏡
-        </div>
-        <div class="proyecto-info">
-          <h3>Residencia Villa Norte</h3>
-          <p>Casa campestre · Bogotá · 2023</p>
-        </div>
-      </div>
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g2">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🏢
-        </div>
-        <div class="proyecto-info">
-          <h3>Torre Empresarial Zen</h3>
-          <p>Edificio oficinas · Medellín · 2023</p>
-        </div>
-      </div>
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g3">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🏨
-        </div>
-        <div class="proyecto-info">
-          <h3>Hotel Boutique Alma</h3>
-          <p>Hotelería · Cartagena · 2022</p>
-        </div>
-      </div>
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g4">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🌿
-        </div>
-        <div class="proyecto-info">
-          <h3>Parque Ecobarrio</h3>
-          <p>Espacio público · Cali · 2022</p>
-        </div>
-      </div>
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g5">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🏪
-        </div>
-        <div class="proyecto-info">
-          <h3>Centro Comercial Vitrina</h3>
-          <p>Retail · Bogotá · 2021</p>
-        </div>
-      </div>
-      <div class="proyecto-card fade-up">
-        <div class="proyecto-img g6">
-          <div class="proyecto-overlay"><span>Ver proyecto →</span></div>
-          🏫
-        </div>
-        <div class="proyecto-info">
-          <h3>Colegio Nuevo Horizonte</h3>
-          <p>Institucional · Bucaramanga · 2021</p>
-        </div>
-      </div>
+    <p>Soluciones completas de arquitectura y diseño para proyectos de cualquier escala y complejidad.</p>
+  </div>
+  <div class="servicios-grid">
+    <div class="servicio reveal">
+      <div class="s-num">01</div>
+      <div class="s-icon">🏠</div>
+      <h3>Diseño Residencial</h3>
+      <p>Casas y apartamentos que reflejan la identidad de quienes los habitan, con diseño personalizado desde la primera planta.</p>
+      <span class="s-arrow">→</span>
     </div>
-  </section>
+    <div class="servicio reveal">
+      <div class="s-num">02</div>
+      <div class="s-icon">🏢</div>
+      <h3>Diseño Comercial</h3>
+      <p>Espacios corporativos y comerciales que comunican la identidad de tu marca y optimizan la experiencia del usuario.</p>
+      <span class="s-arrow">→</span>
+    </div>
+    <div class="servicio reveal">
+      <div class="s-num">03</div>
+      <div class="s-icon">📐</div>
+      <h3>Consultoría Técnica</h3>
+      <p>Asesoría integral en normativa urbana, permisos de construcción, viabilidad técnica y gestión de proyectos.</p>
+      <span class="s-arrow">→</span>
+    </div>
+    <div class="servicio reveal">
+      <div class="s-num">04</div>
+      <div class="s-icon">🔨</div>
+      <h3>Renovaciones</h3>
+      <p>Intervenciones quirúrgicas en espacios existentes que elevan su valor, funcionalidad y calidad estética.</p>
+      <span class="s-arrow">→</span>
+    </div>
+  </div>
+</section>
 
-  <section class="proceso-section" id="proceso">
-    <div class="proceso-header fade-up">
-      <div class="section-label">Cómo trabajamos</div>
-      <h2 class="section-title">Nuestro Proceso</h2>
-      <p class="section-subtitle">Un método claro y transparente para llevar tu proyecto de la idea a la realidad.</p>
+<!-- PROYECTOS -->
+<section class="proyectos" id="proyectos">
+  <div class="proyectos-header reveal">
+    <div>
+      <div class="eyebrow"><span>Portafolio</span></div>
+      <h2 class="section-title">Proyectos Destacados</h2>
     </div>
-    <div class="proceso-steps">
-      <div class="paso fade-up">
-        <div class="paso-num">1</div>
-        <h3>Consulta Inicial</h3>
-        <p>Escuchamos tu visión, necesidades y presupuesto para entender el alcance del proyecto.</p>
-      </div>
-      <div class="paso fade-up">
-        <div class="paso-num">2</div>
-        <h3>Diseño & Propuesta</h3>
-        <p>Desarrollamos planos, renders 3D y especificaciones técnicas para tu aprobación.</p>
-      </div>
-      <div class="paso fade-up">
-        <div class="paso-num">3</div>
-        <h3>Ejecución</h3>
-        <p>Supervisamos cada etapa de la construcción garantizando calidad y cumplimiento.</p>
-      </div>
-      <div class="paso fade-up">
-        <div class="paso-num">4</div>
-        <h3>Entrega Final</h3>
-        <p>Hacemos el recorrido contigo y aseguramos tu total satisfacción antes del cierre.</p>
+    <a href="#">Ver todos los proyectos →</a>
+  </div>
+  <div class="proyectos-bento">
+    <div class="p-card reveal">
+      <div class="p-visual va">🏡</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Residencial · Bogotá · 2023</div>
+        <h3>Residencia Villa Norte</h3>
+        <p>Casa campestre de 480 m² con diseño bioclimático</p>
       </div>
     </div>
-  </section>
+    <div class="p-card reveal">
+      <div class="p-visual vb">🏢</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Comercial · Medellín · 2023</div>
+        <h3>Torre Empresarial Zen</h3>
+        <p>Edificio de oficinas de 12 pisos</p>
+      </div>
+    </div>
+    <div class="p-card reveal">
+      <div class="p-visual vc">🏨</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Hotelería · Cartagena · 2022</div>
+        <h3>Hotel Boutique Alma</h3>
+        <p>32 habitaciones de lujo frente al mar</p>
+      </div>
+    </div>
+    <div class="p-card reveal">
+      <div class="p-visual vd">🌿</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Espacio público · Cali · 2022</div>
+        <h3>Parque Ecobarrio</h3>
+        <p>12.000 m² de parque urbano sostenible</p>
+      </div>
+    </div>
+    <div class="p-card reveal">
+      <div class="p-visual ve">🏪</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Retail · Bogotá · 2021</div>
+        <h3>Centro Comercial Vitrina</h3>
+        <p>Centro comercial de 35.000 m²</p>
+      </div>
+    </div>
+    <div class="p-card reveal">
+      <div class="p-visual vf">🏫</div>
+      <div class="p-overlay"></div>
+      <div class="p-info">
+        <div class="p-tag">Institucional · Bucaramanga · 2021</div>
+        <h3>Colegio Nuevo Horizonte</h3>
+        <p>Campus educativo para 1.200 estudiantes</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="testimonios-section">
-    <div class="testimonios-header fade-up">
-      <div class="section-label">Testimonios</div>
-      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
-      <p class="section-subtitle">La confianza de más de 180 familias y empresas nos respalda.</p>
+<!-- PROCESO -->
+<section class="proceso" id="proceso">
+  <div class="proceso-top reveal">
+    <div class="eyebrow" style="justify-content:center"><span>Cómo trabajamos</span></div>
+    <h2 class="section-title">Nuestro Proceso</h2>
+    <p>Un método claro, transparente y probado en más de 200 proyectos para llevar tu idea a la realidad.</p>
+  </div>
+  <div class="proceso-list">
+    <div class="paso reveal">
+      <div class="paso-circle"><span>1</span></div>
+      <h3>Consulta Inicial</h3>
+      <p>Escuchamos tu visión, analizamos el sitio y definimos el alcance y presupuesto del proyecto.</p>
     </div>
-    <div class="testimonios-grid">
-      <div class="testimonio fade-up">
-        <div class="quote-mark">"</div>
-        <div class="estrellas">★★★★★</div>
-        <p>ArquiVision transformó completamente nuestra casa. El equipo escuchó cada detalle y el resultado superó todas nuestras expectativas. Profesionalismo de primer nivel.</p>
-        <div class="testimonio-footer">
-          <div class="avatar">ML</div>
-          <div class="testimonio-info">
-            <strong>María López</strong>
-            <span>Proyecto residencial · Bogotá</span>
-          </div>
-        </div>
-      </div>
-      <div class="testimonio fade-up">
-        <div class="quote-mark">"</div>
-        <div class="estrellas">★★★★★</div>
-        <p>El diseño de nuestras oficinas mejoró la productividad del equipo un 35%. Creativos, puntuales y dentro del presupuesto. Los recomendaría sin dudarlo.</p>
-        <div class="testimonio-footer">
-          <div class="avatar">CR</div>
-          <div class="testimonio-info">
-            <strong>Carlos Ríos</strong>
-            <span>Director · TechCorp Colombia</span>
-          </div>
-        </div>
-      </div>
-      <div class="testimonio fade-up">
-        <div class="quote-mark">"</div>
-        <div class="estrellas">★★★★★</div>
-        <p>Renovaron nuestro local y las ventas aumentaron un 40%. El nuevo espacio atrae y retiene clientes. ArquiVision entiende que el diseño es una inversión, no un gasto.</p>
-        <div class="testimonio-footer">
-          <div class="avatar">SG</div>
-          <div class="testimonio-info">
-            <strong>Sandra Gómez</strong>
-            <span>Propietaria · Boutique Alma</span>
-          </div>
-        </div>
-      </div>
+    <div class="paso reveal">
+      <div class="paso-circle"><span>2</span></div>
+      <h3>Diseño & Propuesta</h3>
+      <p>Desarrollamos planos arquitectónicos, renders fotorrealistas y especificaciones técnicas detalladas.</p>
     </div>
-  </section>
+    <div class="paso reveal">
+      <div class="paso-circle"><span>3</span></div>
+      <h3>Aprobación & Permisos</h3>
+      <p>Gestionamos todos los trámites legales, licencias y aprobaciones ante las autoridades competentes.</p>
+    </div>
+    <div class="paso reveal">
+      <div class="paso-circle"><span>4</span></div>
+      <h3>Construcción & Entrega</h3>
+      <p>Supervisamos cada etapa de la obra y entregamos cuando cada detalle cumple nuestros estándares.</p>
+    </div>
+  </div>
+</section>
 
-  <section class="contacto-section" id="contacto">
-    <div class="contacto-grid">
-      <div class="contacto-info fade-up">
-        <div class="section-label">Hablemos</div>
-        <h2 class="section-title">Cuéntanos tu Proyecto</h2>
-        <p class="section-subtitle">Respondemos en menos de 24 horas. La consulta inicial es completamente gratuita.</p>
-        <div class="contacto-datos">
-          <div class="dato">
-            <div class="dato-icon">📍</div>
-            <div class="dato-text">
-              <strong>Dirección</strong>
-              <span>Calle 93 #15-40, Bogotá, Colombia</span>
-            </div>
+<!-- TESTIMONIOS -->
+<section class="testimonios">
+  <div class="testimonios-top reveal">
+    <div class="eyebrow" style="justify-content:center"><span>Testimonios</span></div>
+    <h2 class="section-title">Lo que dicen<br><em>nuestros clientes</em></h2>
+  </div>
+  <div class="testimonios-grid">
+    <div class="testimonio reveal">
+      <div class="t-quote">"</div>
+      <div class="t-stars">★★★★★</div>
+      <p>ArquiVision no solo diseñó nuestra casa: diseñó la forma en que vivimos. Cada espacio fue pensado con una precisión y sensibilidad que nunca esperamos encontrar.</p>
+      <div class="t-autor">
+        <div class="t-avatar">ML</div>
+        <div class="t-info">
+          <strong>María López</strong>
+          <span>Proyecto residencial · Bogotá</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio reveal">
+      <div class="t-quote">"</div>
+      <div class="t-stars">★★★★★</div>
+      <p>Nuestras nuevas oficinas han transformado por completo la cultura de nuestra empresa. El espacio inspira creatividad, colaboración y orgullo. Los números lo confirman: +35% en productividad.</p>
+      <div class="t-autor">
+        <div class="t-avatar">CR</div>
+        <div class="t-info">
+          <strong>Carlos Ríos</strong>
+          <span>Director General · TechCorp Colombia</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio reveal">
+      <div class="t-quote">"</div>
+      <div class="t-stars">★★★★★</div>
+      <p>Renovaron nuestro local y las ventas aumentaron un 40% en el primer trimestre. ArquiVision entiende que el diseño no es decoración, es estrategia de negocio.</p>
+      <div class="t-autor">
+        <div class="t-avatar">SG</div>
+        <div class="t-info">
+          <strong>Sandra Gómez</strong>
+          <span>Propietaria · Boutique Alma, Cartagena</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="contacto-wrap">
+    <div class="contacto-left reveal">
+      <div class="eyebrow"><span>Hablemos</span></div>
+      <h2 class="section-title">Comienza tu <em>Proyecto</em></h2>
+      <p class="c-desc">La consulta inicial es gratuita. Cuéntanos tu idea y te respondemos en menos de 24 horas con una propuesta preliminar.</p>
+      <div class="c-datos">
+        <div class="c-dato">
+          <div class="c-dato-icon">📍</div>
+          <div class="c-dato-text">
+            <strong>Oficina Principal</strong>
+            <span>Calle 93 #15-40, Bogotá, Colombia</span>
           </div>
-          <div class="dato">
-            <div class="dato-icon">📞</div>
-            <div class="dato-text">
-              <strong>Teléfono</strong>
-              <span>+57 300 000 0000</span>
-            </div>
+        </div>
+        <div class="c-dato">
+          <div class="c-dato-icon">📞</div>
+          <div class="c-dato-text">
+            <strong>Teléfono</strong>
+            <span>+57 300 000 0000</span>
           </div>
-          <div class="dato">
-            <div class="dato-icon">✉️</div>
-            <div class="dato-text">
-              <strong>Email</strong>
-              <span>hola@arquivision.co</span>
-            </div>
+        </div>
+        <div class="c-dato">
+          <div class="c-dato-icon">✉️</div>
+          <div class="c-dato-text">
+            <strong>Email</strong>
+            <span>hola@arquivision.co</span>
           </div>
         </div>
       </div>
-      <div class="contacto-form fade-up">
-        <div class="form-row">
-          <div class="form-field">
-            <label>Nombre</label>
-            <input type="text" id="nombre" placeholder="Tu nombre" />
+    </div>
+    <div class="reveal">
+      <div class="form">
+        <div class="f-row">
+          <div class="f-field">
+            <label>Nombre completo</label>
+            <input type="text" id="nombre" placeholder="Tu nombre"/>
           </div>
-          <div class="form-field">
+          <div class="f-field">
             <label>Teléfono</label>
-            <input type="tel" id="telefono" placeholder="+57 300 000 0000" />
+            <input type="tel" id="tel" placeholder="+57 300 000 0000"/>
           </div>
         </div>
-        <div class="form-field">
+        <div class="f-field">
           <label>Correo electrónico</label>
-          <input type="email" id="correo" placeholder="tu@correo.com" />
+          <input type="email" id="email" placeholder="tu@correo.com"/>
         </div>
-        <div class="form-field">
+        <div class="f-field">
           <label>Tipo de proyecto</label>
           <select id="tipo">
             <option value="">Selecciona una opción</option>
@@ -1255,98 +1450,99 @@
             <option>Consultoría</option>
           </select>
         </div>
-        <div class="form-field">
+        <div class="f-field" style="border-bottom:1px solid rgba(255,255,255,0.07)">
           <label>Mensaje</label>
-          <textarea id="mensaje" placeholder="Cuéntanos los detalles de tu proyecto..."></textarea>
+          <textarea id="msg" placeholder="Cuéntanos los detalles de tu proyecto..."></textarea>
         </div>
-        <button class="btn-submit" onclick="enviar()">Enviar Mensaje →</button>
-        <p class="msg-ok" id="msg-ok">✓ Mensaje enviado. Te contactaremos pronto.</p>
+        <button class="btn-form" onclick="enviar()">Enviar Mensaje →</button>
+        <p class="f-ok" id="fok">✓ &nbsp;Mensaje recibido. Te contactaremos pronto.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <div class="footer-top">
-      <div class="footer-logo">ARQUI<span>VISION</span></div>
-      <div class="footer-links">
-        <a href="#nosotros">Nosotros</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#proyectos">Proyectos</a>
-        <a href="#contacto">Contacto</a>
-      </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo-text">ARQUI<span>VISION</span></div>
+      <p>Firma de arquitectura y diseño con más de 14 años transformando espacios en Colombia. Diseñamos el futuro que habitas.</p>
     </div>
-    <div class="footer-bottom">
-      <p>© 2024 ArquiVision. Todos los derechos reservados.</p>
-      <span>Bogotá, Colombia</span>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#proceso">Proceso</a>
     </div>
-  </footer>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="#">Diseño Residencial</a>
+      <a href="#">Diseño Comercial</a>
+      <a href="#">Consultoría</a>
+      <a href="#">Renovaciones</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <a href="#">hola@arquivision.co</a>
+      <a href="#">+57 300 000 0000</a>
+      <a href="#">Bogotá, Colombia</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 ArquiVision. Todos los derechos reservados.</p>
+    <p>Diseñado con precisión.</p>
+  </div>
+</footer>
 
-  <button class="btn-flotante" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">✉</button>
+<button class="fab" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">✉</button>
 
-  <script>
-    var navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 60) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
+<script>
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('solid', window.scrollY > 80);
+    check();
+  });
+
+  var counted = false;
+  function cnt(id, end, dur) {
+    var el = document.getElementById(id), n = 0, step = end / (dur / 16);
+    var iv = setInterval(function() {
+      n += step;
+      if (n >= end) { el.textContent = end + '+'; clearInterval(iv); }
+      else el.textContent = Math.floor(n);
+    }, 16);
+  }
+
+  function check() {
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      if (el.getBoundingClientRect().top < window.innerHeight - 60) el.classList.add('on');
     });
-
-    var contado = false;
-    function contador(id, fin, dur) {
-      var el = document.getElementById(id);
-      var inicio = 0;
-      var pasos = dur / 16;
-      var inc = fin / pasos;
-      var iv = setInterval(function() {
-        inicio += inc;
-        if (inicio >= fin) {
-          el.textContent = fin + '+';
-          clearInterval(iv);
-        } else {
-          el.textContent = Math.floor(inicio);
-        }
-      }, 16);
-    }
-
-    function activar() {
-      document.querySelectorAll('.fade-up').forEach(function(el) {
-        if (el.getBoundingClientRect().top < window.innerHeight - 50) {
-          el.classList.add('visible');
-        }
-      });
-      if (!contado) {
-        var bar = document.querySelector('.stats-bar');
-        if (bar && bar.getBoundingClientRect().top < window.innerHeight) {
-          contado = true;
-          contador('cnt1', 200, 1400);
-          contador('cnt2', 180, 1400);
-          contador('cnt3', 14, 900);
-          contador('cnt4', 8, 700);
-        }
+    if (!counted) {
+      var s = document.querySelector('.stats-side');
+      if (s && s.getBoundingClientRect().top < window.innerHeight) {
+        counted = true;
+        cnt('s1', 200, 1200);
+        cnt('s2', 180, 1200);
+        cnt('s3', 14, 800);
       }
     }
+  }
 
-    window.addEventListener('scroll', activar);
-    activar();
+  check();
 
-    function enviar() {
-      var nombre = document.getElementById('nombre').value;
-      var correo = document.getElementById('correo').value;
-      var mensaje = document.getElementById('mensaje').value;
-      if (!nombre || !correo || !mensaje) {
-        alert('Por favor completa los campos obligatorios.');
-        return;
-      }
-      document.getElementById('msg-ok').style.display = 'block';
-      document.getElementById('nombre').value = '';
-      document.getElementById('correo').value = '';
-      document.getElementById('telefono').value = '';
-      document.getElementById('mensaje').value = '';
-      document.getElementById('tipo').value = '';
-    }
-  </script>
-
+  function enviar() {
+    var n = document.getElementById('nombre').value;
+    var e = document.getElementById('email').value;
+    var m = document.getElementById('msg').value;
+    if (!n || !e || !m) { alert('Completa los campos obligatorios.'); return; }
+    document.getElementById('fok').style.display = 'block';
+    document.getElementById('nombre').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('tel').value = '';
+    document.getElementById('msg').value = '';
+    document.getElementById('tipo').value = '';
+  }
+</script>
 </body>
 </html>
