@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Opciones de Logo — ArquiVision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#111; font-family:'Inter',sans-serif; padding:60px 30px; }
+    h1 { color:#c9a84c; font-family:'Playfair Display',serif; text-align:center; font-size:28px; margin-bottom:10px; }
+    p.sub { color:#666; text-align:center; font-size:14px; margin-bottom:60px; }
+    .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:40px; max-width:1100px; margin:0 auto; }
+    .card {
+      background:#1a1a1a;
+      border:1px solid #2a2a2a;
+      border-radius:8px;
+      padding:50px 40px 30px;
+      text-align:center;
+      width:300px;
+      transition:border-color 0.3s;
+    }
+    .card:hover { border-color:#c9a84c; }
+    .card-label { color:#555; font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-top:24px; }
+    .card h3 { color:#c9a84c; font-family:'Playfair Display',serif; font-size:16px; margin-top:6px; }
+
+    .dark-bg { background:#111; }
+    .light-bg { background:#f5f0eb; border:1px solid #ddd; }
+    .light-bg .card-label { color:#888; }
+    .light-bg .card h3 { color:#8a6a1f; }
+
+    .bg-toggle { display:flex; justify-content:center; gap:12px; margin-bottom:40px; }
+    .bg-toggle button {
+      background:transparent;
+      border:1px solid #444;
+      color:#aaa;
+      padding:8px 20px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:13px;
+      font-family:'Inter',sans-serif;
+    }
+    .bg-toggle button.active { border-color:#c9a84c; color:#c9a84c; }
+  </style>
+</head>
+<body>
+  <h1>Opciones de Logo — ArquiVision</h1>
+  <p class="sub">4 propuestas de diseño. Dime cuál te gusta.</p>
+
+  <div class="bg-toggle">
+    <button class="active" onclick="setbg('dark')">Fondo oscuro</button>
+    <button onclick="setbg('light')">Fondo claro</button>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <!-- LOGO 1: Triángulo moderno con inicial -->
+    <div class="card">
+      <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,10 100,75 20,75" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
+        <polygon points="60,22 92,70 28,70" fill="rgba(201,168,76,0.06)"/>
+        <rect x="50" y="55" width="20" height="20" fill="#c9a84c"/>
+        <line x1="60" y1="10" x2="60" y2="75" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+        <line x1="20" y1="75" x2="100" y2="75" stroke="#c9a84c" stroke-width="2.5"/>
+        <text x="115" y="45" font-family="Georgia,serif" font-size="22" font-weight="bold" fill="white" letter-spacing="1">ARQUI</text>
+        <text x="115" y="68" font-family="Georgia,serif" font-size="22" fill="#c9a84c" letter-spacing="1">VISION</text>
+        <line x1="115" y1="52" x2="195" y2="52" stroke="#c9a84c" stroke-width="0.8" opacity="0.4"/>
+        <text x="115" y="82" font-family="Arial,sans-serif" font-size="8" fill="#666" letter-spacing="3">ARQUITECTURA &amp; DISEÑO</text>
+      </svg>
+      <p class="card-label">Opción</p>
+      <h3>1 — Clásico Horizontal</h3>
+    </div>
+
+    <!-- LOGO 2: Edificio minimalista -->
+    <div class="card">
+      <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+        <rect x="55" y="35" width="70" height="55" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        <rect x="55" y="35" width="70" height="55" fill="rgba(201,168,76,0.04)"/>
+        <line x1="55" y1="55" x2="125" y2="55" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+        <line x1="55" y1="70" x2="125" y2="70" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+        <line x1="78" y1="35" x2="78" y2="90" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+        <line x1="102" y1="35" x2="102" y2="90" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+        <rect x="78" y="73" width="24" height="17" fill="#c9a84c"/>
+        <polygon points="55,35 90,12 125,35" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        <polygon points="55,35 90,12 125,35" fill="rgba(201,168,76,0.08)"/>
+        <circle cx="90" cy="12" r="3" fill="#c9a84c"/>
+        <text x="90" y="107" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle" letter-spacing="4">ARQUIVISION</text>
+      </svg>
+      <p class="card-label">Opción</p>
+      <h3>2 — Fachada Completa</h3>
+    </div>
+
+    <!-- LOGO 3: Inicial A geométrica -->
+    <div class="card">
+      <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="90,8 130,88 50,88" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
+        <polygon points="90,8 130,88 50,88" fill="rgba(201,168,76,0.05)"/>
+        <line x1="68" y1="62" x2="112" y2="62" stroke="#c9a84c" stroke-width="2.5"/>
+        <line x1="90" y1="8" x2="90" y2="88" stroke="#c9a84c" stroke-width="1.5" opacity="0.3"/>
+        <line x1="50" y1="88" x2="130" y2="88" stroke="#c9a84c" stroke-width="2.5"/>
+        <rect x="80" y="72" width="20" height="16" fill="#c9a84c"/>
+        <circle cx="90" cy="8" r="4" fill="#c9a84c"/>
+        <text x="90" y="110" font-family="Arial,sans-serif" font-size="9" fill="#c9a84c" text-anchor="middle" letter-spacing="5" font-weight="600">ARQUIVISION</text>
+      </svg>
+      <p class="card-label">Opción</p>
+      <h3>3 — Icono Centrado</h3>
+    </div>
+
+    <!-- LOGO 4: Líneas arquitectónicas + nombre -->
+    <div class="card">
+      <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="30" width="55" height="60" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        <rect x="20" y="30" width="55" height="60" fill="rgba(201,168,76,0.05)"/>
+        <rect x="30" y="50" width="14" height="14" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+        <rect x="51" y="50" width="14" height="14" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+        <rect x="33" y="70" width="20" height="20" fill="#c9a84c"/>
+        <polygon points="20,30 47,10 75,30" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        <polygon points="20,30 47,10 75,30" fill="rgba(201,168,76,0.1)"/>
+        <circle cx="47" cy="10" r="3" fill="#c9a84c"/>
+        <line x1="90" y1="30" x2="185" y2="30" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+        <text x="90" y="52" font-family="Georgia,serif" font-size="20" font-weight="bold" fill="white" letter-spacing="1">ARQUI</text>
+        <text x="90" y="74" font-family="Georgia,serif" font-size="20" fill="#c9a84c" letter-spacing="1">VISION</text>
+        <line x1="90" y1="80" x2="185" y2="80" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+        <text x="90" y="94" font-family="Arial,sans-serif" font-size="7.5" fill="#555" letter-spacing="3">BOGOTÁ · COLOMBIA</text>
+      </svg>
+      <p class="card-label">Opción</p>
+      <h3>4 — Edificio + Texto</h3>
+    </div>
+
+  </div>
+
+  <p style="color:#444;text-align:center;margin-top:50px;font-size:13px;">Dile a Claude cuál te gusta y lo ponemos en la página web.</p>
+
+  <script>
+    function setbg(mode) {
+      var cards = document.querySelectorAll('.card');
+      var btns = document.querySelectorAll('.bg-toggle button');
+      btns.forEach(function(b){ b.classList.remove('active'); });
+      if (mode === 'light') {
+        btns[1].classList.add('active');
+        cards.forEach(function(c){
+          c.style.background = '#f5f0eb';
+          c.style.borderColor = '#ddd';
+          var texts = c.querySelectorAll('text');
+          texts.forEach(function(t){
+            if (t.getAttribute('fill') === 'white') t.setAttribute('fill', '#1a1a1a');
+          });
+        });
+      } else {
+        btns[0].classList.add('active');
+        cards.forEach(function(c){
+          c.style.background = '#1a1a1a';
+          c.style.borderColor = '#2a2a2a';
+          var texts = c.querySelectorAll('text');
+          texts.forEach(function(t){
+            if (t.getAttribute('fill') === '#1a1a1a') t.setAttribute('fill', 'white');
+          });
+        });
+      }
+    }
+  </script>
+</body>
+</html>
