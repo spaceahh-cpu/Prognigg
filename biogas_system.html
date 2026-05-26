@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sistema de Biogás – Energía para Comunidades Rurales de Colombia</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{overflow:hidden;background:#0a1628;font-family:'Segoe UI',Arial,sans-serif}
+  #app{width:100vw;height:100vh;position:relative}
+  canvas{display:block}
+  /* CSS2D label container */
+  #label-container{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;overflow:hidden
+  }
+  .lbl{
+    color:#fff;font-size:11px;font-weight:700;
+    background:rgba(0,0,0,.65);
+    padding:3px 9px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.25);
+    pointer-events:none;white-space:nowrap;
+    text-shadow:0 1px 3px #000;
+    letter-spacing:.5px
+  }
+  /* HUD */
+  #hud-title{
+    position:fixed;top:14px;left:50%;transform:translateX(-50%);
+    text-align:center;z-index:200;pointer-events:none
+  }
+  #hud-title h1{
+    font-size:19px;color:#7EFF7E;
+    text-shadow:0 0 14px rgba(126,255,126,.5);letter-spacing:1px
+  }
+  #hud-title p{font-size:11px;color:#aed6af;margin-top:3px}
+  #hint{
+    position:fixed;bottom:12px;right:14px;
+    color:rgba(255,255,255,.5);font-size:11px;text-align:right;z-index:200;
+    pointer-events:none;line-height:1.7
+  }
+  /* Info panel */
+  #info{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg,rgba(10,22,40,.95),rgba(20,40,70,.95));
+    color:#fff;padding:18px 24px;border-radius:14px;
+    border:1px solid rgba(126,255,126,.35);
+    max-width:520px;min-width:300px;
+    box-shadow:0 8px 32px rgba(0,0,0,.6);
+    display:none;z-index:300;text-align:center
+  }
+  #info h3{color:#7EFF7E;font-size:16px;margin-bottom:8px}
+  #info p{font-size:13px;line-height:1.65;color:#cde}
+  #info-close{
+    margin-top:12px;background:#1a7a1a;border:none;
+    color:#fff;padding:6px 20px;border-radius:20px;
+    cursor:pointer;font-size:12px;transition:.2s
+  }
+  #info-close:hover{background:#27a827}
+  /* Legend */
+  #legend{
+    position:fixed;top:80px;left:14px;z-index:200;
+    background:rgba(0,0,0,.55);border-radius:10px;
+    padding:10px 14px;pointer-events:none
+  }
+  #legend h4{color:#7EFF7E;font-size:11px;margin-bottom:6px;letter-spacing:.5px}
+  .leg-row{display:flex;align-items:center;gap:7px;margin:4px 0;font-size:10px;color:#cde}
+  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="label-container"></div>
+</div>
+
+<div id="hud-title">
+  <h1>🌿 Sistema de Biogás — Comunidades Rurales de Colombia</h1>
+  <p>Residuos de ganado → Biodigestor → Electricidad limpia y renovable</p>
+</div>
+
+<div id="hint">
+  🖱️ Arrastrar para rotar &nbsp;|&nbsp; Rueda para zoom<br>
+  🖱️ Clic en cualquier componente para más info
+</div>
+
+<div id="legend">
+  <h4>FLUJO DE ENERGÍA</h4>
+  <div class="leg-row"><div class="leg-dot" style="background:#00ff44"></div>Residuos orgánicos</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#ffe000"></div>Gas metano CH₄</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#ffffff"></div>Electricidad</div>
+</div>
+
+<div id="info">
+  <h3 id="info-title">Componente</h3>
+  <p id="info-text">Descripción</p>
+  <button id="info-close" onclick="document.getElementById('info').style.display='none'">✕ Cerrar</button>
+</div>
+
+<script type="importmap">
+{
+  "imports":{
+    "three":"https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer,CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+
+/* ────────────────────────────────────────────────────────────────
+   RENDERER + SCENE + CAMERA
+──────────────────────────────────────────────────────────────── */
+const W=()=>window.innerWidth, H=()=>window.innerHeight;
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(W(),H());
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.getElementById('app').appendChild(renderer.domElement);
+
+const labelRenderer=new CSS2DRenderer();
+labelRenderer.setSize(W(),H());
+labelRenderer.domElement.style.cssText='position:absolute;top:0;left:0;pointer-events:none';
+document.getElementById('app').appendChild(labelRenderer.domElement);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x6AAFDA);
+scene.fog=new THREE.FogExp2(0x6AAFDA,0.018);
+
+const camera=new THREE.PerspectiveCamera(55,W()/H(),0.1,120);
+camera.position.set(0,8,22);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,0,0);
+controls.enableDamping=true;
+controls.dampingFactor=0.06;
+controls.minDistance=6;
+controls.maxDistance=45;
+controls.maxPolarAngle=Math.PI*0.82;
+controls.update();
+
+/* ────────────────────────────────────────────────────────────────
+   LIGHTING
+──────────────────────────────────────────────────────────────── */
+scene.add(new THREE.AmbientLight(0xffffff,0.5));
+
+const sun=new THREE.DirectionalLight(0xFFF4CC,1.4);
+sun.position.set(8,18,10);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-22,right:22,top:18,bottom:-18,near:1,far:60});
+scene.add(sun);
+
+const underLight=new THREE.PointLight(0x886644,1.8,12);
+underLight.position.set(-4,-2.5,0);
+scene.add(underLight);
+
+/* ────────────────────────────────────────────────────────────────
+   CLICK INFO DATA
+──────────────────────────────────────────────────────────────── */
+const INFO={
+  COW:{
+    title:'🐄 Vaca – Fuente de Materia Orgánica',
+    text:'El ganado vacuno es la fuente principal de residuos orgánicos en este sistema de biogás. Cada vaca produce entre 10 y 15 kg de estiércol por día, rico en materia orgánica y bacterias metanogénicas. En las zonas rurales de Colombia, la ganadería extensiva es muy común, lo que convierte al estiércol bovino en un recurso energético abundante y renovable.'
+  },
+  WASTE:{
+    title:'💩 Residuos de Ganado',
+    text:'El estiércol fresco se recolecta y se mezcla con agua en proporción 1:1 antes de ingresar al biodigestor. Esta mezcla (llamada "biol" o "slurry") está llena de microorganismos naturales que inician el proceso de digestión anaerobia. El residuo sólido sobrante (biol tratado) es un excelente fertilizante orgánico para cultivos.'
+  },
+  DIGESTER:{
+    title:'⚙️ Biodigestor Anaeróbico',
+    text:'El biodigestor es un tanque hermético y sellado donde la materia orgánica se descompone en ausencia de oxígeno (proceso anaeróbico). Un biodigestor familiar puede procesar 50–200 litros de slurry por día. La digestión tarda entre 15 y 40 días a temperaturas de 25–40°C, condiciones que se dan naturalmente en el clima tropical colombiano. Puede ser de tipo tubular (plástico), cúpula fija (concreto) o flotante (acero).'
+  },
+  BACTERIA:{
+    title:'🦠 Bacterias Metanogénicas',
+    text:'Las arqueas metanogénicas (como Methanobacterium y Methanosarcina) son microorganismos microscópicos que descomponen la materia orgánica y producen metano (CH₄) como subproducto del metabolismo. Viven naturalmente en el estiércol de ganado. El clima cálido de Colombia proporciona la temperatura ideal para su actividad. Sin ellas, no habría producción de biogás.'
+  },
+  METHANE:{
+    title:'💨 Gas Metano (CH₄)',
+    text:'El biogás producido contiene 55–70% de metano (CH₄) y 30–45% de CO₂. Es capturado en la cúpula del biodigestor y transportado por tuberías hasta el generador. Una vaca puede producir suficiente biogás para encender una lámpara varias horas al día. Comparado con la quema de leña, el biogás produce menos contaminación y evita la deforestación. Una válvula controla el flujo hacia el generador.'
+  },
+  GENERATOR:{
+    title:'⚡ Generador de Biogás',
+    text:'El generador convierte el metano en electricidad mediante un motor de combustión interna acoplado a un alternador. Un generador pequeño (1–5 kW) alimentado con biogás puede proporcionar electricidad para iluminación LED, carga de dispositivos móviles, una nevera pequeña y equipos educativos. Algunos modelos pueden usar biogás sin modificaciones, mientras otros requieren adaptadores específicos.'
+  },
+  CABLES:{
+    title:'🔌 Red Eléctrica Local (Mini-Red)',
+    text:'La electricidad generada se distribuye a través de una mini-red de baja tensión soportada por postes de madera. Esta infraestructura puede abastecer a varias viviendas de una comunidad rural aislada donde la red eléctrica nacional no llega. Las comunidades en la Amazonía, el Pacífico y las zonas altas andinas de Colombia se benefician especialmente de estas soluciones de energía distribuida.'
+  },
+  HOUSE:{
+    title:'🏠 Hogar Rural – Comunidad Aislada',
+    text:'Este hogar representa a miles de familias en comunidades rurales aisladas de Colombia que no tienen acceso a la red eléctrica nacional. Con electricidad del biogás, las familias obtienen: iluminación nocturna (mejora la seguridad y el estudio), refrigeración para alimentos y medicinas, carga de teléfonos y comunicación, y acceso a educación digital. Además se reduce el uso de velas y leña, mejorando la salud y reduciendo la deforestación.'
+  }
+};
+
+const clickables=[];
+function makeHitbox(geo,pos,id,color=0xffffff){
+  const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));
+  m.position.copy(pos);
+  m.userData.id=id;
+  scene.add(m);
+  clickables.push(m);
+  return m;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   LABELS helper
+──────────────────────────────────────────────────────────────── */
+function addLabel(text,x,y,z){
+  const div=document.createElement('div');
+  div.className='lbl';
+  div.textContent=text;
+  const obj=new CSS2DObject(div);
+  obj.position.set(x,y,z);
+  scene.add(obj);
+  return obj;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TERRAIN
+════════════════════════════════════════════════════════════════ */
+// Left grass surface (x: -18 … -6.8)
+const grassMat=new THREE.MeshLambertMaterial({color:0x3d9e3d});
+const leftGrass=new THREE.Mesh(new THREE.PlaneGeometry(11.2,14),grassMat);
+leftGrass.rotation.x=-Math.PI/2;
+leftGrass.position.set(-12.4,0,0);
+leftGrass.receiveShadow=true;
+scene.add(leftGrass);
+
+// Right grass surface (x: -0.5 … 18)
+const rightGrass=new THREE.Mesh(new THREE.PlaneGeometry(18.5,14),grassMat);
+rightGrass.rotation.x=-Math.PI/2;
+rightGrass.position.set(8.75,0,0);
+rightGrass.receiveShadow=true;
+scene.add(rightGrass);
+
+// Far background ground
+const bgGrass=new THREE.Mesh(new THREE.PlaneGeometry(60,60),new THREE.MeshLambertMaterial({color:0x358435}));
+bgGrass.rotation.x=-Math.PI/2;
+bgGrass.position.set(0,-0.01,0);
+bgGrass.receiveShadow=true;
+scene.add(bgGrass);
+
+/* ────────────── UNDERGROUND CROSS-SECTION BOX ────────────────
+   x: -6.8 … -0.4   y: -5 … 0   z: -3.5 … 3.5
+   Open top (y=0) and open front-face (z=+3.5) so camera sees inside.
+──────────────────────────────────────────────────────────────── */
+const UXMIN=-6.8, UXMAX=-0.4;
+const UY=-5, UZ=3.5;
+const soilMat=new THREE.MeshLambertMaterial({color:0x7a4520,side:THREE.DoubleSide});
+const rockMat=new THREE.MeshLambertMaterial({color:0x5a3510,side:THREE.DoubleSide});
+
+// Back wall with geological layers
+const backWallGeo=new THREE.PlaneGeometry(UXMAX-UXMIN,5);
+const backWall=new THREE.Mesh(backWallGeo,soilMat);
+backWall.position.set((UXMIN+UXMAX)/2,-2.5,-UZ);
+scene.add(backWall);
+
+// Geology layers on back wall (decorative strips)
+const layerColors=[0x5c3a1a,0x6b4422,0x8b5e3c,0x4a3010,0x7a6050];
+const layerY=[-0.4,-1.2,-2.1,-3.2,-4.3];
+layerColors.forEach((c,i)=>{
+  const lm=new THREE.Mesh(
+    new THREE.PlaneGeometry(UXMAX-UXMIN,0.45),
+    new THREE.MeshLambertMaterial({color:c,side:THREE.DoubleSide})
+  );
+  lm.position.set((UXMIN+UXMAX)/2,layerY[i],-UZ+0.02);
+  scene.add(lm);
+});
+
+// Left wall
+const leftWall2=new THREE.Mesh(new THREE.PlaneGeometry(UZ*2,5),soilMat);
+leftWall2.rotation.y=Math.PI/2;
+leftWall2.position.set(UXMIN,-2.5,0);
+scene.add(leftWall2);
+
+// Right wall
+const rightWall2=new THREE.Mesh(new THREE.PlaneGeometry(UZ*2,5),soilMat);
+rightWall2.rotation.y=-Math.PI/2;
+rightWall2.position.set(UXMAX,-2.5,0);
+scene.add(rightWall2);
+
+// Bottom
+const bottomFloor=new THREE.Mesh(new THREE.PlaneGeometry(UXMAX-UXMIN,UZ*2),rockMat);
+bottomFloor.rotation.x=-Math.PI/2;
+bottomFloor.position.set((UXMIN+UXMAX)/2,UY,0);
+scene.add(bottomFloor);
+
+// Edge trim at top of underground section (dark soil lip)
+const trimMat=new THREE.MeshLambertMaterial({color:0x3d1e08});
+function addTrim(w,h,d,x,y,z){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),trimMat);
+  m.position.set(x,y,z);
+  scene.add(m);
+}
+addTrim(UXMAX-UXMIN,0.18,UZ*2,(UXMIN+UXMAX)/2,-0.09,0); // top edge of underground
+
+/* ════════════════════════════════════════════════════════════════
+   COW  (x = -10.5)
+════════════════════════════════════════════════════════════════ */
+const cowG=new THREE.Group();
+const cowBodyMat=new THREE.MeshLambertMaterial({color:0xF2DDB8});
+const spotMat2=new THREE.MeshLambertMaterial({color:0x1a1a1a});
+const legMat2=new THREE.MeshLambertMaterial({color:0xC8A880});
+
+// Body
+const cowBody=new THREE.Mesh(new THREE.BoxGeometry(1.9,1.1,2.8),cowBodyMat);
+cowBody.position.set(0,1.15,0);
+cowBody.castShadow=true;
+cowG.add(cowBody);
+
+// Spots
+[[-.4,1.22,.4,.7,.06,1.0],[.3,1.22,-.5,.6,.06,.9]].forEach(([x,y,z,w,h,d])=>{
+  const sp=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),spotMat2);
+  sp.position.set(x,y,z);
+  cowG.add(sp);
+});
+
+// Head
+const cowHead=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.85,0.9),cowBodyMat);
+cowHead.position.set(0,1.85,1.55);
+cowHead.castShadow=true;
+cowG.add(cowHead);
+
+// Snout
+const snout=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.32,0.38),new THREE.MeshLambertMaterial({color:0xFFB0B0}));
+snout.position.set(0,1.67,2.02);
+cowG.add(snout);
+
+// Nostrils
+[[-.12,1.67,2.22],[.12,1.67,2.22]].forEach(([x,y,z])=>{
+  const n=new THREE.Mesh(new THREE.SphereGeometry(.04,6,4),new THREE.MeshLambertMaterial({color:0x662222}));
+  n.position.set(x,y,z);
+  cowG.add(n);
+});
+
+// Horns
+const hornMat=new THREE.MeshLambertMaterial({color:0xD4B896});
+[-.35,.35].forEach(sx=>{
+  const h=new THREE.Mesh(new THREE.CylinderGeometry(.045,.02,.5,6),hornMat);
+  h.position.set(sx,2.4,1.45);
+  h.rotation.z=sx<0?.4:-.4;
+  cowG.add(h);
+});
+
+// Ears
+[-.55,.55].forEach(sx=>{
+  const e=new THREE.Mesh(new THREE.SphereGeometry(.18,8,6),cowBodyMat);
+  e.scale.set(1,.6,1);
+  e.position.set(sx,1.95,1.45);
+  cowG.add(e);
+});
+
+// Legs
+[[-0.65,0.5,1.0],[0.65,0.5,1.0],[-0.65,0.5,-1.0],[0.65,0.5,-1.0]].forEach(([x,y,z])=>{
+  const leg=new THREE.Mesh(new THREE.CylinderGeometry(.19,.16,.9,8),legMat2);
+  leg.position.set(x,y,z);
+  leg.castShadow=true;
+  cowG.add(leg);
+  // Hoof
+  const hoof=new THREE.Mesh(new THREE.CylinderGeometry(.17,.14,.18,8),new THREE.MeshLambertMaterial({color:0x222222}));
+  hoof.position.set(x,.05,z);
+  cowG.add(hoof);
+});
+
+// Tail
+const tail=new THREE.Mesh(new THREE.CylinderGeometry(.04,.02,1,6),cowBodyMat);
+tail.position.set(0,1.3,-1.55);
+tail.rotation.x=.9;
+cowG.add(tail);
+const tailTip=new THREE.Mesh(new THREE.SphereGeometry(.1,6,4),new THREE.MeshLambertMaterial({color:0x8B7355}));
+tailTip.position.set(0,.55,-2.1);
+cowG.add(tailTip);
+
+// Udder
+const udder=new THREE.Mesh(new THREE.SphereGeometry(.28,8,6),new THREE.MeshLambertMaterial({color:0xFFB0B0}));
+udder.scale.set(1,.7,1);
+udder.position.set(0,.6,.3);
+cowG.add(udder);
+
+cowG.position.set(-10.5,0,0);
+scene.add(cowG);
+
+makeHitbox(new THREE.BoxGeometry(2.5,2.8,3.5),new THREE.Vector3(-10.5,1.2,0),'COW');
+addLabel('COW 🐄',-10.5,2.9,0);
+
+/* ════════════════════════════════════════════════════════════════
+   COW WASTE PILE  (x = -8.5)
+════════════════════════════════════════════════════════════════ */
+const wasteMat=new THREE.MeshLambertMaterial({color:0x6B3A1A});
+const wasteG=new THREE.Group();
+[[0,.12,0,.42,.5],[-.28,.08,-.1,.28,.5],[.22,.08,.1,.25,.5],[.1,.22,.1,.2,.5]].forEach(([x,y,z,r,sy])=>{
+  const s=new THREE.Mesh(new THREE.SphereGeometry(r,8,6),wasteMat);
+  s.scale.set(1,sy,1);
+  s.position.set(x,y,z);
+  wasteG.add(s);
+});
+wasteG.position.set(-8.5,0,0);
+scene.add(wasteG);
+
+makeHitbox(new THREE.BoxGeometry(1.4,.9,1.4),new THREE.Vector3(-8.5,.35,0),'WASTE');
+addLabel('COW WASTE 💩',-8.5,1.2,0);
+
+/* ════════════════════════════════════════════════════════════════
+   UNDERGROUND PIPES
+════════════════════════════════════════════════════════════════ */
+const pipeMat=new THREE.MeshLambertMaterial({color:0x7a8a8a});
+const pipeMatDark=new THREE.MeshLambertMaterial({color:0x505a5a});
+
+function makePipe(r,h,x,y,z,rx=0,ry=0,rz=0){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,10),pipeMat);
+  m.position.set(x,y,z);
+  m.rotation.set(rx,ry,rz);
+  scene.add(m);
+  return m;
+}
+
+// Waste → vertical down to underground level
+makePipe(.12,.6,-8.5,-.3,0);         // short surface segment
+makePipe(.12,3.5,-8.5,-2.25,0);      // vertical down underground (hidden under left ground)
+// Horizontal underground: -8.5 → -3.7 at y=-3.8
+makePipe(.12,4.82,-6.06,-3.8,0,0,0,Math.PI/2);
+// Rise inside digester: -3.7, y=-3.8 → y=-1.0
+makePipe(.12,2.8,-3.7,-2.4,0);
+
+/* ════════════════════════════════════════════════════════════════
+   BIODIGESTER TANK  (underground, center ~-3.7,-3.0)
+════════════════════════════════════════════════════════════════ */
+const digMat=new THREE.MeshLambertMaterial({color:0x4a6070});
+const digBody=new THREE.Mesh(new THREE.CylinderGeometry(2.0,2.0,3.4,20),digMat);
+digBody.position.set(-3.7,-3.0,0);
+digBody.castShadow=true;
+scene.add(digBody);
+
+// Dome top
+const digDome=new THREE.Mesh(new THREE.SphereGeometry(2.0,20,10,0,Math.PI*2,0,Math.PI/2),digMat);
+digDome.position.set(-3.7,-1.3,0);
+scene.add(digDome);
+
+// Bottom dome
+const digBot=new THREE.Mesh(new THREE.SphereGeometry(2.0,20,10,0,Math.PI*2,Math.PI/2,Math.PI/2),digMat);
+digBot.position.set(-3.7,-4.7,0);
+scene.add(digBot);
+
+// Brown liquid inside
+const liquidMat=new THREE.MeshLambertMaterial({color:0x6B3A0A,transparent:true,opacity:.9});
+const liquid=new THREE.Mesh(new THREE.CylinderGeometry(1.92,1.92,2.0,20),liquidMat);
+liquid.position.set(-3.7,-3.3,0);
+scene.add(liquid);
+
+// Metal ribs
+for(let i=0;i<6;i++){
+  const rib=new THREE.Mesh(new THREE.TorusGeometry(2.04,.04,6,20),new THREE.MeshLambertMaterial({color:0x3a5060}));
+  rib.position.set(-3.7,-1.6+i*.6,0);
+  scene.add(rib);
+}
+
+// Digester hitbox
+makeHitbox(new THREE.CylinderGeometry(2.2,2.2,5,16),new THREE.Vector3(-3.7,-2.8,0),'DIGESTER');
+addLabel('BIODIGESTOR ⚙️',-3.7,-1.0,0);
+
+/* ════════════════════════════════════════════════════════════════
+   BACTERIA BUBBLES  (inside digester)
+════════════════════════════════════════════════════════════════ */
+const bacMat=new THREE.MeshLambertMaterial({color:0x22ff66,emissive:0x005500,transparent:true,opacity:.85});
+const bacData=[];
+const bacGroup=new THREE.Group();
+for(let i=0;i<18;i++){
+  const r=.9+Math.random()*1.0;
+  const a=Math.random()*Math.PI*2;
+  const bx=r*Math.cos(a),bz=r*Math.sin(a);
+  const by=-3.8+Math.random()*2.0;
+  const bac=new THREE.Mesh(new THREE.SphereGeometry(.1+Math.random()*.09,7,5),bacMat);
+  bac.position.set(bx,by,bz);
+  bacGroup.add(bac);
+  bacData.push({ox:bx,oy:by,oz:bz,phase:Math.random()*Math.PI*2,sp:.8+Math.random()*.6});
+}
+bacGroup.position.set(-3.7,0,0);
+scene.add(bacGroup);
+
+makeHitbox(new THREE.CylinderGeometry(1.6,1.6,2.0,12),new THREE.Vector3(-3.7,-3.4,0),'BACTERIA');
+addLabel('BACTERIA 🦠',-3.7,-4.2,0);
+
+/* ════════════════════════════════════════════════════════════════
+   METHANE RISE PIPE + VALVE
+════════════════════════════════════════════════════════════════ */
+// Vertical pipe from digester top to surface
+makePipe(.1,1.4,-3.7,-.6,0);   // inside cross-section, y: -1.3 → 0
+
+// Elbow / small piece at surface
+const elbowMat=new THREE.MeshLambertMaterial({color:0xff4444});
+const valve=new THREE.Mesh(new THREE.TorusGeometry(.22,.07,8,16),elbowMat);
+valve.position.set(-3.7,.05,0);
+valve.rotation.x=Math.PI/2;
+scene.add(valve);
+const vHandle=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.44,6),elbowMat);
+vHandle.position.set(-3.7,.05,0);
+vHandle.rotation.z=Math.PI/2;
+scene.add(vHandle);
+
+// Horizontal pipe from valve to generator area
+makePipe(.1,3.4,-1.9,.1,0,0,0,Math.PI/2);  // z-level pipe along x
+
+// Short rise to generator
+makePipe(.1,.5,-.2,.25,0);
+
+// Methane hitbox (the pipe area)
+makeHitbox(new THREE.CylinderGeometry(.35,.35,1.5,10),new THREE.Vector3(-3.7,-.3,0),'METHANE');
+addLabel('METANO CH₄ 💨',-3.7,.8,0);
+
+/* ════════════════════════════════════════════════════════════════
+   GENERATOR  (x = 1.0)
+════════════════════════════════════════════════════════════════ */
+const genG=new THREE.Group();
+const genFrame=new THREE.Mesh(new THREE.BoxGeometry(1.6,1.1,1.1),new THREE.MeshLambertMaterial({color:0x2d3f50}));
+genFrame.position.set(0,.55,0);
+genFrame.castShadow=true;
+genG.add(genFrame);
+
+// Engine block
+const engBlk=new THREE.Mesh(new THREE.BoxGeometry(.75,0.72,.7),new THREE.MeshLambertMaterial({color:0x3a4f62}));
+engBlk.position.set(-.3,.5,.2);
+genG.add(engBlk);
+
+// Alternator cylinder
+const alt=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.55,10),new THREE.MeshLambertMaterial({color:0xCC9900}));
+alt.rotation.x=Math.PI/2;
+alt.position.set(.4,.5,.2);
+genG.add(alt);
+
+// Fins on alternator
+for(let i=0;i<8;i++){
+  const fin=new THREE.Mesh(new THREE.BoxGeometry(.06,.06,.55),new THREE.MeshLambertMaterial({color:0xAA8800}));
+  fin.position.set(.4+.3*Math.cos(i*Math.PI/4),.5+.3*Math.sin(i*Math.PI/4),.2);
+  genG.add(fin);
+}
+
+// Control panel
+const panel=new THREE.Mesh(new THREE.BoxGeometry(.55,.45,.04),new THREE.MeshLambertMaterial({color:0x0a1a2e}));
+panel.position.set(-.2,.62,.57);
+genG.add(panel);
+
+// Panel indicators
+const greenLed=new THREE.Mesh(new THREE.SphereGeometry(.05,6,4),new THREE.MeshLambertMaterial({color:0x00ff44,emissive:0x007722}));
+greenLed.position.set(-.05,.7,.6);
+genG.add(greenLed);
+const redLed=new THREE.Mesh(new THREE.SphereGeometry(.04,6,4),new THREE.MeshLambertMaterial({color:0xff2200,emissive:0x660000}));
+redLed.position.set(-.18,.7,.6);
+genG.add(redLed);
+
+// Exhaust pipe
+const exhaust=new THREE.Mesh(new THREE.CylinderGeometry(.065,.065,.55,7),new THREE.MeshLambertMaterial({color:0x333333}));
+exhaust.position.set(.55,1.2,.0);
+genG.add(exhaust);
+const exhaustTip=new THREE.Mesh(new THREE.CylinderGeometry(.09,.065,.06,7),new THREE.MeshLambertMaterial({color:0x222222}));
+exhaustTip.position.set(.55,1.48,0);
+genG.add(exhaustTip);
+
+// Skid base
+const skid=new THREE.Mesh(new THREE.BoxGeometry(1.9,.12,1.4),new THREE.MeshLambertMaterial({color:0x1a2a3a}));
+skid.position.set(0,.06,0);
+genG.add(skid);
+
+genG.position.set(1.0,0,0);
+scene.add(genG);
+
+makeHitbox(new THREE.BoxGeometry(2.2,1.8,1.6),new THREE.Vector3(1.0,.7,0),'GENERATOR');
+addLabel('GENERADOR ⚡',1.0,1.9,0);
+
+/* ════════════════════════════════════════════════════════════════
+   WOODEN POLES & CABLES
+════════════════════════════════════════════════════════════════ */
+const woodMat=new THREE.MeshLambertMaterial({color:0x9B6C1E});
+const insulMat=new THREE.MeshLambertMaterial({color:0x882200});
+
+function makePole(x){
+  // Shaft
+  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.09,.13,5.5,8),woodMat);
+  shaft.position.set(x,2.75,0);
+  shaft.castShadow=true;
+  scene.add(shaft);
+  // Crossbar
+  const cross=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,1.6,7),woodMat);
+  cross.rotation.z=Math.PI/2;
+  cross.position.set(x,4.5,0);
+  scene.add(cross);
+  // Insulators
+  [-.62,.62].forEach(dx=>{
+    const ins=new THREE.Mesh(new THREE.CylinderGeometry(.055,.04,.15,7),insulMat);
+    ins.position.set(x+dx,4.5,0);
+    scene.add(ins);
+  });
+}
+
+makePole(4.2);
+makePole(7.0);
+
+// Point light on each pole top for atmosphere
+[4.2,7.0].forEach(px=>{
+  const pl=new THREE.PointLight(0xFFEEAA,.4,6);
+  pl.position.set(px,5.5,0);
+  scene.add(pl);
+});
+
+// Cables as CatmullRom tube
+function cable(pts,r=.022,color=0x111111){
+  const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));
+  const geo=new THREE.TubeGeometry(curve,pts.length*5,r,5,false);
+  const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color}));
+  scene.add(m);
+  return m;
+}
+
+// Generator → Pole1  (two wires, offset in z)
+[[.32],[-.32]].forEach(oz=>{
+  cable([[1.8,1.0,oz[0]],[3.0,2.2,oz[0]],[4.2-.62,4.5,oz[0]]]);
+  cable([[4.2+.62,4.5,oz[0]],[5.6,4.3,oz[0]],[7.0-.62,4.5,oz[0]]]);
+  cable([[7.0+.62,4.5,oz[0]],[8.2,3.8,oz[0]],[9.8,3.0,oz[0]]]);
+});
+
+// Cable hitbox (approximate over pole area)
+makeHitbox(new THREE.BoxGeometry(7,2,1.5),new THREE.Vector3(5.6,3.8,0),'CABLES');
+addLabel('ELECTRICIDAD 🔌',5.6,5.6,0);
+
+/* ════════════════════════════════════════════════════════════════
+   RURAL HOUSE  (x = 11)
+════════════════════════════════════════════════════════════════ */
+const houseG=new THREE.Group();
+const wallMat=new THREE.MeshLambertMaterial({color:0xEFD8A8});
+const roofMat=new THREE.MeshLambertMaterial({color:0xAA2020});
+const windowMat=new THREE.MeshLambertMaterial({color:0xFFFF66,emissive:0xFF9900,emissiveIntensity:.9});
+const doorMat=new THREE.MeshLambertMaterial({color:0x7a4010});
+
+// Walls
+const walls=new THREE.Mesh(new THREE.BoxGeometry(2.8,2.2,2.4),wallMat);
+walls.position.set(0,1.1,0);
+walls.castShadow=true;
+houseG.add(walls);
+
+// Roof (pyramid via ConeGeometry 4 sides, rotated 45deg)
+const roof=new THREE.Mesh(new THREE.ConeGeometry(2.15,1.4,4),roofMat);
+roof.position.set(0,2.9,0);
+roof.rotation.y=Math.PI/4;
+roof.castShadow=true;
+houseG.add(roof);
+
+// Door
+const door=new THREE.Mesh(new THREE.BoxGeometry(.55,1.0,.04),doorMat);
+door.position.set(0,.5,1.22);
+houseG.add(door);
+// Door knob
+const knob=new THREE.Mesh(new THREE.SphereGeometry(.04,6,4),new THREE.MeshLambertMaterial({color:0xCC9900}));
+knob.position.set(.2,.5,1.24);
+houseG.add(knob);
+
+// Windows (glowing)
+[[-0.85,1.35,1.22],[0.85,1.35,1.22]].forEach(([x,y,z])=>{
+  const w=new THREE.Mesh(new THREE.BoxGeometry(.62,.52,.04),windowMat);
+  w.position.set(x,y,z);
+  houseG.add(w);
+  // Glow point light inside
+  const wl=new THREE.PointLight(0xFFBB44,1.2,3.5);
+  wl.position.set(x,y,z-.2);
+  houseG.add(wl);
+});
+
+// Side window
+const sideWin=new THREE.Mesh(new THREE.BoxGeometry(.04,.48,.52),windowMat);
+sideWin.position.set(1.42,1.3,0);
+houseG.add(sideWin);
+
+// Chimney
+const chimney=new THREE.Mesh(new THREE.BoxGeometry(.35,.7,.35),new THREE.MeshLambertMaterial({color:0x888888}));
+chimney.position.set(.75,3.3,.5);
+houseG.add(chimney);
+const chimneyCap=new THREE.Mesh(new THREE.BoxGeometry(.44,.1,.44),new THREE.MeshLambertMaterial({color:0x666666}));
+chimneyCap.position.set(.75,3.68,.5);
+houseG.add(chimneyCap);
+
+// Porch step
+const step=new THREE.Mesh(new THREE.BoxGeometry(1.4,.15,1.0),wallMat);
+step.position.set(0,.08,1.7);
+houseG.add(step);
+
+// Fence posts
+const fenceMat=new THREE.MeshLambertMaterial({color:0xD4B064});
+for(let i=0;i<6;i++){
+  const fp=new THREE.Mesh(new THREE.BoxGeometry(.06,.7,.06),fenceMat);
+  fp.position.set(-1.5+i*.6,.35,1.85);
+  houseG.add(fp);
+}
+const fenceRail=new THREE.Mesh(new THREE.BoxGeometry(3.05,.06,.04),fenceMat);
+fenceRail.position.set(0,.6,1.85);
+houseG.add(fenceRail);
+
+houseG.position.set(11,0,0);
+scene.add(houseG);
+
+makeHitbox(new THREE.BoxGeometry(3.5,4.5,3),new THREE.Vector3(11,2,0),'HOUSE');
+addLabel('HOGAR RURAL 🏠',11,4.5,0);
+
+/* ════════════════════════════════════════════════════════════════
+   DECORATIVE TREES
+════════════════════════════════════════════════════════════════ */
+function tree(x,z,h=3.5,sc=1){
+  const g=new THREE.Group();
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.15*sc,.22*sc,h*.38,7),
+    new THREE.MeshLambertMaterial({color:0x8B5E1A}));
+  trunk.position.y=h*.19;
+  trunk.castShadow=true;
+  g.add(trunk);
+  // 3-tier foliage
+  [1.1,1.55,2.0].forEach((yf,i)=>{
+    const f=new THREE.Mesh(new THREE.ConeGeometry((.9-.2*i)*sc,(h*.3),9),
+      new THREE.MeshLambertMaterial({color:i===0?0x1a7a1a:i===1?0x228B22:0x27a027}));
+    f.position.y=yf*sc;
+    f.castShadow=true;
+    g.add(f);
+  });
+  g.position.set(x,0,z);
+  scene.add(g);
+}
+
+tree(-13,-4,4);
+tree(-13, 4,3.5);
+tree(-11.5,-5,3);
+tree(13,-4.5,4.5);
+tree(14, 3.5,3.8);
+tree(12.5,-5.5,3);
+
+/* ════════════════════════════════════════════════════════════════
+   CLOUDS
+════════════════════════════════════════════════════════════════ */
+const cloudMat=new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:.85});
+function cloud(x,y,z){
+  const cg=new THREE.Group();
+  [[0,0,0,.9],[1.0,.1,0,.75],[-.9,.1,0,.7],[.5,.5,0,.65],[-.4,.5,0,.55]].forEach(([cx,cy,cz,r])=>{
+    const s=new THREE.Mesh(new THREE.SphereGeometry(r,8,6),cloudMat);
+    s.position.set(cx,cy,cz);
+    cg.add(s);
+  });
+  cg.position.set(x,y,z);
+  scene.add(cg);
+  return cg;
+}
+const clouds=[cloud(-8,12,-8),cloud(4,14,-10),cloud(12,11,-6),cloud(-3,13,8)];
+
+/* ════════════════════════════════════════════════════════════════
+   PARTICLE SYSTEMS
+════════════════════════════════════════════════════════════════ */
+// ── Path helpers ──────────────────────────────────────────────
+// Green path: waste pile → underground pipe → biodigester
+function greenPath(t){
+  // 0–0.15: small drop to ground
+  // 0.15–0.35: go down underground (y: 0 → -3.8)
+  // 0.35–1.0: horizontal to digester center (-8.5 → -3.7)
+  if(t<.15){
+    return new THREE.Vector3(-8.5,-t/.15*.3,0);
+  } else if(t<.35){
+    const s=(t-.15)/.2;
+    return new THREE.Vector3(-8.5,-0.3-s*3.5,0);
+  } else {
+    const s=(t-.35)/.65;
+    return new THREE.Vector3(-8.5+s*4.8,-3.8,0);
+  }
+}
+
+// Yellow path: inside digester rising → valve → horizontal → generator
+function yellowPath(t){
+  if(t<.5){
+    const s=t/.5;
+    // rise inside digester, slight waver
+    return new THREE.Vector3(-3.7,-4.0+s*4.2,Math.sin(s*Math.PI*.5)*.3);
+  } else {
+    const s=(t-.5)/.5;
+    return new THREE.Vector3(-3.7+s*4.75,.1,0);
+  }
+}
+
+// White path: generator → pole1 → pole2 → house
+function whitePath(t){
+  const pts=[
+    new THREE.Vector3(1.8,.9,0),
+    new THREE.Vector3(3.1,2.2,0),
+    new THREE.Vector3(4.2,4.4,0),
+    new THREE.Vector3(5.6,4.2,0),
+    new THREE.Vector3(7.0,4.4,0),
+    new THREE.Vector3(8.4,3.6,0),
+    new THREE.Vector3(9.8,2.8,0),
+    new THREE.Vector3(11.0,1.5,0)
+  ];
+  const total=pts.length-1;
+  const scaled=t*total;
+  const idx=Math.min(Math.floor(scaled),total-1);
+  return pts[idx].clone().lerp(pts[idx+1],scaled-idx);
+}
+
+// ── Create particle buffer ──
+function makeParticles(count,color,size=.18){
+  const positions=new Float32Array(count*3);
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  const mat=new THREE.PointsMaterial({color,size,transparent:true,opacity:.9,sizeAttenuation:true,depthWrite:false});
+  const pts=new THREE.Points(geo,mat);
+  scene.add(pts);
+  return {pts,positions,geo};
+}
+
+const GP_COUNT=70, YP_COUNT=60, WP_COUNT=75;
+const {pts:greenPts,positions:gPos,geo:gGeo}=makeParticles(GP_COUNT,0x00ff44,.2);
+const {pts:yellowPts,positions:yPos,geo:yGeo}=makeParticles(YP_COUNT,0xFFDD00,.18);
+const {pts:whitePts,positions:wPos,geo:wGeo}=makeParticles(WP_COUNT,0xffffff,.16);
+
+// Per-particle t and speed
+const gT=Array.from({length:GP_COUNT},()=>({t:Math.random(),sp:.003+Math.random()*.002,jz:(Math.random()-.5)*.25}));
+const yT=Array.from({length:YP_COUNT},()=>({t:Math.random(),sp:.004+Math.random()*.003,jz:(Math.random()-.5)*.3}));
+const wT=Array.from({length:WP_COUNT},()=>({t:Math.random(),sp:.0035+Math.random()*.002,jz:(Math.random()-.5)*.35}));
+
+/* ════════════════════════════════════════════════════════════════
+   MOUSE CLICK HANDLER
+════════════════════════════════════════════════════════════════ */
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+let mouseDown=new THREE.Vector2();
+
+renderer.domElement.addEventListener('pointerdown',e=>{
+  mouseDown.set(e.clientX,e.clientY);
+});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(Math.abs(e.clientX-mouseDown.x)>5||Math.abs(e.clientY-mouseDown.y)>5) return;
+  mouse.set((e.clientX/W())*2-1,-(e.clientY/H())*2+1);
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(clickables,false);
+  if(!hits.length) return;
+  const id=hits[0].object.userData.id;
+  if(!INFO[id]) return;
+  document.getElementById('info-title').textContent=INFO[id].title;
+  document.getElementById('info-text').textContent=INFO[id].text;
+  document.getElementById('info').style.display='block';
+});
+
+/* ════════════════════════════════════════════════════════════════
+   RESIZE
+════════════════════════════════════════════════════════════════ */
+window.addEventListener('resize',()=>{
+  camera.aspect=W()/H();
+  camera.updateProjectionMatrix();
+  renderer.setSize(W(),H());
+  labelRenderer.setSize(W(),H());
+});
+
+/* ════════════════════════════════════════════════════════════════
+   ANIMATION LOOP
+════════════════════════════════════════════════════════════════ */
+const clock=new THREE.Clock();
+
+function animate(){
+  requestAnimationFrame(animate);
+  const t=clock.getElapsedTime();
+
+  controls.update();
+
+  // ── Animate bacteria ──
+  bacData.forEach((d,i)=>{
+    const b=bacGroup.children[i];
+    b.position.set(
+      d.ox+Math.sin(t*d.sp*2.5+d.phase)*.12,
+      d.oy+Math.sin(t*d.sp*1.8+d.phase+1)*.18,
+      d.oz+Math.cos(t*d.sp*2+d.phase)*.1
+    );
+  });
+  bacMat.emissiveIntensity=.25+Math.sin(t*2.2)*.15;
+
+  // ── Animate window glow ──
+  windowMat.emissiveIntensity=.8+Math.sin(t*1.8)*.15;
+  greenLed.material.emissiveIntensity=.5+Math.sin(t*4)*.3;
+
+  // ── Slow cloud drift ──
+  clouds.forEach((c,i)=>{ c.position.x+=.003*(i%2===0?1:-1); if(c.position.x>20)c.position.x=-18; if(c.position.x<-20)c.position.x=18; });
+
+  // ── Exhaust smoke puff (tiny scale on exhaust pipe) ──
+  // (visual via rotation on alt)
+  alt.rotation.z=t*3;
+
+  // ── Particles ──
+  for(let i=0;i<GP_COUNT;i++){
+    gT[i].t=(gT[i].t+gT[i].sp)%1;
+    const p=greenPath(gT[i].t);
+    gPos[i*3]=p.x+(Math.random()-.5)*.04;
+    gPos[i*3+1]=p.y+(Math.random()-.5)*.04;
+    gPos[i*3+2]=p.z+gT[i].jz;
+  }
+  gGeo.attributes.position.needsUpdate=true;
+
+  for(let i=0;i<YP_COUNT;i++){
+    yT[i].t=(yT[i].t+yT[i].sp)%1;
+    const p=yellowPath(yT[i].t);
+    yPos[i*3]=p.x+(Math.random()-.5)*.05;
+    yPos[i*3+1]=p.y+(Math.random()-.5)*.05;
+    yPos[i*3+2]=p.z+yT[i].jz;
+  }
+  yGeo.attributes.position.needsUpdate=true;
+
+  for(let i=0;i<WP_COUNT;i++){
+    wT[i].t=(wT[i].t+wT[i].sp)%1;
+    const p=whitePath(wT[i].t);
+    wPos[i*3]=p.x+(Math.random()-.5)*.04;
+    wPos[i*3+1]=p.y+(Math.random()-.5)*.04;
+    wPos[i*3+2]=p.z+wT[i].jz;
+  }
+  wGeo.attributes.position.needsUpdate=true;
+
+  renderer.render(scene,camera);
+  labelRenderer.render(scene,camera);
+}
+
+animate();
+</script>
+</body>
+</html>
