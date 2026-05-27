@@ -4,77 +4,72 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
 <title>Sistema de Biogás — Colombia Rural</title>
-<script src="https://unpkg.com/three@0.134.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://unpkg.com/three@0.134.0/examples/js/renderers/CSS2DRenderer.js"></script>
+<!-- Using jsDelivr CDN (more reliable) -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/renderers/CSS2DRenderer.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{overflow:hidden;background:#0a1628;font-family:'Segoe UI',system-ui,sans-serif;touch-action:none}
+body{overflow:hidden;background:#0a1a2e;font-family:'Segoe UI',system-ui,sans-serif;touch-action:none}
 #app{width:100vw;height:100vh;position:relative}
-canvas{display:block}
+canvas{display:block;width:100%!important;height:100%!important}
 .lbl{
   color:#fff;font-size:10px;font-weight:700;
-  background:rgba(6,16,30,.78);
-  padding:4px 11px;border-radius:20px;
-  border:1px solid rgba(80,210,130,.45);
-  pointer-events:none;white-space:nowrap;
-  letter-spacing:.8px;text-transform:uppercase;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)
+  background:rgba(5,14,26,.8);padding:4px 11px;border-radius:20px;
+  border:1px solid rgba(80,210,130,.5);pointer-events:none;
+  white-space:nowrap;letter-spacing:.7px;text-transform:uppercase
 }
 #hud{
-  position:fixed;top:0;left:0;right:0;
-  padding:14px 16px 28px;
-  background:linear-gradient(to bottom,rgba(6,14,26,.9),transparent);
+  position:fixed;top:0;left:0;right:0;padding:14px 16px 30px;
+  background:linear-gradient(to bottom,rgba(5,12,22,.88),transparent);
   pointer-events:none;z-index:200;text-align:center
 }
-#hud h1{font-size:18px;font-weight:700;color:#fff;
-  text-shadow:0 0 22px rgba(80,210,130,.6);letter-spacing:.4px}
-#hud h1 em{color:#50D282;font-style:normal}
-#hud p{font-size:11px;color:rgba(255,255,255,.55);margin-top:5px;letter-spacing:.4px}
+#hud h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:.3px;
+  text-shadow:0 0 20px rgba(80,210,130,.55)}
+#hud h1 span{color:#50D282}
+#hud p{font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;letter-spacing:.3px}
 #hint{
   position:fixed;bottom:14px;right:14px;
-  color:rgba(255,255,255,.4);font-size:10px;
-  text-align:right;z-index:200;pointer-events:none;line-height:2;letter-spacing:.3px
+  color:rgba(255,255,255,.38);font-size:10px;
+  text-align:right;z-index:200;pointer-events:none;line-height:2
 }
 #info{
   position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
-  width:min(520px,90vw);
-  background:rgba(6,14,26,.93);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(80,210,130,.22);border-radius:16px;
+  width:min(510px,90vw);
+  background:rgba(5,14,26,.95);
+  border:1px solid rgba(80,210,130,.25);border-radius:16px;
   padding:18px 22px;
-  box-shadow:0 24px 64px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.06);
+  box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);
   display:none;z-index:300
 }
 #info-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-#info h3{color:#50D282;font-size:14px;font-weight:700;letter-spacing:.2px}
-#info-close{
-  background:rgba(80,210,130,.12);border:1px solid rgba(80,210,130,.3);
+#info h3{color:#50D282;font-size:14px;font-weight:700}
+#info-x{background:rgba(80,210,130,.12);border:1px solid rgba(80,210,130,.3);
   color:#50D282;width:28px;height:28px;border-radius:50%;cursor:pointer;
-  font-size:13px;display:flex;align-items:center;justify-content:center
-}
+  font-size:13px;display:flex;align-items:center;justify-content:center}
 #info p{font-size:12px;line-height:1.75;color:rgba(200,225,212,.9)}
 #legend{
   position:fixed;top:76px;left:14px;z-index:200;
-  background:rgba(6,14,26,.72);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.09);border-radius:12px;
-  padding:11px 14px;pointer-events:none
+  background:rgba(5,14,26,.72);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:11px 14px;pointer-events:none
 }
-#legend h4{color:rgba(255,255,255,.4);font-size:9px;font-weight:600;
+#legend h4{color:rgba(255,255,255,.38);font-size:9px;font-weight:600;
   letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px}
 .lr{display:flex;align-items:center;gap:8px;margin:5px 0;
-  font-size:10px;color:rgba(200,220,210,.85);letter-spacing:.2px}
+  font-size:10px;color:rgba(200,220,210,.85)}
 .ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+#err{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(180,0,0,.9);color:#fff;padding:20px 28px;border-radius:12px;
+  font-size:13px;z-index:999;text-align:center;max-width:80vw}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="hud">
-  <h1>🌿 <em>Sistema de Biogás</em> — Energía para Colombia Rural</h1>
+  <h1>🌿 <span>Sistema de Biogás</span> — Energía para Colombia Rural</h1>
   <p>Residuos de ganado · Biodigestor · Bacterias metanogénicas · Electricidad limpia</p>
 </div>
-<div id="hint">✦ Arrastrar: rotar &nbsp;·&nbsp; Pellizcar: zoom<br>✦ Tocar componente: más información</div>
+<div id="hint">✦ Arrastrar: rotar &nbsp;·&nbsp; Rueda / pellizcar: zoom<br>✦ Clic en componente: más información</div>
 <div id="legend">
   <h4>Flujo de Energía</h4>
   <div class="lr"><div class="ld" style="background:#00ff88"></div>Residuos orgánicos</div>
@@ -84,37 +79,45 @@ canvas{display:block}
 <div id="info">
   <div id="info-hdr">
     <h3 id="info-title"></h3>
-    <button id="info-close" onclick="document.getElementById('info').style.display='none'">✕</button>
+    <button id="info-x" onclick="document.getElementById('info').style.display='none'">✕</button>
   </div>
   <p id="info-text"></p>
 </div>
+<div id="err"></div>
 
 <script>
-/* ── INFO DATA ───────────────────────────────────────────── */
-var INFO = {
-  COW:{ title:'🐄 Vaca — Fuente de Materia Orgánica',
-    text:'Cada vaca produce 10–15 kg de estiércol diario, rico en materia orgánica y bacterias metanogénicas. La ganadería extensiva de Colombia convierte este residuo en un recurso energético renovable y abundante para comunidades rurales aisladas que no tienen acceso a la red eléctrica nacional.' },
-  WASTE:{ title:'💩 Residuos de Ganado — Materia Prima',
-    text:'El estiércol se mezcla con agua (proporción 1:1) formando el "biol", que se vierte al biodigestor. Contiene los microorganismos necesarios para la digestión anaerobia. El residuo digerido final es un fertilizante orgánico de alta calidad que mejora los suelos agrícolas locales.' },
-  DIGESTER:{ title:'⚙️ Biodigestor Anaeróbico — El Corazón del Sistema',
-    text:'Tanque hermético donde la materia orgánica se descompone sin oxígeno. Procesa 50–500 L de slurry por día según tamaño. La digestión tarda 15–40 días a 25–40 °C, temperaturas naturales en el clima tropical colombiano. Tipos comunes: tubular (plástico), cúpula fija (concreto) o globo (geomembrana).' },
-  BACTERIA:{ title:'🦠 Bacterias Metanogénicas — Motor Biológico',
-    text:'Arqueas metanogénicas (Methanobacterium, Methanosarcina) descomponen la materia orgánica y producen CH₄. Presentes naturalmente en el estiércol bovino, operan de forma óptima a 30–37 °C —condiciones que el clima colombiano ofrece de forma natural, eliminando la necesidad de calefacción artificial.' },
-  METHANE:{ title:'💨 Metano CH₄ — Energía Capturada',
-    text:'El biogás contiene 55–70 % de metano. Se acumula en la cúpula del biodigestor y fluye a presión constante al generador. Una vaca genera ~1 m³ de biogás/día, equivalente a 10 h de luz LED. La válvula roja controla el flujo y garantiza la seguridad del sistema ante sobrepresiones.' },
-  GENERATOR:{ title:'⚡ Generador de Biogás — Conversión Energética',
-    text:'Motor de combustión interna adaptado para metano, acoplado a un alternador que produce 110 V/60 Hz. Un generador de 2 kW abastece: 8–12 lámparas LED, nevera pequeña, carga de teléfonos y televisor. Eficiencia eléctrica: 25–30 %. El calor residual puede aprovecharse para cocción.' },
-  CABLES:{ title:'🔌 Mini-Red Eléctrica — Distribución Local',
-    text:'Red de baja tensión con postes de madera y conductores de cobre que distribuye electricidad a varias viviendas. Un sistema de 2–5 kW sirve 4–10 hogares rurales hasta 500 m. Incluye protecciones: fusibles, pararrayos y medidores por familia. Costo aproximado: USD 800–2 500.' },
-  HOUSE:{ title:'🏠 Hogar Rural — Beneficiario Final',
-    text:'Familias en comunidades aisladas de Colombia (Amazonía, Pacífico, Andes) sin acceso a la red eléctrica. Con biogás obtienen: iluminación nocturna segura, refrigeración para alimentos y medicinas, conectividad (carga de celulares) y acceso a educación digital. Se reducen enfermedades por humo de leña y se frena la deforestación.' }
+/* ─── global error catcher ─── */
+window.onerror = function(msg, src, line) {
+  var el = document.getElementById('err');
+  el.textContent = '⚠ Error (line ' + line + '): ' + msg;
+  el.style.display = 'block';
 };
 
-/* ── SETUP ───────────────────────────────────────────────── */
+/* ─── INFO ─── */
+var INFO = {
+  COW:{ title:'🐄 Vaca — Fuente de Materia Orgánica',
+    text:'Cada vaca produce 10–15 kg de estiércol diario, rico en materia orgánica y bacterias metanogénicas. La ganadería extensiva de Colombia convierte este residuo en un recurso energético renovable para comunidades rurales aisladas sin acceso a la red eléctrica nacional.' },
+  WASTE:{ title:'💩 Residuos de Ganado — Materia Prima',
+    text:'El estiércol se mezcla con agua (1:1) formando el "biol", que se vierte al biodigestor. Esta mezcla activa los microorganismos que inician la digestión anaerobia. El residuo digerido final es un fertilizante orgánico de alta calidad que mejora los suelos agrícolas locales.' },
+  DIGESTER:{ title:'⚙️ Biodigestor Anaeróbico — El Corazón del Sistema',
+    text:'Tanque hermético donde la materia orgánica se descompone sin oxígeno. Procesa 50–500 L de slurry diarios según su tamaño. La digestión tarda 15–40 días a 25–40 °C —temperaturas naturales en el clima tropical colombiano. Tipos comunes: tubular (plástico), cúpula fija (concreto) o globo (geomembrana).' },
+  BACTERIA:{ title:'🦠 Bacterias Metanogénicas — Motor Biológico',
+    text:'Las arqueas metanogénicas (Methanobacterium, Methanosarcina) descomponen la materia orgánica y producen CH₄. Presentes de forma natural en el estiércol bovino, operan a 30–37 °C —condiciones que el clima colombiano provee naturalmente, eliminando la necesidad de calefacción artificial.' },
+  METHANE:{ title:'💨 Metano CH₄ — Energía Capturada',
+    text:'El biogás contiene 55–70 % de metano. Se acumula en la cúpula del biodigestor y fluye a presión constante hacia el generador. Una vaca genera ~1 m³/día de biogás, suficiente para 10 horas de iluminación LED. La válvula roja controla el flujo y garantiza la seguridad ante sobrepresiones.' },
+  GENERATOR:{ title:'⚡ Generador de Biogás — Conversión Energética',
+    text:'Motor de combustión interna adaptado para metano, acoplado a un alternador que produce 110 V/60 Hz. Un generador de 2 kW alimentado con biogás puede abastecer: 8–12 lámparas LED, una nevera pequeña, carga de celulares y televisor. Eficiencia eléctrica: 25–30 %.' },
+  CABLES:{ title:'🔌 Mini-Red Eléctrica — Distribución Local',
+    text:'Red de baja tensión con postes de madera y conductores de cobre que distribuye electricidad a varias viviendas rurales. Un sistema de 2–5 kW sirve 4–10 hogares hasta 500 m de distancia. Incluye fusibles, pararrayos y medidores individuales. Costo aproximado: USD 800–2 500.' },
+  HOUSE:{ title:'🏠 Hogar Rural — Beneficiario Final',
+    text:'Familias en comunidades aisladas de Colombia (Amazonía, Pacífico, Andes) sin acceso a la red eléctrica nacional. Con biogás obtienen: iluminación nocturna segura, refrigeración para alimentos y medicinas, conectividad digital y acceso a educación. Se eliminan las velas y la leña, mejorando la salud y reduciendo la deforestación.' }
+};
+
+/* ─── RENDERER ─── */
 function W(){ return window.innerWidth; }
 function H(){ return window.innerHeight; }
 
-var renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+var renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(W(), H());
 renderer.shadowMap.enabled = true;
@@ -130,9 +133,11 @@ labelRenderer.domElement.style.cssText = 'position:absolute;top:0;left:0;pointer
 document.getElementById('app').appendChild(labelRenderer.domElement);
 
 var scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x7ecce3, 0.012);
+/* Sky-blue fallback background (visible if shader dome fails) */
+scene.background = new THREE.Color(0x7ecce3);
+scene.fog = new THREE.FogExp2(0x7ecce3, 0.011);
 
-var camera = new THREE.PerspectiveCamera(52, W()/H(), 0.1, 200);
+var camera = new THREE.PerspectiveCamera(52, W() / H(), 0.1, 200);
 camera.position.set(1, 9, 23);
 
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -144,704 +149,778 @@ controls.maxDistance = 52;
 controls.maxPolarAngle = Math.PI * 0.80;
 controls.update();
 
-/* ── SKY DOME (gradient shader) ─────────────────────────── */
-scene.add(new THREE.Mesh(
-  new THREE.SphereGeometry(95, 32, 16),
+/* ─── SKY DOME ─── */
+var skyMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(90, 32, 16),
   new THREE.ShaderMaterial({
-    uniforms:{
-      top:   { value: new THREE.Color(0x0c1e3d) },
-      mid:   { value: new THREE.Color(0x1a6faa) },
-      horiz: { value: new THREE.Color(0x7ecce3) }
+    uniforms: {
+      uTop:   { value: new THREE.Color(0x0c1e3d) },
+      uMid:   { value: new THREE.Color(0x1a6faa) },
+      uHoriz: { value: new THREE.Color(0x7ecce3) }
     },
-    vertexShader:[
-      'varying float vY;',
+    vertexShader: [
+      'varying float vWorldY;',
       'void main(){',
-      '  vY=(modelMatrix*vec4(position,1.0)).y;',
-      '  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);',
+      '  vWorldY = (modelMatrix * vec4(position,1.0)).y;',
+      '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);',
       '}'
     ].join('\n'),
-    fragmentShader:[
-      'uniform vec3 top,mid,horiz;',
-      'varying float vY;',
+    fragmentShader: [
+      'uniform vec3 uTop, uMid, uHoriz;',
+      'varying float vWorldY;',
       'void main(){',
-      '  float t1=clamp(vY/16.0,0.0,1.0);',
-      '  float t2=clamp(vY/85.0,0.0,1.0);',
-      '  vec3 c=mix(horiz,mid,t1);',
-      '  c=mix(c,top,t2);',
-      '  gl_FragColor=vec4(c,1.0);',
+      '  float t1 = clamp(vWorldY / 15.0, 0.0, 1.0);',
+      '  float t2 = clamp(vWorldY / 82.0, 0.0, 1.0);',
+      '  vec3 c = mix(uHoriz, uMid, t1);',
+      '  c = mix(c, uTop, t2);',
+      '  gl_FragColor = vec4(c, 1.0);',
       '}'
     ].join('\n'),
-    side: THREE.BackSide
+    side: THREE.BackSide,
+    depthWrite: false
   })
-));
+);
+scene.add(skyMesh);
 
-/* ── LIGHTING ────────────────────────────────────────────── */
+/* ─── LIGHTING ─── */
 scene.add(new THREE.HemisphereLight(0x9DCFEA, 0x2E6B1A, 0.45));
 
-var sun = new THREE.DirectionalLight(0xFFF5D8, 1.7);
+var sun = new THREE.DirectionalLight(0xFFF5D8, 1.8);
 sun.position.set(14, 22, 10);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.camera.left   = -26;
-sun.shadow.camera.right  =  26;
-sun.shadow.camera.top    =  22;
-sun.shadow.camera.bottom = -22;
+sun.shadow.mapSize.width  = 2048;
+sun.shadow.mapSize.height = 2048;
+sun.shadow.camera.left   = -28;
+sun.shadow.camera.right  =  28;
+sun.shadow.camera.top    =  24;
+sun.shadow.camera.bottom = -24;
 sun.shadow.camera.near   = 1;
-sun.shadow.camera.far    = 65;
+sun.shadow.camera.far    = 70;
 sun.shadow.bias          = -0.0004;
 scene.add(sun);
 
-scene.add(Object.assign(new THREE.DirectionalLight(0x9EC5FF, 0.32), { position: new THREE.Vector3(-12, 8, -6) }));
+var fillLight = new THREE.DirectionalLight(0x9EC5FF, 0.30);
+fillLight.position.set(-12, 8, -6);
+scene.add(fillLight);
 
-var digGlow  = new THREE.PointLight(0xFF8822, 2.8, 11);
+var digGlow = new THREE.PointLight(0xFF8822, 3.0, 12);
 digGlow.position.set(-3.7, -1.5, 0);
 scene.add(digGlow);
 
-var genGlow  = new THREE.PointLight(0xAADDFF, 1.1, 6);
+var genGlow = new THREE.PointLight(0xAADDFF, 1.0, 6);
 genGlow.position.set(1.0, 1.8, 0);
 scene.add(genGlow);
 
-var bulbGlow = new THREE.PointLight(0xFFCC44, 1.8, 5.5);
+var bulbGlow = new THREE.PointLight(0xFFCC44, 1.8, 6);
 bulbGlow.position.set(11.5, 2.1, 2.5);
 scene.add(bulbGlow);
 
-/* ── PBR MATERIALS ───────────────────────────────────────── */
+/* ─── PBR MATERIAL HELPER ─── */
 function std(o){ return new THREE.MeshStandardMaterial(o); }
 
-var M = {
-  grassA:   std({color:0x2E8B3A,roughness:.95,metalness:0}),
-  grassB:   std({color:0x1E6B2A,roughness:.95,metalness:0}),
-  soilA:    std({color:0x8B5E3C,roughness:.98,metalness:0}),
-  soilB:    std({color:0x6B4030,roughness:.98,metalness:0}),
-  soilC:    std({color:0x9B7050,roughness:.95,metalness:0}),
-  rock:     std({color:0x524D5C,roughness:.95,metalness:.04}),
-  clay:     std({color:0xA06040,roughness:.97,metalness:0}),
-  steel:    std({color:0x99AABB,roughness:.28,metalness:.88}),
-  dkSteel:  std({color:0x445566,roughness:.4, metalness:.8}),
-  paintGray:std({color:0x5D6F80,roughness:.5, metalness:.3}),
-  indus:    std({color:0x3C4F62,roughness:.5, metalness:.35}),
-  brass:    std({color:0xCC9933,roughness:.28,metalness:.82}),
-  copper:   std({color:0xCC7722,roughness:.33,metalness:.75}),
-  galv:     std({color:0xBBCCDD,roughness:.22,metalness:.92}),
-  rubber:   std({color:0x111111,roughness:.95,metalness:0}),
-  concrete: std({color:0x888888,roughness:.9, metalness:0}),
-  cowSkin:  std({color:0xEED8A8,roughness:.9, metalness:0}),
-  cowSpot:  std({color:0x1A1A1A,roughness:.9, metalness:0}),
-  cowPink:  std({color:0xF0A0A0,roughness:.8, metalness:0}),
-  cowHoof:  std({color:0x1E1E1E,roughness:.85,metalness:.02}),
-  cowHorn:  std({color:0xD4B880,roughness:.7, metalness:0}),
-  waste:    std({color:0x6B3A1A,roughness:.99,metalness:0}),
-  digTank:  std({color:0x455A6A,roughness:.42,metalness:.42}),
-  digFlg:   std({color:0x556677,roughness:.28,metalness:.78}),
-  liquid:   std({color:0x7A3D12,roughness:.18,metalness:0,transparent:true,opacity:.88}),
-  bac:      std({color:0x22EE66,roughness:.5, metalness:0,emissive:new THREE.Color(0x005500),emissiveIntensity:.32}),
-  pipe:     std({color:0x778899,roughness:.32,metalness:.82}),
-  valve:    std({color:0xDD2200,roughness:.28,metalness:.62}),
-  genFrame: std({color:0x28394E,roughness:.52,metalness:.32}),
-  genEng:   std({color:0x3E4F62,roughness:.48,metalness:.42}),
-  genAlt:   std({color:0xBB8800,roughness:.28,metalness:.72}),
-  genPanel: std({color:0x0C1C2C,roughness:.48,metalness:.22}),
-  genSkid:  std({color:0x18283A,roughness:.52,metalness:.52}),
-  ledG:     std({color:0x00FF44,roughness:.3, metalness:0,emissive:new THREE.Color(0x00AA33),emissiveIntensity:1.0}),
-  ledR:     std({color:0xFF2200,roughness:.3, metalness:0,emissive:new THREE.Color(0xAA1100),emissiveIntensity:.8}),
-  wood:     std({color:0x9B6C1E,roughness:.92,metalness:0}),
-  insulat:  std({color:0xAA3300,roughness:.62,metalness:.02}),
-  wire:     std({color:0x1A1A1A,roughness:.62,metalness:.32}),
-  stucco:   std({color:0xE8D5A8,roughness:.85,metalness:0}),
-  roofZinc: std({color:0x889999,roughness:.45,metalness:.65}),
-  doorWood: std({color:0x7A4010,roughness:.85,metalness:0}),
-  winGlo:   std({color:0xFFEE88,roughness:.18,metalness:0,emissive:new THREE.Color(0xFF9900),emissiveIntensity:1.1}),
-  winFrame: std({color:0x886633,roughness:.72,metalness:.1}),
-  fence:    std({color:0xD4A864,roughness:.82,metalness:0}),
-  bark:     std({color:0x7A5015,roughness:.92,metalness:0}),
-  lvs1:     std({color:0x1A8A22,roughness:.9, metalness:0}),
-  lvs2:     std({color:0x228B2A,roughness:.9, metalness:0}),
-  lvs3:     std({color:0x30A830,roughness:.9, metalness:0}),
-  hillA:    std({color:0x2A6A2A,roughness:.98,metalness:0}),
-  hillB:    std({color:0x1A4A1A,roughness:.98,metalness:0}),
-  hillC:    std({color:0x3A7A3A,roughness:.98,metalness:0}),
-  cloud:    std({color:0xffffff,roughness:.8, metalness:0,transparent:true,opacity:.87})
-};
-
-/* ── HELPERS ─────────────────────────────────────────────── */
+/* ─── SCENE HELPERS ─── */
 var clickables = [];
-function hitbox(geo, x, y, z, id){
-  var m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));
-  m.position.set(x,y,z); m.userData.id = id;
-  scene.add(m); clickables.push(m); return m;
+
+function hitbox(geo, x, y, z, id) {
+  var m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+    transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false
+  }));
+  m.position.set(x, y, z);
+  m.userData.id = id;
+  scene.add(m);
+  clickables.push(m);
 }
-function lbl(text, x, y, z){
-  var d = document.createElement('div'); d.className='lbl'; d.textContent=text;
-  var o = new THREE.CSS2DObject(d); o.position.set(x,y,z); scene.add(o); return o;
+
+function lbl(text, x, y, z) {
+  var d = document.createElement('div');
+  d.className = 'lbl';
+  d.textContent = text;
+  var o = new THREE.CSS2DObject(d);
+  o.position.set(x, y, z);
+  scene.add(o);
 }
-function box(w,h,d,mat,x,y,z,rx,ry,rz,cast){
-  var m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
-  m.position.set(x,y,z);
-  if(rx||ry||rz) m.rotation.set(rx||0,ry||0,rz||0);
-  if(cast) m.castShadow=true;
-  scene.add(m); return m;
+
+function mesh(geo, mat, x, y, z, rx, ry, rz, cast) {
+  var m = new THREE.Mesh(geo, mat);
+  m.position.set(x || 0, y || 0, z || 0);
+  if (rx || ry || rz) m.rotation.set(rx || 0, ry || 0, rz || 0);
+  if (cast) m.castShadow = true;
+  scene.add(m);
+  return m;
 }
-function cyl(rt,rb,h,seg,mat,x,y,z,rx,ry,rz,cast){
-  var m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||12),mat);
-  m.position.set(x,y,z);
-  if(rx||ry||rz) m.rotation.set(rx||0,ry||0,rz||0);
-  if(cast) m.castShadow=true;
-  scene.add(m); return m;
+
+function cyl(rt, rb, h, seg, mat, x, y, z, rx, ry, rz, cast) {
+  return mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 12), mat, x, y, z, rx, ry, rz, cast);
 }
-function sph(r,mat,x,y,z,sx,sy,sz){
-  var m = new THREE.Mesh(new THREE.SphereGeometry(r,16,12),mat);
-  m.position.set(x,y,z);
-  if(sx||sy||sz) m.scale.set(sx||1,sy||1,sz||1);
-  scene.add(m); return m;
+function box(w, h, d, mat, x, y, z, rx, ry, rz, cast) {
+  return mesh(new THREE.BoxGeometry(w, h, d), mat, x, y, z, rx, ry, rz, cast);
+}
+function sph(r, mat, x, y, z, sx, sy, sz) {
+  var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), mat);
+  m.position.set(x || 0, y || 0, z || 0);
+  if (sx) m.scale.set(sx, sy || 1, sz || 1);
+  scene.add(m);
+  return m;
 }
 
 /* ══════════════════════════════════════════════════════════
    TERRAIN
 ══════════════════════════════════════════════════════════ */
-// Wide background
-var bgGnd = new THREE.Mesh(new THREE.PlaneGeometry(180,120),M.grassB);
-bgGnd.rotation.x = -Math.PI/2; bgGnd.position.y = -0.02;
-bgGnd.receiveShadow = true; scene.add(bgGnd);
+var matGrassA = std({ color: 0x2E8B3A, roughness: .95, metalness: 0 });
+var matGrassB = std({ color: 0x1E6B2A, roughness: .95, metalness: 0 });
+var matSoilA  = std({ color: 0x8B5E3C, roughness: .98, metalness: 0 });
+var matSoilB  = std({ color: 0x6B4030, roughness: .98, metalness: 0 });
+var matRock   = std({ color: 0x524D5C, roughness: .94, metalness: .04 });
+var matConcr  = std({ color: 0x888888, roughness: .9,  metalness: 0 });
+var matSoilSeam = std({ color: 0x2d1005, roughness: .99, metalness: 0 });
 
-// Left grass slab
-var lgnd = new THREE.Mesh(new THREE.PlaneGeometry(11.6,16),M.grassA);
-lgnd.rotation.x = -Math.PI/2; lgnd.position.set(-12.2,0,0);
-lgnd.receiveShadow=true; scene.add(lgnd);
+// Far background
+mesh(new THREE.PlaneGeometry(180, 120), matGrassB, 0, -0.02, 0, -Math.PI/2);
 
-// Right grass slab
-var rgnd = new THREE.Mesh(new THREE.PlaneGeometry(21,16),M.grassA);
-rgnd.rotation.x = -Math.PI/2; rgnd.position.set(9.5,0,0);
-rgnd.receiveShadow=true; scene.add(rgnd);
+// Left grass slab (x: -18 → -7)
+mesh(new THREE.PlaneGeometry(11.4, 16), matGrassA, -12.3, 0, 0, -Math.PI/2);
 
-// Concrete curb around underground pit
-var cbMat = std({color:0x777777,roughness:.72,metalness:.12});
-box(0.4,.38,8.2,cbMat,-7.0,.19,0);   // left curb
-box(0.4,.38,8.2,cbMat,-0.2,.19,0);   // right curb
-box(7.2,.38,0.4,cbMat,-3.6,.19,-3.8);// back curb
-box(7.2,.38,0.4,cbMat,-3.6,.19, 3.8);// front curb
+// Right grass slab (x: -0.3 → 18)
+mesh(new THREE.PlaneGeometry(19.0, 16), matGrassA, 9.15, 0, 0, -Math.PI/2);
 
-// Underground pit walls (no front face — camera sees inside)
+// Concrete curbs around underground pit opening
+var matCurb = std({ color: 0x777777, roughness: .72, metalness: .12 });
+box(0.42, .40, 8.4, matCurb, -7.1,  .20, 0);  // left
+box(0.42, .40, 8.4, matCurb, -0.3,  .20, 0);  // right
+box(7.2,  .40, 0.4, matCurb, -3.7,  .20, -4.0); // back
+box(7.2,  .40, 0.4, matCurb, -3.7,  .20,  4.0); // front
+
+// Underground cross-section (open top, open front)
 // Back wall
-var bwm = new THREE.Mesh(new THREE.PlaneGeometry(6.8,5.4),M.soilA);
-bwm.position.set(-3.6,-2.7,-3.8); scene.add(bwm);
+mesh(new THREE.PlaneGeometry(6.9, 5.6), matSoilA, -3.7, -2.8, -4.0);
 
-// Geology layers
-var geo_layers=[
-  {c:0x5c3a1a,y:-0.32,h:.38},{c:0x7a5a3a,y:-.92,h:.52},
-  {c:0x8B5E3C,y:-1.7,h:.66},{c:0xA07050,y:-2.62,h:.78},
-  {c:0x6B4030,y:-3.56,h:.78},{c:0x524D5C,y:-4.52,h:.72}
+// Geological layers on back wall
+var geoLyr = [
+  {c:0x5c3a1a,y:-0.30,h:.40}, {c:0x7a5a3a,y:-.90,h:.52},
+  {c:0x8B5E3C,y:-1.68,h:.66}, {c:0xA07050,y:-2.60,h:.78},
+  {c:0x6B4030,y:-3.54,h:.78}, {c:0x524D5C,y:-4.48,h:.74}
 ];
-geo_layers.forEach(function(g){
-  var lm=new THREE.Mesh(new THREE.PlaneGeometry(6.8,g.h),std({color:g.c,roughness:.98,metalness:0}));
-  lm.position.set(-3.6,g.y,-3.77); scene.add(lm);
+geoLyr.forEach(function(g) {
+  var lm = new THREE.Mesh(new THREE.PlaneGeometry(6.9, g.h),
+    std({ color: g.c, roughness: .98, metalness: 0 }));
+  lm.position.set(-3.7, g.y, -3.97);
+  scene.add(lm);
 });
 
-// Left pit wall
-var lwm=new THREE.Mesh(new THREE.PlaneGeometry(7.8,5.4),M.soilB);
-lwm.rotation.y=Math.PI/2; lwm.position.set(-7.0,-2.7,0); scene.add(lwm);
-// Right pit wall
-var rwm=new THREE.Mesh(new THREE.PlaneGeometry(7.8,5.4),M.soilB);
-rwm.rotation.y=-Math.PI/2; rwm.position.set(-0.2,-2.7,0); scene.add(rwm);
+// Left wall
+mesh(new THREE.PlaneGeometry(8.0, 5.6), matSoilB, -7.0, -2.8, 0, 0, Math.PI/2);
+// Right wall
+mesh(new THREE.PlaneGeometry(8.0, 5.6), matSoilB, -0.3, -2.8, 0, 0, -Math.PI/2);
 // Floor
-var flm=new THREE.Mesh(new THREE.PlaneGeometry(6.8,7.8),M.rock);
-flm.rotation.x=-Math.PI/2; flm.position.set(-3.6,-5.3,0); scene.add(flm);
+mesh(new THREE.PlaneGeometry(6.9, 8.0), matRock, -3.7, -5.5, 0, -Math.PI/2);
 // Dark topsoil seam
-box(6.8,.22,7.8,std({color:0x2d1005,roughness:.99,metalness:0}),-3.6,-0.11,0);
+box(6.9, .22, 8.0, matSoilSeam, -3.7, -0.11, 0);
 
 /* ══════════════════════════════════════════════════════════
-   COW  (x = -10.5)
+   COW  (centered at x = -10.5)
 ══════════════════════════════════════════════════════════ */
 var cowG = new THREE.Group();
-function ca(geo,mat,x,y,z,rx,ry,rz,cast){
-  var m=new THREE.Mesh(geo,mat); m.position.set(x,y,z);
-  if(rx||ry||rz) m.rotation.set(rx||0,ry||0,rz||0);
-  if(cast) m.castShadow=true; cowG.add(m); return m;
+var matCowSkin = std({ color: 0xEED8A8, roughness: .90, metalness: 0 });
+var matCowSpot = std({ color: 0x1A1A1A, roughness: .90, metalness: 0 });
+var matCowPink = std({ color: 0xF0A0A0, roughness: .80, metalness: 0 });
+var matCowHoof = std({ color: 0x1E1E1E, roughness: .85, metalness: .02 });
+var matCowHorn = std({ color: 0xD4B880, roughness: .70, metalness: 0 });
+var matCowEye  = std({ color: 0x1A1A2A, roughness: .40, metalness: .10 });
+var matCowShine= std({ color: 0xffffff, roughness: .20, metalness: 0 });
+
+function cadd(geo, mat, x, y, z, rx, ry, rz, cast) {
+  var m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  if (rx || ry || rz) m.rotation.set(rx || 0, ry || 0, rz || 0);
+  if (cast) m.castShadow = true;
+  cowG.add(m);
+  return m;
 }
 
-// Belly cylinder
-ca(new THREE.CylinderGeometry(.55,.55,2.65,14),M.cowSkin, 0,.88,0, Math.PI/2,0,0);
-// Body top
-ca(new THREE.BoxGeometry(1.88,1.12,2.9),M.cowSkin, 0,1.22,0, 0,0,0,true);
+// Belly
+cadd(new THREE.CylinderGeometry(.56, .56, 2.68, 14), matCowSkin, 0, .88, 0,  Math.PI/2, 0, 0);
+// Body
+cadd(new THREE.BoxGeometry(1.88, 1.12, 2.92), matCowSkin, 0, 1.22, 0, 0, 0, 0, true);
 // Spots
-ca(new THREE.BoxGeometry(.72,.07,1.08),M.cowSpot, -.38,1.3,.42);
-ca(new THREE.BoxGeometry(.56,.07,.92),M.cowSpot,   .32,1.3,-.62);
-ca(new THREE.BoxGeometry(.48,.07,.7), M.cowSpot,  -.18,1.3,-1.1);
+cadd(new THREE.BoxGeometry(.72, .07, 1.08), matCowSpot, -.38, 1.29,  .44);
+cadd(new THREE.BoxGeometry(.56, .07,  .92), matCowSpot,  .32, 1.29, -.62);
+cadd(new THREE.BoxGeometry(.48, .07,  .70), matCowSpot, -.18, 1.29,-1.10);
 // Neck
-ca(new THREE.CylinderGeometry(.32,.42,.68,10),M.cowSkin, 0,1.66,1.32, -.38,0,0);
-// Head box + rounding
-ca(new THREE.BoxGeometry(.95,.88,.94),M.cowSkin, 0,1.92,1.68, 0,0,0,true);
-ca(new THREE.SphereGeometry(.43,12,9),M.cowSkin, 0,1.9,2.1);
+cadd(new THREE.CylinderGeometry(.32, .42, .68, 10), matCowSkin, 0, 1.66, 1.32, -.38, 0, 0);
+// Head
+cadd(new THREE.BoxGeometry(.96, .88, .96), matCowSkin, 0, 1.92, 1.68, 0, 0, 0, true);
+cadd(new THREE.SphereGeometry(.44, 12, 9), matCowSkin, 0, 1.90, 2.12);
 // Snout
-ca(new THREE.CylinderGeometry(.28,.3,.22,12),M.cowPink, 0,1.73,2.18, Math.PI/2,0,0);
+cadd(new THREE.CylinderGeometry(.28, .30, .22, 12), matCowPink, 0, 1.73, 2.18,  Math.PI/2, 0, 0);
 // Nostrils
-ca(new THREE.SphereGeometry(.04,6,4),std({color:0x662222,roughness:.85,metalness:0}), -.1,1.73,2.3);
-ca(new THREE.SphereGeometry(.04,6,4),std({color:0x662222,roughness:.85,metalness:0}),  .1,1.73,2.3);
+cadd(new THREE.SphereGeometry(.04, 6, 4), std({color:0x662222,roughness:.85,metalness:0}), -.10, 1.73, 2.30);
+cadd(new THREE.SphereGeometry(.04, 6, 4), std({color:0x662222,roughness:.85,metalness:0}),  .10, 1.73, 2.30);
 // Horns
-ca(new THREE.CylinderGeometry(.04,.015,.54,7),M.cowHorn, -.38,2.44,1.56, .12,0,.45);
-ca(new THREE.CylinderGeometry(.04,.015,.54,7),M.cowHorn,  .38,2.44,1.56, .12,0,-.45);
+cadd(new THREE.CylinderGeometry(.040, .015, .54, 7), matCowHorn, -.38, 2.44, 1.56, .12, 0,  .45);
+cadd(new THREE.CylinderGeometry(.040, .015, .54, 7), matCowHorn,  .38, 2.44, 1.56, .12, 0, -.45);
 // Ears
-function ear(sx){
-  var e=new THREE.Mesh(new THREE.SphereGeometry(.2,9,7),M.cowSkin);
-  e.scale.set(1,.56,1.2); e.position.set(sx,2.0,1.56); e.rotation.z=sx<0?.2:-.2; cowG.add(e);
-  var i=new THREE.Mesh(new THREE.SphereGeometry(.12,9,7),M.cowPink);
-  i.scale.set(1,.4,.9); i.position.set(sx*.94,2.0,1.62); cowG.add(i);
+function cowEar(sx) {
+  var e = new THREE.Mesh(new THREE.SphereGeometry(.20, 9, 7), matCowSkin);
+  e.scale.set(1, .56, 1.2); e.position.set(sx, 2.00, 1.56);
+  e.rotation.z = sx < 0 ? .2 : -.2; cowG.add(e);
+  var ei = new THREE.Mesh(new THREE.SphereGeometry(.12, 9, 7), matCowPink);
+  ei.scale.set(1, .40, .90); ei.position.set(sx * .94, 2.00, 1.62); cowG.add(ei);
 }
-ear(-.56); ear(.56);
+cowEar(-.56); cowEar(.56);
 // Eyes
-ca(new THREE.SphereGeometry(.06,7,5),std({color:0x1A1A2A,roughness:.4,metalness:.1}), -.38,2.05,2.08);
-ca(new THREE.SphereGeometry(.06,7,5),std({color:0x1A1A2A,roughness:.4,metalness:.1}),  .38,2.05,2.08);
-// Eye shine
-ca(new THREE.SphereGeometry(.02,5,4),std({color:0xffffff,roughness:.2,metalness:0}), -.36,2.07,2.14);
-ca(new THREE.SphereGeometry(.02,5,4),std({color:0xffffff,roughness:.2,metalness:0}),  .40,2.07,2.14);
+cadd(new THREE.SphereGeometry(.06, 7, 5), matCowEye,  -.38, 2.05, 2.08);
+cadd(new THREE.SphereGeometry(.06, 7, 5), matCowEye,   .38, 2.05, 2.08);
+cadd(new THREE.SphereGeometry(.02, 5, 4), matCowShine, -.36, 2.07, 2.14);
+cadd(new THREE.SphereGeometry(.02, 5, 4), matCowShine,  .40, 2.07, 2.14);
 // Legs
-[[-0.67,0.52,1.06],[0.67,0.52,1.06],[-0.67,0.52,-1.0],[0.67,0.52,-1.0]].forEach(function(p){
-  ca(new THREE.CylinderGeometry(.22,.18,.62,9),M.cowSkin, p[0],p[1]+.42,p[2], 0,0,0,true);
-  ca(new THREE.CylinderGeometry(.17,.15,.67,9),M.cowSkin, p[0],p[1]-.04,p[2], 0,0,0,true);
-  ca(new THREE.CylinderGeometry(.16,.13,.2,9),M.cowHoof,  p[0],.1,p[2]);
+var legPos = [[-0.67, 0.52, 1.06], [0.67, 0.52, 1.06], [-0.67, 0.52, -1.0], [0.67, 0.52, -1.0]];
+legPos.forEach(function(p) {
+  cadd(new THREE.CylinderGeometry(.22, .18, .62, 9), matCowSkin, p[0], p[1]+.42, p[2], 0,0,0, true);
+  cadd(new THREE.CylinderGeometry(.17, .15, .67, 9), matCowSkin, p[0], p[1]-.04, p[2], 0,0,0, true);
+  cadd(new THREE.CylinderGeometry(.16, .13, .20, 9), matCowHoof, p[0], .10, p[2]);
 });
 // Tail
-ca(new THREE.CylinderGeometry(.05,.03,.92,7),M.cowSkin, 0,1.42,-1.58, .86,0,0);
-ca(new THREE.SphereGeometry(.12,7,5),std({color:0x9B7A45,roughness:.88,metalness:0}), 0,.62,-2.28);
+cadd(new THREE.CylinderGeometry(.05, .03, .92, 7), matCowSkin, 0, 1.42, -1.58, .86, 0, 0);
+cadd(new THREE.SphereGeometry(.12, 7, 5), std({color:0x9B7A45,roughness:.88,metalness:0}), 0, .62, -2.28);
 // Udder + teats
-ca(new THREE.SphereGeometry(.3,10,8),M.cowPink, 0,.66,.42);
+cadd(new THREE.SphereGeometry(.30, 10, 8), matCowPink, 0, .66, .42);
 [[-.1,.46,.58],[.1,.46,.58],[-.1,.46,.26],[.1,.46,.26]].forEach(function(p){
-  ca(new THREE.CylinderGeometry(.04,.03,.13,6),M.cowPink, p[0],p[1],p[2]);
+  cadd(new THREE.CylinderGeometry(.04,.03,.13,6), matCowPink, p[0],p[1],p[2]);
 });
 
-cowG.position.set(-10.5,0,0);
+cowG.position.set(-10.5, 0, 0);
 scene.add(cowG);
-hitbox(new THREE.BoxGeometry(2.6,2.9,3.6),-10.5,1.25,0,'COW');
-lbl('COW  🐄',-10.5,3.15,0);
+hitbox(new THREE.BoxGeometry(2.6, 2.9, 3.6), -10.5, 1.25, 0, 'COW');
+lbl('COW  🐄', -10.5, 3.15, 0);
 
 /* ══════════════════════════════════════════════════════════
    COW WASTE  (x = -8.4)
 ══════════════════════════════════════════════════════════ */
-var wG=new THREE.Group();
-[[0,.13,0,.44,.48],[-.3,.09,-.1,.29,.48],[.26,.09,.1,.27,.48],[.1,.25,.1,.21,.48]].forEach(function(d){
-  var s=new THREE.Mesh(new THREE.SphereGeometry(d[3],9,7),M.waste);
-  s.scale.set(1.15,d[4],1.1); s.position.set(d[0],d[1],d[2]); wG.add(s);
+var matWaste = std({ color: 0x6B3A1A, roughness: .99, metalness: 0 });
+var wasteG = new THREE.Group();
+[[0,.13,0,.44,.48],[-.3,.09,-.10,.29,.48],[.26,.09,.10,.27,.48],[.10,.25,.10,.21,.48]].forEach(function(d){
+  var s = new THREE.Mesh(new THREE.SphereGeometry(d[3], 9, 7), matWaste);
+  s.scale.set(1.15, d[4], 1.1); s.position.set(d[0], d[1], d[2]); wasteG.add(s);
 });
-wG.position.set(-8.4,0,0); scene.add(wG);
-hitbox(new THREE.BoxGeometry(1.4,1.0,1.4),-8.4,.35,0,'WASTE');
-lbl('COW WASTE  💩',-8.4,1.25,0);
+wasteG.position.set(-8.4, 0, 0);
+scene.add(wasteG);
+hitbox(new THREE.BoxGeometry(1.4, 1.0, 1.4), -8.4, .35, 0, 'WASTE');
+lbl('COW WASTE  💩', -8.4, 1.25, 0);
 
 /* ══════════════════════════════════════════════════════════
    UNDERGROUND PIPES
 ══════════════════════════════════════════════════════════ */
-function pip(r,len,x,y,z,rx,ry,rz){
-  cyl(r,r,len,11,M.pipe,x,y,z,rx||0,ry||0,rz||0);
-}
-pip(.12,.55,-8.4,-.28,0);                        // surface drop
-pip(.12,3.62,-8.4,-2.09,0);                      // vertical down
-pip(.12,5.1,-5.85,-3.82,0, 0,0,Math.PI/2);       // horizontal to digester
-pip(.12,2.82,-3.7,-2.41,0);                      // rise in digester
-pip(.1,1.45,-3.7,-.62,0);                        // methane vertical
-pip(.1,3.56,-1.82,.12,0, 0,0,Math.PI/2);         // methane horizontal
-pip(.1,.55,-.04,.3,0);                            // short rise to gen
+var matPipe  = std({ color: 0x778899, roughness: .32, metalness: .82 });
+var matValve = std({ color: 0xDD2200, roughness: .28, metalness: .62 });
+var matBrass = std({ color: 0xCC9933, roughness: .28, metalness: .82 });
+var matSteel = std({ color: 0x99AABB, roughness: .28, metalness: .88 });
 
-// Valve wheel
-var vt=new THREE.Mesh(new THREE.TorusGeometry(.24,.076,10,20),M.valve);
-vt.position.set(-3.7,.06,0); vt.rotation.x=Math.PI/2; scene.add(vt);
-cyl(.052,.052,.52,7,M.valve,-3.7,.06,0, 0,0,Math.PI/2);  // spoke
-cyl(.042,.042,.28,7,M.valve,-3.7,.22,0);                   // stem
-// Gauge on valve
-cyl(.11,.11,.06,12,M.steel,-3.48,.06,.3, 0,0,Math.PI/2);
-var gf=new THREE.Mesh(new THREE.CircleGeometry(.095,12),std({color:0xffffff,roughness:.3,metalness:0}));
-gf.rotation.y=-Math.PI/2; gf.position.set(-3.46,.06,.3); scene.add(gf);
+// Waste inlet: surface drop → vertical → horizontal → rise in digester
+cyl(.12, .12, .55, 11, matPipe, -8.4, -.28, 0);
+cyl(.12, .12, 3.62, 11, matPipe, -8.4, -2.09, 0);
+cyl(.12, .12, 5.10, 11, matPipe, -5.85, -3.82, 0,  0, 0, Math.PI/2);
+cyl(.12, .12, 2.82, 11, matPipe, -3.7, -2.41, 0);
 
-hitbox(new THREE.CylinderGeometry(.38,.38,1.65,10),-3.7,-.28,0,'METHANE');
-lbl('METANO  CH₄  💨',-3.7,.92,0);
+// Methane outlet: vertical up, valve, horizontal to gen
+cyl(.10, .10, 1.45, 11, matPipe, -3.7, -.62, 0);
+
+// Valve
+var valveTorus = new THREE.Mesh(new THREE.TorusGeometry(.24, .076, 10, 20), matValve);
+valveTorus.position.set(-3.7, .06, 0); valveTorus.rotation.x = Math.PI/2;
+scene.add(valveTorus);
+cyl(.052, .052, .52, 7, matValve, -3.7, .06, 0, 0, 0, Math.PI/2);
+cyl(.042, .042, .28, 7, matValve, -3.7, .22, 0);
+// Gauge
+cyl(.11, .11, .06, 12, matSteel, -3.48, .06, .30, 0, 0, Math.PI/2);
+var gf = new THREE.Mesh(new THREE.CircleGeometry(.095, 12), std({color:0xffffff,roughness:.3,metalness:0}));
+gf.position.set(-3.46, .06, .30); gf.rotation.y = -Math.PI/2; scene.add(gf);
+
+hitbox(new THREE.CylinderGeometry(.38, .38, 1.65, 10), -3.7, -.28, 0, 'METHANE');
+lbl('METANO  CH₄  💨', -3.7, .92, 0);
+
+cyl(.10, .10, 3.56, 11, matPipe, -1.82, .12, 0, 0, 0, Math.PI/2);
+cyl(.10, .10, .55,  11, matPipe, -.04,  .30, 0);
 
 /* ══════════════════════════════════════════════════════════
    BIODIGESTER
 ══════════════════════════════════════════════════════════ */
-cyl(2.0,2.0,3.25,24,M.digTank,-3.7,-2.88,0, 0,0,0,true);
-// Domes
-scene.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(2.0,24,12,0,Math.PI*2,0,Math.PI/2),M.digTank),
-  {position:new THREE.Vector3(-3.7,-1.26,0)}));
-scene.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(2.0,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2),M.digTank),
-  {position:new THREE.Vector3(-3.7,-4.51,0)}));
-// Liquid
-scene.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(1.92,1.92,2.22,24),M.liquid),
-  {position:new THREE.Vector3(-3.7,-3.14,0)}));
-// Ribs
-for(var ri=0;ri<7;ri++){
-  var rb=new THREE.Mesh(new THREE.TorusGeometry(2.05,.046,8,24),M.digFlg);
-  rb.position.set(-3.7,-1.48+ri*.54,0); scene.add(rb);
-}
-// Access hatch + handle
-cyl(.42,.42,.17,12,M.steel,-3.7,-.62,0);
-cyl(.44,.44,.07,12,M.steel,-3.7,-.52,0);
-var hh=new THREE.Mesh(new THREE.TorusGeometry(.13,.026,6,10),M.steel);
-hh.position.set(-3.7,-.47,0); scene.add(hh);
-// Side temp gauge
-cyl(.12,.12,.06,12,M.steel,-3.7,-1.98,2.06, 0,0,Math.PI/2);
+var matDigTank = std({ color: 0x455A6A, roughness: .42, metalness: .42 });
+var matDigFlg  = std({ color: 0x556677, roughness: .28, metalness: .78 });
+var matLiquid  = std({ color: 0x7A3D12, roughness: .18, metalness: 0, transparent: true, opacity: .88 });
 
-hitbox(new THREE.CylinderGeometry(2.22,2.22,5.3,16),-3.7,-2.75,0,'DIGESTER');
-lbl('BIODIGESTOR  ⚙️',-3.7,-.78,0);
+// Main body
+var digCyl = cyl(2.0, 2.0, 3.25, 24, matDigTank, -3.7, -2.88, 0, 0,0,0, true);
+
+// Top dome
+var digDomeTop = new THREE.Mesh(
+  new THREE.SphereGeometry(2.0, 24, 12, 0, Math.PI*2, 0, Math.PI/2), matDigTank);
+digDomeTop.position.set(-3.7, -1.26, 0);
+scene.add(digDomeTop);
+
+// Bottom dome
+var digDomeBot = new THREE.Mesh(
+  new THREE.SphereGeometry(2.0, 24, 12, 0, Math.PI*2, Math.PI/2, Math.PI/2), matDigTank);
+digDomeBot.position.set(-3.7, -4.51, 0);
+scene.add(digDomeBot);
+
+// Liquid inside
+var digLiquid = new THREE.Mesh(new THREE.CylinderGeometry(1.92, 1.92, 2.22, 24), matLiquid);
+digLiquid.position.set(-3.7, -3.14, 0);
+scene.add(digLiquid);
+
+// Stiffener ribs
+for (var ri = 0; ri < 7; ri++) {
+  var rib = new THREE.Mesh(new THREE.TorusGeometry(2.05, .046, 8, 24), matDigFlg);
+  rib.position.set(-3.7, -1.48 + ri * .54, 0);
+  scene.add(rib);
+}
+
+// Access hatch
+cyl(.42, .42, .17, 12, matSteel, -3.7, -.62, 0);
+cyl(.44, .44, .07, 12, matSteel, -3.7, -.52, 0);
+var hh = new THREE.Mesh(new THREE.TorusGeometry(.13, .026, 6, 10), matSteel);
+hh.position.set(-3.7, -.47, 0); scene.add(hh);
+
+// Side temperature gauge
+cyl(.12, .12, .06, 12, matSteel, -3.7, -1.98, 2.06, 0, 0, Math.PI/2);
+
+hitbox(new THREE.CylinderGeometry(2.22, 2.22, 5.3, 16), -3.7, -2.75, 0, 'DIGESTER');
+lbl('BIODIGESTOR  ⚙️', -3.7, -.78, 0);
 
 /* ══════════════════════════════════════════════════════════
    BACTERIA
 ══════════════════════════════════════════════════════════ */
-var bacG=new THREE.Group(), bacD=[];
-for(var bi=0;bi<22;bi++){
-  var br=.72+Math.random()*1.05, ba=Math.random()*Math.PI*2;
-  var bx=br*Math.cos(ba), bz2=br*Math.sin(ba), by=-3.88+Math.random()*2.2;
-  var bm=new THREE.Mesh(new THREE.SphereGeometry(.09+Math.random()*.1,8,6),M.bac);
-  bm.position.set(bx,by,bz2); bacG.add(bm);
-  bacD.push({ox:bx,oy:by,oz:bz2,ph:Math.random()*Math.PI*2,sp:.72+Math.random()*.8});
+var matBac = std({
+  color: 0x22EE66, roughness: .5, metalness: 0,
+  emissive: new THREE.Color(0x005500), emissiveIntensity: .32
+});
+var bacGroup = new THREE.Group();
+var bacData = [];
+for (var bi = 0; bi < 22; bi++) {
+  var br = .72 + Math.random() * 1.05;
+  var ba = Math.random() * Math.PI * 2;
+  var bx = br * Math.cos(ba);
+  var bz2 = br * Math.sin(ba);
+  var by = -3.88 + Math.random() * 2.2;
+  var bac = new THREE.Mesh(new THREE.SphereGeometry(.09 + Math.random() * .10, 8, 6), matBac);
+  bac.position.set(bx, by, bz2);
+  bacGroup.add(bac);
+  bacData.push({ ox: bx, oy: by, oz: bz2, ph: Math.random() * Math.PI * 2, sp: .72 + Math.random() * .8 });
 }
-bacG.position.set(-3.7,0,0); scene.add(bacG);
-hitbox(new THREE.CylinderGeometry(1.7,1.7,2.2,12),-3.7,-3.4,0,'BACTERIA');
-lbl('BACTERIA  🦠',-3.7,-4.35,0);
+bacGroup.position.set(-3.7, 0, 0);
+scene.add(bacGroup);
+hitbox(new THREE.CylinderGeometry(1.7, 1.7, 2.2, 12), -3.7, -3.4, 0, 'BACTERIA');
+lbl('BACTERIA  🦠', -3.7, -4.35, 0);
 
 /* ══════════════════════════════════════════════════════════
    GENERATOR  (x = 1.0)
 ══════════════════════════════════════════════════════════ */
-var gG=new THREE.Group();
-function ga(geo,mat,x,y,z,rx,ry,rz,cast){
-  var m=new THREE.Mesh(geo,mat); m.position.set(x,y,z);
-  if(rx||ry||rz) m.rotation.set(rx||0,ry||0,rz||0);
-  if(cast) m.castShadow=true; gG.add(m); return m;
+var genG = new THREE.Group();
+var matGenFrame = std({ color: 0x28394E, roughness: .52, metalness: .32 });
+var matGenEng   = std({ color: 0x3E4F62, roughness: .48, metalness: .42 });
+var matGenAlt   = std({ color: 0xBB8800, roughness: .28, metalness: .72 });
+var matGenPanel = std({ color: 0x0C1C2C, roughness: .48, metalness: .22 });
+var matGenSkid  = std({ color: 0x18283A, roughness: .52, metalness: .52 });
+var matLedG = std({ color: 0x00FF44, roughness: .3, metalness: 0, emissive: new THREE.Color(0x00AA33), emissiveIntensity: 1.0 });
+var matLedR = std({ color: 0xFF2200, roughness: .3, metalness: 0, emissive: new THREE.Color(0xAA1100), emissiveIntensity: .8 });
+var matRubber = std({ color: 0x111111, roughness: .95, metalness: 0 });
+
+function gadd(geo, mat, x, y, z, rx, ry, rz, cast) {
+  var m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  if (rx || ry || rz) m.rotation.set(rx || 0, ry || 0, rz || 0);
+  if (cast) m.castShadow = true;
+  genG.add(m); return m;
 }
+
 // Skid
-ga(new THREE.BoxGeometry(2.15,.14,1.58),M.genSkid, 0,.07,0);
-[.6,-.6].forEach(function(z){
-  ga(new THREE.BoxGeometry(2.15,.1,.08),std({color:0x111A22,roughness:.62,metalness:.6}),0,.13,z);
+gadd(new THREE.BoxGeometry(2.15, .14, 1.58), matGenSkid, 0, .07, 0);
+[.60, -.60].forEach(function(z){
+  gadd(new THREE.BoxGeometry(2.15, .10, .08), std({color:0x111A22,roughness:.62,metalness:.6}), 0, .13, z);
 });
-// Engine block
-ga(new THREE.BoxGeometry(.92,.76,.88),M.genEng, -.3,.53,0, 0,0,0,true);
-ga(new THREE.BoxGeometry(.84,.2,.8),M.steel,    -.3,.96,0);
-// Cooling fins
-for(var cf=0;cf<7;cf++){
-  ga(new THREE.BoxGeometry(.8,.065,.04),M.steel, -.3,.6+cf*.075,.44);
+// Engine
+gadd(new THREE.BoxGeometry(.92, .76, .88), matGenEng, -.3, .53, 0, 0,0,0, true);
+gadd(new THREE.BoxGeometry(.84, .20, .80), matSteel,  -.3, .96, 0);
+for (var cf = 0; cf < 7; cf++) {
+  gadd(new THREE.BoxGeometry(.80, .065, .04), matSteel, -.3, .60+cf*.075, .44);
 }
-// Alternator body
-var altMesh=ga(new THREE.CylinderGeometry(.3,.3,.72,14),M.genAlt, .5,.53,0, Math.PI/2,0,0,true);
-// Alternator fins
-for(var af=0;af<8;af++){
-  ga(new THREE.BoxGeometry(.065,.065,.72),M.brass, .5+.33*Math.cos(af*Math.PI/4),.53+.33*Math.sin(af*Math.PI/4),0);
+// Alternator
+var altMesh = gadd(new THREE.CylinderGeometry(.30, .30, .72, 14), matGenAlt, .5, .53, 0, Math.PI/2, 0, 0, true);
+for (var af = 0; af < 8; af++) {
+  gadd(new THREE.BoxGeometry(.065, .065, .72), matBrass,
+    .5 + .33*Math.cos(af*Math.PI/4), .53 + .33*Math.sin(af*Math.PI/4), 0);
 }
-ga(new THREE.CylinderGeometry(.32,.32,.08,14),M.steel, .5,.53,.38, Math.PI/2,0,0);
+gadd(new THREE.CylinderGeometry(.32, .32, .08, 14), matSteel, .5, .53, .38, Math.PI/2, 0, 0);
 // Coupling
-ga(new THREE.CylinderGeometry(.13,.13,.24,10),M.rubber, .1,.53,0, Math.PI/2,0,0);
+gadd(new THREE.CylinderGeometry(.13, .13, .24, 10), matRubber, .1, .53, 0, Math.PI/2, 0, 0);
 // Exhaust
-ga(new THREE.BoxGeometry(.24,.16,.24),std({color:0x333333,roughness:.52,metalness:.52}),-.08,.9,-.42);
-ga(new THREE.CylinderGeometry(.057,.057,.68,8),std({color:0x333333,roughness:.55,metalness:.55}),.22,1.28,-.42);
-ga(new THREE.CylinderGeometry(.1,.058,.32,10),std({color:0x444444,roughness:.52,metalness:.52}),.22,1.66,-.42);
+gadd(new THREE.BoxGeometry(.24, .16, .24), std({color:0x333333,roughness:.52,metalness:.52}), -.08, .90, -.42);
+gadd(new THREE.CylinderGeometry(.057, .057, .68, 8), std({color:0x333333,roughness:.55,metalness:.55}), .22, 1.28, -.42);
+gadd(new THREE.CylinderGeometry(.10,  .058, .32, 10),std({color:0x444444,roughness:.52,metalness:.52}), .22, 1.66, -.42);
 // Radiator
-ga(new THREE.BoxGeometry(.12,.68,.84),M.steel, -.8,.53,0);
-for(var rr=0;rr<8;rr++){
-  ga(new THREE.BoxGeometry(.08,.038,.76),std({color:0x8899AA,roughness:.38,metalness:.72}),-.8,.27+rr*.078,0);
+gadd(new THREE.BoxGeometry(.12, .68, .84), matSteel, -.80, .53, 0);
+for (var rr = 0; rr < 8; rr++) {
+  gadd(new THREE.BoxGeometry(.08, .038, .76), std({color:0x8899AA,roughness:.38,metalness:.72}), -.80, .27+rr*.078, 0);
 }
 // Control panel
-ga(new THREE.BoxGeometry(.56,.54,.08),M.genPanel, -.2,.73,.68);
-ga(new THREE.BoxGeometry(.29,.2,.022),std({color:0x002200,roughness:.2,metalness:0,emissive:new THREE.Color(0x005500),emissiveIntensity:.65}),-.2,.8,.73);
-var gLed=ga(new THREE.SphereGeometry(.042,7,5),M.ledG, -.04,.62,.73);
-ga(new THREE.SphereGeometry(.036,7,5),M.ledR, -.18,.62,.73);
+gadd(new THREE.BoxGeometry(.56, .54, .08), matGenPanel, -.20, .73, .68);
+gadd(new THREE.BoxGeometry(.29, .20, .022), std({color:0x002200,roughness:.2,metalness:0,emissive:new THREE.Color(0x005500),emissiveIntensity:.65}), -.20, .80, .73);
+gadd(new THREE.SphereGeometry(.042, 7, 5), matLedG, -.04, .62, .73);
+gadd(new THREE.SphereGeometry(.036, 7, 5), matLedR, -.18, .62, .73);
 // Side panels
-[.7,-.7].forEach(function(z){
-  ga(new THREE.BoxGeometry(2.02,.92,.042),M.genFrame, -.05,.55,z);
+[.70, -.70].forEach(function(z){
+  gadd(new THREE.BoxGeometry(2.02, .92, .042), matGenFrame, -.05, .55, z);
 });
-// Gas inlet fitting
-ga(new THREE.CylinderGeometry(.08,.08,.22,8),M.brass, -.5,.53,-.7, Math.PI/2,0,0);
+// Gas inlet
+gadd(new THREE.CylinderGeometry(.08, .08, .22, 8), matBrass, -.50, .53, -.70, Math.PI/2, 0, 0);
 
-gG.position.set(1.0,0,0); scene.add(gG);
-hitbox(new THREE.BoxGeometry(2.6,2.1,1.85),1.0,.82,0,'GENERATOR');
-lbl('GENERADOR  ⚡',1.0,2.05,0);
+genG.position.set(1.0, 0, 0);
+scene.add(genG);
+hitbox(new THREE.BoxGeometry(2.6, 2.1, 1.85), 1.0, .82, 0, 'GENERATOR');
+lbl('GENERADOR  ⚡', 1.0, 2.05, 0);
 
 /* ══════════════════════════════════════════════════════════
-   POWER POLES  (x = 4.4 and 7.4)
+   WOODEN POLES & CABLES
 ══════════════════════════════════════════════════════════ */
-function pole(px){
-  cyl(.09,.15,5.85,9,M.wood, px,2.93,0, 0,0,0,true);
-  cyl(.18,.18,.38,9,std({color:0x3A3A3A,roughness:.72,metalness:.32}),px,.19,0);
-  // crossarm
-  cyl(.058,.058,1.74,8,M.wood, px,4.88,0, 0,0,Math.PI/2);
-  // braces
-  [-.62,.62].forEach(function(dx){
-    var brc=new THREE.Mesh(new THREE.CylinderGeometry(.032,.032,.72,6),M.wood);
-    brc.position.set(px+dx*.5,4.46,0);
-    brc.rotation.z=dx<0?-.5:.5; scene.add(brc);
+var matWood   = std({ color: 0x9B6C1E, roughness: .92, metalness: 0 });
+var matInsul  = std({ color: 0xAA3300, roughness: .62, metalness: .02 });
+var matWire   = std({ color: 0x1A1A1A, roughness: .62, metalness: .32 });
+
+function pole(px) {
+  cyl(.09, .15, 5.85, 9, matWood, px, 2.93, 0, 0, 0, 0, true);
+  cyl(.18, .18, .38, 9, std({color:0x3A3A3A,roughness:.72,metalness:.32}), px, .19, 0);
+  cyl(.058,.058,1.74, 8, matWood, px, 4.88, 0, 0, 0, Math.PI/2);
+  [-.62, .62].forEach(function(dx) {
+    var brc = new THREE.Mesh(new THREE.CylinderGeometry(.032, .032, .72, 6), matWood);
+    brc.position.set(px+dx*.5, 4.46, 0); brc.rotation.z = dx<0 ? -.5 : .5;
+    scene.add(brc);
   });
-  // insulators
-  [-.7,.7].forEach(function(dx){
-    cyl(.062,.048,.2,8,M.insulat, px+dx,4.88,0);
-    sph(.068,M.insulat, px+dx,4.99,0);
+  [-.70, .70].forEach(function(dx) {
+    cyl(.062, .048, .20, 8, matInsul, px+dx, 4.88, 0);
+    sph(.068, matInsul, px+dx, 4.99, 0);
   });
-  var pl=new THREE.PointLight(0xFFEEBB,.38,7);
-  pl.position.set(px,5.6,0); scene.add(pl);
+  var pl = new THREE.PointLight(0xFFEEBB, .38, 7);
+  pl.position.set(px, 5.6, 0); scene.add(pl);
 }
 pole(4.4); pole(7.4);
 
-// Catenary cables
-function wire(pts){
-  var vecs=pts.map(function(p){return new THREE.Vector3(p[0],p[1],p[2]);});
-  var crv=new THREE.CatmullRomCurve3(vecs);
-  var m=new THREE.Mesh(new THREE.TubeGeometry(crv,pts.length*6,.022,6,false),M.wire);
-  scene.add(m);
+function wireLine(pts) {
+  var vecs = pts.map(function(p){ return new THREE.Vector3(p[0], p[1], p[2]); });
+  var curve = new THREE.CatmullRomCurve3(vecs);
+  var geo = new THREE.TubeGeometry(curve, pts.length * 6, .022, 6, false);
+  scene.add(new THREE.Mesh(geo, matWire));
 }
-[-.36,.36].forEach(function(oz){
-  wire([[2.1,1.1,oz],[3.3,2.6,oz],[4.4-.7,4.88,oz]]);
-  wire([[4.4+.7,4.88,oz],[5.9,4.62,oz],[7.4-.7,4.88,oz]]);
-  wire([[7.4+.7,4.88,oz],[8.7,4.02,oz],[10.0,3.22,oz]]);
+[-.36, .36].forEach(function(oz) {
+  wireLine([[2.1,1.1,oz],[3.3,2.6,oz],[4.4-.70,4.88,oz]]);
+  wireLine([[4.4+.70,4.88,oz],[5.9,4.62,oz],[7.4-.70,4.88,oz]]);
+  wireLine([[7.4+.70,4.88,oz],[8.8,4.02,oz],[10.0,3.22,oz]]);
 });
-hitbox(new THREE.BoxGeometry(8.5,2.6,1.6),5.8,4.3,0,'CABLES');
-lbl('ELECTRICIDAD  🔌',5.9,6.0,0);
+hitbox(new THREE.BoxGeometry(8.5, 2.6, 1.6), 5.8, 4.3, 0, 'CABLES');
+lbl('ELECTRICIDAD  🔌', 5.9, 6.0, 0);
 
 /* ══════════════════════════════════════════════════════════
    RURAL HOUSE  (x = 11.5)
 ══════════════════════════════════════════════════════════ */
-var hG=new THREE.Group();
-function ha(geo,mat,x,y,z,rx,ry,rz,cast){
-  var m=new THREE.Mesh(geo,mat); m.position.set(x,y,z);
-  if(rx||ry||rz) m.rotation.set(rx||0,ry||0,rz||0);
-  if(cast) m.castShadow=true; hG.add(m); return m;
-}
-// Foundation
-ha(new THREE.BoxGeometry(3.15,.32,2.72),M.concrete, 0,.16,0, 0,0,0,true);
-// Walls
-ha(new THREE.BoxGeometry(2.92,2.38,2.52),M.stucco, 0,1.35,0, 0,0,0,true);
-// Corner pillars
-[[1.32,1.18],[-1.32,1.18],[1.32,-1.18],[-1.32,-1.18]].forEach(function(p){
-  ha(new THREE.BoxGeometry(.2,2.4,.2),M.concrete, p[0],1.36,p[1]);
-});
-// Corrugated zinc roof (two slopes)
-ha(new THREE.BoxGeometry(3.45,.12,3.05),M.roofZinc, .18,2.9,0, 0,0,-.28,true);
-ha(new THREE.BoxGeometry(3.45,.12,3.05),M.roofZinc,-.18,2.9,0, 0,0, .28,true);
-ha(new THREE.BoxGeometry(.26,.15,2.82),std({color:0x777777,roughness:.52,metalness:.65}), 0,3.16,0);
-// Overhang front
-ha(new THREE.BoxGeometry(3.5,.065,.42),M.roofZinc, .5,2.57,1.5, 0,0,-.28);
-// Door + frame
-ha(new THREE.BoxGeometry(.74,1.1,.08),std({color:0x4a2808,roughness:.75,metalness:.02}),0,.7,1.3);
-ha(new THREE.BoxGeometry(.62,.96,.06),M.doorWood, 0,.7,1.34);
-[[0,.86,.36],[0,.5,.36]].forEach(function(p){
-  ha(new THREE.BoxGeometry(.52,.24,.022),std({color:0x8B4E18,roughness:.82,metalness:0}),p[0],p[1],p[2]);
-});
-ha(new THREE.SphereGeometry(.042,7,5),M.brass, .23,.7,1.37);
-// Windows (glowing!)
-[[-0.9,1.52,1.3],[0.9,1.52,1.3]].forEach(function(p){
-  ha(new THREE.BoxGeometry(.74,.64,.07),M.winFrame, p[0],p[1],p[2]-.01);
-  ha(new THREE.BoxGeometry(.62,.52,.045),M.winGlo,  p[0],p[1],p[2]);
-  ha(new THREE.BoxGeometry(.62,.04,.022),M.winFrame, p[0],p[1],p[2]+.022);
-  ha(new THREE.BoxGeometry(.04,.52,.022),M.winFrame, p[0],p[1],p[2]+.022);
-  var wl=new THREE.PointLight(0xFFCC44,1.3,4.2);
-  wl.position.set(p[0],p[1],p[2]-.5); hG.add(wl);
-});
-ha(new THREE.BoxGeometry(.06,.52,.58),M.winGlo, 1.47,1.48,-.1);
-// Chimney
-ha(new THREE.BoxGeometry(.38,.82,.38),M.concrete, .82,3.5,.58);
-ha(new THREE.BoxGeometry(.48,.1,.48),std({color:0x666666,roughness:.8,metalness:.1}), .82,3.94,.58);
-// Porch step
-ha(new THREE.BoxGeometry(1.52,.18,1.12),M.concrete, 0,.09,1.85);
-// Porch bulb (electric light!)
-ha(new THREE.CylinderGeometry(.016,.016,.38,5),std({color:0x333333,roughness:.52,metalness:.52}),0,2.35,1.48);
-ha(new THREE.SphereGeometry(.08,10,8),std({color:0xFFFFAA,roughness:.1,metalness:0,emissive:new THREE.Color(0xFFDD00),emissiveIntensity:2.2}),0,2.08,1.48);
-// Fence
-for(var fp=0;fp<8;fp++){
-  ha(new THREE.BoxGeometry(.07,.82,.07),M.fence, -1.96+fp*.56,.41,2.08);
-}
-ha(new THREE.BoxGeometry(3.98,.07,.05),M.fence, 0,.7,2.08);
-ha(new THREE.BoxGeometry(3.98,.065,.05),M.fence,0,.32,2.08);
-// Barrel
-ha(new THREE.CylinderGeometry(.22,.2,.66,12),std({color:0x226633,roughness:.72,metalness:.1}),-1.65,.33,1.06);
+var houseG = new THREE.Group();
+var matStucco  = std({ color: 0xE8D5A8, roughness: .85, metalness: 0 });
+var matZinc    = std({ color: 0x889999, roughness: .45, metalness: .65 });
+var matDoorWd  = std({ color: 0x7A4010, roughness: .85, metalness: 0 });
+var matWinGlo  = std({ color: 0xFFEE88, roughness: .18, metalness: 0, emissive: new THREE.Color(0xFF9900), emissiveIntensity: 1.1 });
+var matWinFrm  = std({ color: 0x886633, roughness: .72, metalness: .10 });
+var matFence   = std({ color: 0xD4A864, roughness: .82, metalness: 0 });
 
-hG.position.set(11.5,0,0); scene.add(hG);
-hitbox(new THREE.BoxGeometry(3.9,4.7,3.3),11.5,2.0,0,'HOUSE');
-lbl('HOGAR RURAL  🏠',11.5,4.88,0);
+function hadd(geo, mat, x, y, z, rx, ry, rz, cast) {
+  var m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  if (rx || ry || rz) m.rotation.set(rx || 0, ry || 0, rz || 0);
+  if (cast) m.castShadow = true;
+  houseG.add(m); return m;
+}
+
+// Foundation + walls
+hadd(new THREE.BoxGeometry(3.15, .32, 2.72), matConcr, 0, .16, 0, 0,0,0, true);
+hadd(new THREE.BoxGeometry(2.92, 2.38, 2.52), matStucco, 0, 1.35, 0, 0,0,0, true);
+
+// Concrete corner pillars
+[[ 1.32, 1.18], [-1.32, 1.18], [1.32, -1.18], [-1.32, -1.18]].forEach(function(p) {
+  hadd(new THREE.BoxGeometry(.20, 2.40, .20), matConcr, p[0], 1.36, p[1]);
+});
+
+// Corrugated zinc roof (two slopes)
+hadd(new THREE.BoxGeometry(3.45, .12, 3.05), matZinc,  .18, 2.90, 0, 0,0, -.28, true);
+hadd(new THREE.BoxGeometry(3.45, .12, 3.05), matZinc, -.18, 2.90, 0, 0,0,  .28, true);
+hadd(new THREE.BoxGeometry(.26, .15, 2.82), std({color:0x777777,roughness:.52,metalness:.65}), 0, 3.16, 0);
+// Front overhang
+hadd(new THREE.BoxGeometry(3.5, .065, .42), matZinc, .5, 2.57, 1.5, 0,0,-.28);
+
+// Door + frame
+hadd(new THREE.BoxGeometry(.74,1.10,.08), std({color:0x4a2808,roughness:.75,metalness:.02}), 0, .70, 1.30);
+hadd(new THREE.BoxGeometry(.62, .96, .06), matDoorWd, 0, .70, 1.34);
+[[0,.86,.36],[0,.50,.36]].forEach(function(p){
+  hadd(new THREE.BoxGeometry(.52,.24,.022), std({color:0x8B4E18,roughness:.82,metalness:0}), p[0],p[1],p[2]);
+});
+hadd(new THREE.SphereGeometry(.042, 7, 5), matBrass, .23, .70, 1.37);
+
+// Glowing windows
+[[-.90, 1.52, 1.30], [.90, 1.52, 1.30]].forEach(function(p) {
+  hadd(new THREE.BoxGeometry(.74, .64, .07), matWinFrm, p[0], p[1], p[2]-.01);
+  hadd(new THREE.BoxGeometry(.62, .52, .045), matWinGlo, p[0], p[1], p[2]);
+  hadd(new THREE.BoxGeometry(.62, .04, .022), matWinFrm, p[0], p[1], p[2]+.022);
+  hadd(new THREE.BoxGeometry(.04, .52, .022), matWinFrm, p[0], p[1], p[2]+.022);
+  var wl = new THREE.PointLight(0xFFCC44, 1.3, 4.2);
+  wl.position.set(p[0], p[1], p[2]-.5); houseG.add(wl);
+});
+hadd(new THREE.BoxGeometry(.06, .52, .58), matWinGlo, 1.47, 1.48, -.10);
+
+// Chimney
+hadd(new THREE.BoxGeometry(.38, .82, .38), matConcr, .82, 3.50, .58);
+hadd(new THREE.BoxGeometry(.48, .10, .48), std({color:0x666666,roughness:.8,metalness:.1}), .82, 3.94, .58);
+
+// Porch step
+hadd(new THREE.BoxGeometry(1.52, .18, 1.12), matConcr, 0, .09, 1.85);
+
+// Porch bulb (powered by biogas electricity!)
+hadd(new THREE.CylinderGeometry(.016,.016,.38,5), std({color:0x333333,roughness:.52,metalness:.52}), 0, 2.35, 1.48);
+hadd(new THREE.SphereGeometry(.08,10,8), std({color:0xFFFFAA,roughness:.1,metalness:0,emissive:new THREE.Color(0xFFDD00),emissiveIntensity:2.2}), 0, 2.08, 1.48);
+
+// Fence
+for (var fp = 0; fp < 8; fp++) {
+  hadd(new THREE.BoxGeometry(.07,.82,.07), matFence, -1.96+fp*.56, .41, 2.08);
+}
+hadd(new THREE.BoxGeometry(3.98,.07,.05), matFence, 0, .70, 2.08);
+hadd(new THREE.BoxGeometry(3.98,.065,.05), matFence, 0, .32, 2.08);
+
+// Rain barrel
+hadd(new THREE.CylinderGeometry(.22,.20,.66,12), std({color:0x226633,roughness:.72,metalness:.1}), -1.65, .33, 1.06);
+
+houseG.position.set(11.5, 0, 0);
+scene.add(houseG);
+hitbox(new THREE.BoxGeometry(3.9, 4.7, 3.3), 11.5, 2.0, 0, 'HOUSE');
+lbl('HOGAR RURAL  🏠', 11.5, 4.88, 0);
 
 /* ══════════════════════════════════════════════════════════
    TREES
 ══════════════════════════════════════════════════════════ */
-function tree(x,z,h,sc){
-  h=h||3.5; sc=sc||1;
-  var g=new THREE.Group();
-  var tr=new THREE.Mesh(new THREE.CylinderGeometry(.14*sc,.22*sc,h*.38,8),M.bark);
-  tr.position.y=h*.19; tr.castShadow=true; g.add(tr);
-  [[1.1,M.lvs1],[1.55,M.lvs2],[2.0,M.lvs3]].forEach(function(d,i){
-    var f=new THREE.Mesh(new THREE.ConeGeometry((.9-.2*i)*sc,h*.3,10),d[1]);
-    f.position.y=d[0]*sc; f.castShadow=true; g.add(f);
+var matBark = std({ color: 0x7A5015, roughness: .92, metalness: 0 });
+var matLvs  = [
+  std({ color: 0x1A8A22, roughness: .9, metalness: 0 }),
+  std({ color: 0x228B2A, roughness: .9, metalness: 0 }),
+  std({ color: 0x30A830, roughness: .9, metalness: 0 })
+];
+
+function tree(x, z, h, sc) {
+  h = h || 3.5; sc = sc || 1;
+  var g = new THREE.Group();
+  var tr = new THREE.Mesh(new THREE.CylinderGeometry(.14*sc,.22*sc,h*.38,8), matBark);
+  tr.position.y = h * .19; tr.castShadow = true; g.add(tr);
+  [1.1, 1.55, 2.0].forEach(function(yf, i) {
+    var f = new THREE.Mesh(new THREE.ConeGeometry((.90-.2*i)*sc, h*.30, 10), matLvs[i]);
+    f.position.y = yf * sc; f.castShadow = true; g.add(f);
   });
-  g.position.set(x,0,z); scene.add(g);
+  g.position.set(x, 0, z); scene.add(g);
 }
-tree(-13,-4.2,4.1,1.06); tree(-13,4,3.6,.96); tree(-11.5,-5.6,3.2,.86);
-tree(13.5,-4.6,4.5,1.1); tree(14.6,3.6,3.8,.96); tree(12.5,-5.9,3.4,.9);
-tree(-12,6.5,3.0,.8);    tree(15.2,6.2,4.0,1.0);
+tree(-13.0,-4.2,4.1,1.06); tree(-13.0, 4.0,3.6,.96); tree(-11.5,-5.6,3.2,.86);
+tree( 13.5,-4.6,4.5,1.10); tree( 14.6, 3.6,3.8,.96); tree( 12.5,-5.9,3.4,.90);
+tree(-12.0, 6.5,3.0,.80);  tree( 15.2, 6.2,4.0,1.0);
 
 /* ══════════════════════════════════════════════════════════
-   ANDEAN MOUNTAINS (background)
+   ANDEAN MOUNTAINS (background silhouettes)
 ══════════════════════════════════════════════════════════ */
-[[-36,0,-52,18,14,M.hillB],[-16,0,-50,14,12,M.hillA],[4,0,-54,20,16,M.hillB],
- [28,0,-50,16,13,M.hillA],[48,0,-57,22,18,M.hillB],[-56,0,-54,20,15,M.hillC]
-].forEach(function(d){
-  var h=new THREE.Mesh(new THREE.SphereGeometry(d[3],12,8),d[5]);
-  h.scale.set(d[4]/d[3],d[5]/d[3]*.82,1.0);
-  h.position.set(d[0],-d[5]*.5,d[2]); scene.add(h);
+var matHillA = std({ color: 0x2A6A2A, roughness: .98, metalness: 0 });
+var matHillB = std({ color: 0x1A4A1A, roughness: .98, metalness: 0 });
+var matHillC = std({ color: 0x3A7A3A, roughness: .98, metalness: 0 });
+[[-36,0,-52,18,14,matHillB],[-16,0,-50,14,12,matHillA],[4,0,-54,20,16,matHillB],
+ [28,0,-50,16,13,matHillA],[48,0,-57,22,18,matHillB],[-56,0,-54,20,15,matHillC]
+].forEach(function(d) {
+  var hm = new THREE.Mesh(new THREE.SphereGeometry(d[3], 12, 8), d[5]);
+  hm.scale.set(d[4]/d[3], d[5]/d[3] * .82, 1.0);
+  hm.position.set(d[0], -d[5] * .5, d[2]);
+  scene.add(hm);
 });
 
 /* ══════════════════════════════════════════════════════════
    CLOUDS
 ══════════════════════════════════════════════════════════ */
-var clouds=[];
-function cloud(x,y,z){
-  var cg=new THREE.Group();
-  [[0,0,0,1.05],[1.12,.1,0,.8],[-.98,.1,0,.74],[.52,.56,0,.7],[-.44,.52,0,.62],[0,0,.85,.68],[0,0,-.82,.65]].forEach(function(d){
-    var s=new THREE.Mesh(new THREE.SphereGeometry(d[3],9,7),M.cloud);
-    s.position.set(d[0],d[1],d[2]); cg.add(s);
+var matCloud = std({ color: 0xffffff, roughness: .80, metalness: 0, transparent: true, opacity: .87 });
+var clouds = [];
+function mkCloud(x, y, z) {
+  var cg = new THREE.Group();
+  [[0,0,0,1.05],[1.12,.1,0,.80],[-.98,.1,0,.74],
+   [.52,.56,0,.70],[-.44,.52,0,.62],[0,0,.85,.68],[0,0,-.82,.65]].forEach(function(d) {
+    var s = new THREE.Mesh(new THREE.SphereGeometry(d[3], 9, 7), matCloud);
+    s.position.set(d[0], d[1], d[2]); cg.add(s);
   });
-  cg.position.set(x,y,z); scene.add(cg); return cg;
+  cg.position.set(x, y, z); scene.add(cg); return cg;
 }
-clouds.push(cloud(-10,14,-9));
-clouds.push(cloud(5,16,-13));
-clouds.push(cloud(15,12,-8));
-clouds.push(cloud(-3,15,10));
-clouds.push(cloud(24,12,-6));
+clouds.push(mkCloud(-10,14,-9));
+clouds.push(mkCloud(  5,16,-13));
+clouds.push(mkCloud( 15,12,-8));
+clouds.push(mkCloud( -3,15,10));
+clouds.push(mkCloud( 24,12,-6));
 
 /* ══════════════════════════════════════════════════════════
-   PARTICLES  (additive blending = glow)
+   PARTICLES  (additive blending = glow effect)
 ══════════════════════════════════════════════════════════ */
-function greenPath(t){
-  if(t<.15) return new THREE.Vector3(-8.4,-t/.15*.28,0);
-  if(t<.36){var s=(t-.15)/.21; return new THREE.Vector3(-8.4,-.28-s*3.54,0);}
-  var s=(t-.36)/.64; return new THREE.Vector3(-8.4+s*4.7,-3.82,0);
+function greenPath(t) {
+  if (t < .15) return new THREE.Vector3(-8.4, -t/.15*.28, 0);
+  if (t < .36) { var s=(t-.15)/.21; return new THREE.Vector3(-8.4, -.28-s*3.54, 0); }
+  var s2=(t-.36)/.64; return new THREE.Vector3(-8.4+s2*4.70, -3.82, 0);
 }
-function yellowPath(t){
-  if(t<.5){var s=t/.5; return new THREE.Vector3(-3.7,-4.0+s*4.22,Math.sin(s*Math.PI*.5)*.32);}
-  var s=(t-.5)/.5; return new THREE.Vector3(-3.7+s*4.78,.14,0);
+function yellowPath(t) {
+  if (t < .5) { var s=t/.5; return new THREE.Vector3(-3.7, -4.0+s*4.22, Math.sin(s*Math.PI*.5)*.32); }
+  var s2=(t-.5)/.5; return new THREE.Vector3(-3.7+s2*4.78, .14, 0);
 }
-function whitePath(t){
-  var pts=[
-    new THREE.Vector3(2.1,1.1,0),new THREE.Vector3(3.4,2.6,0),
-    new THREE.Vector3(4.4,4.82,0),new THREE.Vector3(5.9,4.58,0),
-    new THREE.Vector3(7.4,4.82,0),new THREE.Vector3(8.8,4.0,0),
-    new THREE.Vector3(10.0,3.2,0),new THREE.Vector3(11.4,1.7,0)
+function whitePath(t) {
+  var P = [
+    new THREE.Vector3(2.1,1.1,0), new THREE.Vector3(3.4,2.6,0),
+    new THREE.Vector3(4.4,4.82,0), new THREE.Vector3(5.9,4.58,0),
+    new THREE.Vector3(7.4,4.82,0), new THREE.Vector3(8.8,4.0,0),
+    new THREE.Vector3(10.0,3.2,0), new THREE.Vector3(11.4,1.7,0)
   ];
-  var tot=pts.length-1, sc=t*tot, idx=Math.min(Math.floor(sc),tot-1);
-  return pts[idx].clone().lerp(pts[idx+1],sc-idx);
+  var tot = P.length - 1, sc = t * tot;
+  var idx = Math.min(Math.floor(sc), tot - 1);
+  return P[idx].clone().lerp(P[idx+1], sc - idx);
 }
-function mkPts(n,color,size){
-  var pos=new Float32Array(n*3);
-  var geo=new THREE.BufferGeometry();
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  var mat=new THREE.PointsMaterial({color:color,size:size,transparent:true,opacity:.82,
-    sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending});
-  var p=new THREE.Points(geo,mat); scene.add(p);
-  return {p:p,pos:pos,geo:geo};
+
+function mkPts(n, color, size) {
+  var pos = new Float32Array(n * 3);
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  var mat = new THREE.PointsMaterial({
+    color: color, size: size, transparent: true, opacity: .82,
+    sizeAttenuation: true, depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+  var pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+  return { pts: pts, pos: pos, geo: geo };
 }
-var gp=mkPts(85,0x00FF88,.26), yp=mkPts(72,0xFFCC00,.23), wp=mkPts(90,0x88CCFF,.2);
-var gT=[],yT=[],wT=[];
-for(var i=0;i<85;i++) gT.push({t:Math.random(),sp:.003+Math.random()*.002,jz:(Math.random()-.5)*.3});
-for(var i=0;i<72;i++) yT.push({t:Math.random(),sp:.004+Math.random()*.003,jz:(Math.random()-.5)*.34});
-for(var i=0;i<90;i++) wT.push({t:Math.random(),sp:.0036+Math.random()*.002,jz:(Math.random()-.5)*.4});
+
+var gpN=85, ypN=72, wpN=90;
+var gp = mkPts(gpN, 0x00FF88, .26);
+var yp = mkPts(ypN, 0xFFCC00, .23);
+var wp = mkPts(wpN, 0x88CCFF, .20);
+
+var gT=[], yT=[], wT=[];
+for (var pi=0; pi<gpN; pi++) gT.push({t:Math.random(),sp:.003+Math.random()*.002,jz:(Math.random()-.5)*.30});
+for (var pi=0; pi<ypN; pi++) yT.push({t:Math.random(),sp:.004+Math.random()*.003,jz:(Math.random()-.5)*.34});
+for (var pi=0; pi<wpN; pi++) wT.push({t:Math.random(),sp:.0036+Math.random()*.002,jz:(Math.random()-.5)*.40});
 
 /* ══════════════════════════════════════════════════════════
    CLICK / TOUCH
 ══════════════════════════════════════════════════════════ */
-var ray=new THREE.Raycaster(), ms=new THREE.Vector2(), md=new THREE.Vector2();
-function onDn(e){
-  var cx=e.clientX!==undefined?e.clientX:(e.touches&&e.touches[0]?e.touches[0].clientX:0);
-  var cy=e.clientY!==undefined?e.clientY:(e.touches&&e.touches[0]?e.touches[0].clientY:0);
-  md.set(cx,cy);
-}
-function onUp(e){
-  var cx=e.clientX!==undefined?e.clientX:(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:0);
-  var cy=e.clientY!==undefined?e.clientY:(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientY:0);
-  if(Math.abs(cx-md.x)>9||Math.abs(cy-md.y)>9) return;
-  ms.set((cx/W())*2-1,-(cy/H())*2+1);
-  ray.setFromCamera(ms,camera);
-  var hits=ray.intersectObjects(clickables,false);
-  if(!hits.length) return;
-  var id=hits[0].object.userData.id;
-  if(!INFO[id]) return;
-  document.getElementById('info-title').textContent=INFO[id].title;
-  document.getElementById('info-text').textContent=INFO[id].text;
-  document.getElementById('info').style.display='block';
-}
-renderer.domElement.addEventListener('pointerdown',onDn);
-renderer.domElement.addEventListener('pointerup',onUp);
-renderer.domElement.addEventListener('touchstart',onDn,{passive:true});
-renderer.domElement.addEventListener('touchend',onUp,{passive:true});
+var ray = new THREE.Raycaster();
+var ms  = new THREE.Vector2();
+var md  = new THREE.Vector2();
 
-window.addEventListener('resize',function(){
-  camera.aspect=W()/H();
+function getXY(e) {
+  if (e.clientX !== undefined) return { x: e.clientX, y: e.clientY };
+  var t = e.touches || e.changedTouches;
+  return t && t[0] ? { x: t[0].clientX, y: t[0].clientY } : { x: 0, y: 0 };
+}
+function onDown(e) { var p=getXY(e); md.set(p.x, p.y); }
+function onUp(e) {
+  var p = getXY(e);
+  if (Math.abs(p.x-md.x) > 9 || Math.abs(p.y-md.y) > 9) return;
+  ms.set((p.x/W())*2-1, -(p.y/H())*2+1);
+  ray.setFromCamera(ms, camera);
+  var hits = ray.intersectObjects(clickables, false);
+  if (!hits.length) return;
+  var id = hits[0].object.userData.id;
+  if (!INFO[id]) return;
+  document.getElementById('info-title').textContent = INFO[id].title;
+  document.getElementById('info-text').textContent = INFO[id].text;
+  document.getElementById('info').style.display = 'block';
+}
+renderer.domElement.addEventListener('pointerdown', onDown);
+renderer.domElement.addEventListener('pointerup',   onUp);
+renderer.domElement.addEventListener('touchstart', onDown, { passive: true });
+renderer.domElement.addEventListener('touchend',   onUp,   { passive: true });
+
+window.addEventListener('resize', function() {
+  camera.aspect = W() / H();
   camera.updateProjectionMatrix();
-  renderer.setSize(W(),H());
-  labelRenderer.setSize(W(),H());
+  renderer.setSize(W(), H());
+  labelRenderer.setSize(W(), H());
 });
 
 /* ══════════════════════════════════════════════════════════
-   ANIMATE
+   ANIMATION LOOP
 ══════════════════════════════════════════════════════════ */
-var clk=new THREE.Clock();
-function animate(){
+var clock = new THREE.Clock();
+
+function animate() {
   requestAnimationFrame(animate);
-  var t=clk.getElapsedTime();
+  var t = clock.getElapsedTime();
+
   controls.update();
 
-  // Bacteria pulse + bob
-  bacD.forEach(function(d,i){
-    var b=bacG.children[i];
-    b.position.set(
-      d.ox+Math.sin(t*d.sp*2.5+d.ph)*.15,
-      d.oy+Math.sin(t*d.sp*1.8+d.ph+1)*.21,
-      d.oz+Math.cos(t*d.sp*2+d.ph)*.13
+  /* Bacteria: bob + scale pulse */
+  for (var bi2 = 0; bi2 < bacData.length; bi2++) {
+    var d  = bacData[bi2];
+    var bm = bacGroup.children[bi2];
+    bm.position.set(
+      d.ox + Math.sin(t * d.sp * 2.5 + d.ph) * .15,
+      d.oy + Math.sin(t * d.sp * 1.8 + d.ph + 1) * .21,
+      d.oz + Math.cos(t * d.sp * 2.0 + d.ph) * .13
     );
-    b.scale.setScalar(.84+Math.sin(t*d.sp*3+d.ph)*.18);
-  });
-  M.bac.emissiveIntensity=.28+Math.sin(t*2.2)*.13;
-
-  // Organic underground glow (gurgling)
-  digGlow.intensity=2.6+Math.sin(t*1.75)*.55;
-
-  // Window + bulb warm pulse
-  M.winGlo.emissiveIntensity=1.08+Math.sin(t*1.3)*.13;
-  bulbGlow.intensity=1.7+Math.sin(t*.85)*.1;
-
-  // Generator LED blink
-  M.ledG.emissiveIntensity=.82+Math.sin(t*4.5)*.42;
-
-  // Alternator spin
-  altMesh.rotation.z=t*3.6;
-
-  // Cloud drift
-  clouds.forEach(function(c,i){
-    c.position.x+=.0042*(i%2===0?1:-1);
-    if(c.position.x>30) c.position.x=-24;
-    if(c.position.x<-24) c.position.x=30;
-  });
-
-  // Particles
-  var p,idx;
-  for(idx=0;idx<85;idx++){
-    gT[idx].t=(gT[idx].t+gT[idx].sp)%1;
-    p=greenPath(gT[idx].t);
-    gp.pos[idx*3]=p.x+(Math.random()-.5)*.06;
-    gp.pos[idx*3+1]=p.y+(Math.random()-.5)*.06;
-    gp.pos[idx*3+2]=p.z+gT[idx].jz;
+    bm.scale.setScalar(.84 + Math.sin(t * d.sp * 3 + d.ph) * .18);
   }
-  gp.geo.attributes.position.needsUpdate=true;
+  matBac.emissiveIntensity = .28 + Math.sin(t * 2.2) * .13;
 
-  for(idx=0;idx<72;idx++){
-    yT[idx].t=(yT[idx].t+yT[idx].sp)%1;
-    p=yellowPath(yT[idx].t);
-    yp.pos[idx*3]=p.x+(Math.random()-.5)*.06;
-    yp.pos[idx*3+1]=p.y+(Math.random()-.5)*.06;
-    yp.pos[idx*3+2]=p.z+yT[idx].jz;
+  /* Underground digester glow (organic gurgling) */
+  digGlow.intensity = 2.8 + Math.sin(t * 1.75) * .55;
+
+  /* Window + porch bulb warm pulse */
+  matWinGlo.emissiveIntensity = 1.08 + Math.sin(t * 1.3) * .13;
+  bulbGlow.intensity = 1.7 + Math.sin(t * .85) * .10;
+
+  /* Generator LED */
+  matLedG.emissiveIntensity = .82 + Math.sin(t * 4.5) * .42;
+
+  /* Alternator spin */
+  altMesh.rotation.z = t * 3.6;
+
+  /* Cloud drift */
+  for (var ci = 0; ci < clouds.length; ci++) {
+    clouds[ci].position.x += .004 * (ci % 2 === 0 ? 1 : -1);
+    if (clouds[ci].position.x > 30)  clouds[ci].position.x = -24;
+    if (clouds[ci].position.x < -24) clouds[ci].position.x = 30;
   }
-  yp.geo.attributes.position.needsUpdate=true;
 
-  for(idx=0;idx<90;idx++){
-    wT[idx].t=(wT[idx].t+wT[idx].sp)%1;
-    p=whitePath(wT[idx].t);
-    wp.pos[idx*3]=p.x+(Math.random()-.5)*.05;
-    wp.pos[idx*3+1]=p.y+(Math.random()-.5)*.05;
-    wp.pos[idx*3+2]=p.z+wT[idx].jz;
+  /* Particles */
+  var idx, p;
+  for (idx = 0; idx < gpN; idx++) {
+    gT[idx].t = (gT[idx].t + gT[idx].sp) % 1;
+    p = greenPath(gT[idx].t);
+    gp.pos[idx*3]   = p.x + (Math.random()-.5)*.06;
+    gp.pos[idx*3+1] = p.y + (Math.random()-.5)*.06;
+    gp.pos[idx*3+2] = p.z + gT[idx].jz;
   }
-  wp.geo.attributes.position.needsUpdate=true;
+  gp.geo.attributes.position.needsUpdate = true;
 
-  renderer.render(scene,camera);
-  labelRenderer.render(scene,camera);
+  for (idx = 0; idx < ypN; idx++) {
+    yT[idx].t = (yT[idx].t + yT[idx].sp) % 1;
+    p = yellowPath(yT[idx].t);
+    yp.pos[idx*3]   = p.x + (Math.random()-.5)*.06;
+    yp.pos[idx*3+1] = p.y + (Math.random()-.5)*.06;
+    yp.pos[idx*3+2] = p.z + yT[idx].jz;
+  }
+  yp.geo.attributes.position.needsUpdate = true;
+
+  for (idx = 0; idx < wpN; idx++) {
+    wT[idx].t = (wT[idx].t + wT[idx].sp) % 1;
+    p = whitePath(wT[idx].t);
+    wp.pos[idx*3]   = p.x + (Math.random()-.5)*.05;
+    wp.pos[idx*3+1] = p.y + (Math.random()-.5)*.05;
+    wp.pos[idx*3+2] = p.z + wT[idx].jz;
+  }
+  wp.geo.attributes.position.needsUpdate = true;
+
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
 }
+
 animate();
 </script>
 </body>
